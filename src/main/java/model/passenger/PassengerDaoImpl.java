@@ -1,5 +1,6 @@
 package model.passenger;
 
+import jdk.internal.org.jline.utils.Log;
 import util.Database;
 import util.StatusMessage;
 
@@ -10,12 +11,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 public class PassengerDaoImpl implements PassengerDAO{
 
-    private static final Logger LOGGER = Logger.getLogger(PassengerDaoImpl.class.getName());
     private DataSource datasource = Database.getDataSource();
 
     @Override
@@ -38,7 +35,8 @@ public class PassengerDaoImpl implements PassengerDAO{
                 passenger.setFirstName(rs.getString("first_name"));
                 passenger.setLastName(rs.getString("last_name"));
             } else {
-                LOGGER.log(Level.WARNING, String.format("Customer with ID of %d is not found.", passId));
+                Log.error(
+                        String.format("Customer with ID of %d is not found.", passId));
                 StatusMessage statusMessage = new StatusMessage();
                 statusMessage.setStatus(Response.Status.NOT_FOUND.getStatusCode());
                 statusMessage.setMessage(
@@ -46,14 +44,14 @@ public class PassengerDaoImpl implements PassengerDAO{
                 return Response.status(404).entity(statusMessage).build();
             }
         } catch (SQLException e) {
-            LOGGER.log(Level.WARNING, "Error: " + e.getMessage());
+            Log.error("Error: " + e.getMessage());
             e.printStackTrace();
         } finally {
             if (rs != null) {
                 try {
                     rs.close();
                 } catch (SQLException e) {
-                    LOGGER.log(Level.WARNING, "Error closing resultset: " + e.getMessage());
+                    Log.error("Error closing resultset: " + e.getMessage());
                     e.printStackTrace();
                 }
             }
@@ -61,7 +59,7 @@ public class PassengerDaoImpl implements PassengerDAO{
                 try {
                     ps.close();
                 } catch (SQLException e) {
-                    LOGGER.log(Level.WARNING, "Error closing PreparedStatement: " + e.getMessage());
+                    Log.error("Error closing PreparedStatement: " + e.getMessage());
                     e.printStackTrace();
                 }
             }
@@ -69,7 +67,7 @@ public class PassengerDaoImpl implements PassengerDAO{
                 try {
                     conn.close();
                 } catch (SQLException e) {
-                    LOGGER.log(Level.WARNING, "Error closing connection: " + e.getMessage());
+                    Log.error("Error closing connection: " + e.getMessage());
                     e.printStackTrace();
                 }
             }
