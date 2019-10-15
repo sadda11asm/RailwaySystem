@@ -6,11 +6,11 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="dynamictodolist" />
+        <module name="RailwaysSystemApplication" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="dynamictodolist" target="1.8" />
+      <module name="RailwaysSystemApplication" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>

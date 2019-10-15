@@ -3,11 +3,11 @@
   <modelVersion>4.0.0</modelVersion>
   
   <groupId>kz.edu.nu.cs.se.hw</groupId>
-  <artifactId>dynamictodolist</artifactId>
+  <artifactId>railwayssystem</artifactId>
   <packaging>war</packaging>
   <version>0.0.1-SNAPSHOT</version>
   
-  <name>dynamictodolist Maven Webapp</name>
+  <name>railwayssystem Maven Webapp</name>
   
   <dependencies>
     <dependency>

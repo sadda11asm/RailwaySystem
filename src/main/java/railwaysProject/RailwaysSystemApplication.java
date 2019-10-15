@@ -11,11 +11,11 @@ import javax.ws.rs.core.Application;
 
 
 @ApplicationPath("/api")
-public class DynamicTodoListApplication extends Application {
+public class RailwaysSystemApplication extends Application {
     private Set<Object> singletons = new HashSet<Object>();
     private Set<Class<?>> empty = new HashSet<Class<?>>();
     
-    public DynamicTodoListApplication() {
+    public RailwaysSystemApplication() {
         singletons.add(new HelloWorld());
         singletons.add(new ListItemsService());
     }
