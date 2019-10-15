@@ -6,16 +6,11 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a6dcd861-038c-49f9-83d6-408038da67cd" name="Default Changelist" comment="renamed dynamictodolist files to railwaysproject">
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/artifacts/dynamictodolist_war_exploded.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/artifacts/dynamictodolist_war_exploded.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dynamictodolist.iml" beforeDir="false" afterPath="$PROJECT_DIR$/RailwaysSystemApplication.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/railwaysProject/DynamicTodoListApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/railwaysProject/RailwaysSystemApplication.java" afterDir="false" />
+    <list default="true" id="a6dcd861-038c-49f9-83d6-408038da67cd" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/artifacts/RailwaysSystemApplication_war.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/artifacts/RailwaysSystemApplication_war_exploded.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/railwaysProject/passenger/PassengerDaoImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/railwaysProject/passenger/PassengerDaoImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/railwaysProject/util/Database.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/railwaysProject/util/Database.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -197,8 +192,16 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1571153074043</updated>
-      <workItem from="1571153075281" duration="1178000" />
+      <workItem from="1571153075281" duration="2560000" />
     </task>
+    <task id="LOCAL-00001" summary="renamed dynamictodolist files to railwaysproject">
+      <created>1571154260663</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1571154260663</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

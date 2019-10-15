@@ -6,17 +6,20 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
+import java.util.logging.Logger;
+import java.util.logging.Level;
+
 public class Database {
     private static DataSource ds = null;
-
+    private static final Logger LOGGER = Logger.getLogger(Database.class.getName());
     static {
-//        Log.info("Inside Database() static method... ");
+        LOGGER.log(Level.INFO, "Inside Database() static method... ");
         Context context = null;
         try {
             context = new InitialContext();
             ds = (DataSource)context.lookup("java:comp/env/jdbc/tutorialdb");
         } catch (NamingException e) {
-//            Log.error("Unable to get Datasource...");
+            LOGGER.log(Level.INFO, "Unable to get Datasource...");
             e.printStackTrace();
         }
     }
