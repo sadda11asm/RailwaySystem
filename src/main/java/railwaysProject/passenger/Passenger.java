@@ -1,0 +1,34 @@
+package railwaysProject.passenger;
+
+
+public class Passenger {
+
+    private int passId;
+    private String firstName;
+    private String lastName;
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public int getPassId() {
+        return passId;
+    }
+
+    public void setPassId(int passId) {
+        this.passId = passId;
+    }
+
+}
