@@ -1,4 +1,4 @@
-package railwaysProject.Controller;
+package railwaysProject.model.Cities;
 
 public class City{
     private String name;

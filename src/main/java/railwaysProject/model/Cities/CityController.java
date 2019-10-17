@@ -1,4 +1,4 @@
-package railwaysProject.Controller;
+package railwaysProject.model.Cities;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -6,7 +6,7 @@ import java.util.List;
 import railwaysProject.util.ConnectionPool;
 
 /* Java program to find a Pair which has maximum score*/
-public class Controller {
+public class CityController {
 
     public List<City> getCities(){
         List<City> cities = new ArrayList<>();
