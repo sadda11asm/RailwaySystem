@@ -3,7 +3,6 @@ package railwaysProject;
 import railwaysProject.view.Cities;
 import railwaysProject.view.HelloWorld;
 import railwaysProject.view.ListItemsService;
-import railwaysProject.view.Routes;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -21,7 +20,6 @@ public class RailwaysSystemApplication extends Application {
         singletons.add(new HelloWorld());
         singletons.add(new ListItemsService());
         singletons.add(new Cities());
-        singletons.add(new Routes());
     }
     
     @Override
