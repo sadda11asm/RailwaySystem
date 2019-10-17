@@ -19,4 +19,8 @@
   <Valve className="org.apache.catalina.valves.RemoteAddrValve"
          allow="127\.\d+\.\d+\.\d+|::1|0:0:0:0:0:0:0:1" />
   <Manager sessionAttributeValueClassNameFilter="java\.lang\.(?:Boolean|Integer|Long|Number|String)|org\.apache\.catalina\.filters\.CsrfPreventionFilter\$LruCache(?:\$1)?|java\.util\.(?:Linked)?HashMap"/>
+  <Resource name="jdbc/TestDB" auth="Container" type="javax.sql.DataSource"
+            maxActive="100" maxIdle="30" maxWait="10000"
+            username="root" password="example" driverClassName="com.mysql.jdbc.Driver"
+            url="jdbc:mysql://localhost:8081/mydb"/>
 </Context>

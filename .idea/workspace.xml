@@ -7,10 +7,21 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a6dcd861-038c-49f9-83d6-408038da67cd" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/artifacts/RailwaysSystemApplication_war.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/artifacts/RailwaysSystemApplication_war_exploded.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/railwaysProject/passenger/PassengerDaoImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/railwaysProject/passenger/PassengerDaoImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/railwaysProject/util/Database.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/railwaysProject/util/Database.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__mysql_mysql_connector_java_6_0_6.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/artifacts/RailwaysSystemApplication_war_exploded.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/artifacts/RailwaysSystemApplication_war_exploded.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RailwaysSystemApplication.iml" beforeDir="false" afterPath="$PROJECT_DIR$/RailwaysSystemApplication.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/railwaysProject/model/passenger/PassengerDaoImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/railwaysProject/util/Database.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/railwaysProject/util/StatusMessage.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/railwaysProject/view/HelloWorld.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/railwaysProject/view/HelloWorld.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tomcat-8.5.47/conf/context.xml" beforeDir="false" afterPath="$PROJECT_DIR$/tomcat-8.5.47/conf/context.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tomcat-8.5.47/conf/web.xml" beforeDir="false" afterPath="$PROJECT_DIR$/tomcat-8.5.47/conf/web.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tomcat-8.5.47/webapps/host-manager/META-INF/context.xml" beforeDir="false" afterPath="$PROJECT_DIR$/tomcat-8.5.47/webapps/host-manager/META-INF/context.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tomcat-8.5.47/webapps/host-manager/WEB-INF/web.xml" beforeDir="false" afterPath="$PROJECT_DIR$/tomcat-8.5.47/webapps/host-manager/WEB-INF/web.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tomcat-8.5.47/webapps/manager/META-INF/context.xml" beforeDir="false" afterPath="$PROJECT_DIR$/tomcat-8.5.47/webapps/manager/META-INF/context.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tomcat-8.5.47/webapps/manager/WEB-INF/web.xml" beforeDir="false" afterPath="$PROJECT_DIR$/tomcat-8.5.47/webapps/manager/WEB-INF/web.xml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -21,11 +32,17 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
+        <option value="Jsp File" />
         <option value="Class" />
       </list>
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="master" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="LogFilters">
@@ -41,10 +58,11 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/java/railwaysProject" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/tomcat-8.5.47/lib" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/tomcat-8.5.47/lib" />
       <recent name="$PROJECT_DIR$/src/main/java/railwaysProject" />
     </key>
   </component>
@@ -61,53 +79,6 @@
     </option>
   </component>
   <component name="RunManager">
-    <configuration default="true" type="JetRunConfigurationType" factoryName="Kotlin">
-      <module name="RailwaysSystemApplication" />
-      <option name="VM_PARAMETERS" />
-      <option name="PROGRAM_PARAMETERS" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="WORKING_DIRECTORY" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType" factoryName="Kotlin script">
-      <module name="RailwaysSystemApplication" />
-      <option name="filePath" />
-      <option name="vmParameters" />
-      <option name="alternativeJrePath" />
-      <option name="programParameters" />
-      <option name="passParentEnvs" value="true" />
-      <option name="workingDirectory" />
-      <option name="isAlternativeJrePathEnabled" value="false" />
-      <option name="VM_PARAMETERS" />
-      <option name="PROGRAM_PARAMETERS" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="WORKING_DIRECTORY" />
-      <option name="filePath" />
-      <option name="vmParameters" />
-      <option name="alternativeJrePath" />
-      <option name="programParameters" />
-      <option name="passParentEnvs" value="true" />
-      <option name="workingDirectory" />
-      <option name="isAlternativeJrePathEnabled" value="false" />
-      <option name="VM_PARAMETERS" />
-      <option name="PROGRAM_PARAMETERS" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="WORKING_DIRECTORY" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="Tomcat 8.5.47" type="#com.intellij.j2ee.web.tomcat.TomcatRunConfigurationFactory" factoryName="Local" APPLICATION_SERVER_NAME="Tomcat 8.5.47" ALTERNATIVE_JRE_ENABLED="false" nameIsGenerated="true">
       <option name="UPDATING_POLICY" value="redeploy-artifacts" />
       <deployment>
@@ -193,6 +164,8 @@
       <option name="presentableId" value="Default" />
       <updated>1571153074043</updated>
       <workItem from="1571153075281" duration="2560000" />
+      <workItem from="1571259329389" duration="349000" />
+      <workItem from="1571322878130" duration="1649000" />
     </task>
     <task id="LOCAL-00001" summary="renamed dynamictodolist files to railwaysproject">
       <created>1571154260663</created>
@@ -212,7 +185,9 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="COLUMN_ORDER" />
+            </State>
           </value>
         </entry>
       </map>
