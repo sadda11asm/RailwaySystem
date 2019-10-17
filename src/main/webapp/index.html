@@ -1,8 +1,489 @@
 <!DOCTYPE html>
-<html>
+<html lang="en" dir="ltr">
 <head>
-<meta charset="UTF-8">
-<title>Website</title>
-<body>
+
+    <meta charset="utf-8">
+    <title>Welcome!</title>
+    <link rel="stylesheet" type="text/css" href="treeMainStyle.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js">
+    </script>
+
+    <script>
+        var myViewModel;
+        var response = '[{"rank":"9","content":"Alon","UID":"5"},{"rank":"6","content":"Tala","UID":"6"}]';
+
+        function autocomplete(inp, arr) {
+            /*the autocomplete function takes two arguments,
+            the text field element and an array of possible autocompleted values:*/
+            var currentFocus;
+            /*execute a function when someone writes in the text field:*/
+            inp.addEventListener("input", function (e) {
+                var a, b, i, val = this.value;
+                /*close any already open lists of autocompleted values*/
+                closeAllLists();
+                if (!val) {
+                    return false;
+                }
+                currentFocus = -1;
+                /*create a DIV element that will contain the items (values):*/
+                a = document.createElement("DIV");
+                a.setAttribute("id", this.id + "autocomplete-list");
+                a.setAttribute("class", "autocomplete-items");
+                /*append the DIV element as a child of the autocomplete container:*/
+                this.parentNode.appendChild(a);
+                /*for each item in the array...*/
+                for (i = 0; i < arr.length; i++) {
+                    /*check if the item starts with the same letters as the text field value:*/
+                    if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+                        /*create a DIV element for each matching element:*/
+                        b = document.createElement("DIV");
+                        /*make the matching letters bold:*/
+                        b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
+                        b.innerHTML += arr[i].substr(val.length);
+                        /*insert a input field that will hold the current array item's value:*/
+                        b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
+                        /*execute a function when someone clicks on the item value (DIV element):*/
+                        b.addEventListener("click", function (e) {
+                            /*insert the value for the autocomplete text field:*/
+                            inp.value = this.getElementsByTagName("input")[0].value;
+                            /*close the list of autocompleted values,
+                            (or any other open lists of autocompleted values:*/
+                            closeAllLists();
+                        });
+                        a.appendChild(b);
+                    }
+                }
+            });
+            /*execute a function presses a key on the keyboard:*/
+            inp.addEventListener("keydown", function (e) {
+                var x = document.getElementById(this.id + "autocomplete-list");
+                if (x) x = x.getElementsByTagName("div");
+                if (e.keyCode == 40) {
+                    /*If the arrow DOWN key is pressed,
+                    increase the currentFocus variable:*/
+                    currentFocus++;
+                    /*and and make the current item more visible:*/
+                    addActive(x);
+                } else if (e.keyCode == 38) { //up
+                    /*If the arrow UP key is pressed,
+                    decrease the currentFocus variable:*/
+                    currentFocus--;
+                    /*and and make the current item more visible:*/
+                    addActive(x);
+                } else if (e.keyCode == 13) {
+                    /*If the ENTER key is pressed, prevent the form from being submitted,*/
+                    e.preventDefault();
+                    if (currentFocus > -1) {
+                        /*and simulate a click on the "active" item:*/
+                        if (x) x[currentFocus].click();
+                    }
+                }
+            });
+
+            function addActive(x) {
+                /*a function to classify an item as "active":*/
+                if (!x) return false;
+                /*start by removing the "active" class on all items:*/
+                removeActive(x);
+                if (currentFocus >= x.length) currentFocus = 0;
+                if (currentFocus < 0) currentFocus = (x.length - 1);
+                /*add class "autocomplete-active":*/
+                x[currentFocus].classList.add("autocomplete-active");
+            }
+
+            function removeActive(x) {
+                /*a function to remove the "active" class from all autocomplete items:*/
+                for (var i = 0; i < x.length; i++) {
+                    x[i].classList.remove("autocomplete-active");
+                }
+            }
+
+            function closeAllLists(elmnt) {
+                /*close all autocomplete lists in the document,
+                except the one passed as an argument:*/
+                var x = document.getElementsByClassName("autocomplete-items");
+                for (var i = 0; i < x.length; i++) {
+                    if (elmnt != x[i] && elmnt != inp) {
+                        x[i].parentNode.removeChild(x[i]);
+                    }
+                }
+            }
+
+            /*execute a function when someone clicks in the document:*/
+            document.addEventListener("click", function (e) {
+                closeAllLists(e.target);
+            });
+        }
+
+
+        /*An array containing all the country names in the world:*/
+        var cities = ["Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Anguilla", "Antigua & Barbuda", "Argentina", "Armenia", "Aruba", "Australia", "Austria", "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bermuda", "Bhutan", "Bolivia", "Bosnia & Herzegovina", "Botswana", "Brazil", "British Virgin Islands", "Brunei", "Bulgaria", "Burkina Faso", "Burundi", "Cambodia", "Cameroon", "Canada", "Cape Verde", "Cayman Islands", "Central Arfrican Republic", "Chad", "Chile", "China", "Colombia", "Congo", "Cook Islands", "Costa Rica", "Cote D Ivoire", "Croatia", "Cuba", "Curacao", "Cyprus", "Czech Republic", "Denmark", "Djibouti", "Dominica", "Dominican Republic", "Ecuador", "Egypt", "El Salvador", "Equatorial Guinea", "Eritrea", "Estonia", "Ethiopia", "Falkland Islands", "Faroe Islands", "Fiji", "Finland", "France", "French Polynesia", "French West Indies", "Gabon", "Gambia", "Georgia", "Germany", "Ghana", "Gibraltar", "Greece", "Greenland", "Grenada", "Guam", "Guatemala", "Guernsey", "Guinea", "Guinea Bissau", "Guyana", "Haiti", "Honduras", "Hong Kong", "Hungary", "Iceland", "India", "Indonesia", "Iran", "Iraq", "Ireland", "Isle of Man", "Israel", "Italy", "Jamaica", "Japan", "Jersey", "Jordan", "Kazakhstan", "Kenya", "Kiribati", "Kosovo", "Kuwait", "Kyrgyzstan", "Laos", "Latvia", "Lebanon", "Lesotho", "Liberia", "Libya", "Liechtenstein", "Lithuania", "Luxembourg", "Macau", "Macedonia", "Madagascar", "Malawi", "Malaysia", "Maldives", "Mali", "Malta", "Marshall Islands", "Mauritania", "Mauritius", "Mexico", "Micronesia", "Moldova", "Monaco", "Mongolia", "Montenegro", "Montserrat", "Morocco", "Mozambique", "Myanmar", "Namibia", "Nauro", "Nepal", "Netherlands", "Netherlands Antilles", "New Caledonia", "New Zealand", "Nicaragua", "Niger", "Nigeria", "North Korea", "Norway", "Oman", "Pakistan", "Palau", "Palestine", "Panama", "Papua New Guinea", "Paraguay", "Peru", "Philippines", "Poland", "Portugal", "Puerto Rico", "Qatar", "Reunion", "Romania", "Russia", "Rwanda", "Saint Pierre & Miquelon", "Samoa", "San Marino", "Sao Tome and Principe", "Saudi Arabia", "Senegal", "Serbia", "Seychelles", "Sierra Leone", "Singapore", "Slovakia", "Slovenia", "Solomon Islands", "Somalia", "South Africa", "South Korea", "South Sudan", "Spain", "Sri Lanka", "St Kitts & Nevis", "St Lucia", "St Vincent", "Sudan", "Suriname", "Swaziland", "Sweden", "Switzerland", "Syria", "Taiwan", "Tajikistan", "Tanzania", "Thailand", "Timor L'Este", "Togo", "Tonga", "Trinidad & Tobago", "Tunisia", "Turkey", "Turkmenistan", "Turks & Caicos", "Tuvalu", "Uganda", "Ukraine", "United Arab Emirates", "United Kingdom", "United States of America", "Uruguay", "Uzbekistan", "Vanuatu", "Vatican City", "Venezuela", "Vietnam", "Virgin Islands (US)", "Yemen", "Zambia", "Zimbabwe"];
+
+        /*initiate the autocomplete function on the "myInput" element, and pass along the countries array as possible autocomplete values:*/
+
+        $(document).ready(function () {
+            $.ajax({
+                url: "/dynamictodolist_war_exploded/api/cities",
+                success: function(returnedCitiesList) {
+                    console.log(typeof($.parseJSON(returnedCitiesList)));
+                    cities = [];
+
+                    $.parseJSON(returnedCitiesList).forEach( function(item)  {
+                        cities.push(item.name);
+                    });
+
+                    autocomplete(document.getElementById("myInput"), cities);
+                    var overlay = $('<div id="overlay"></div>');
+                    overlay.show();
+                    overlay.appendTo(document.body);
+                    $('.popup').show();
+                    $('.close').click(function () {
+                        $('.popup').hide();
+                        updateItem();
+                        overlay.appendTo(document.body).remove();
+
+                        return false;
+                    });
+                    $('.x').click(function () {
+                        $('.popup').hide();
+                        overlay.appendTo(document.body).remove();
+                        return false;
+                    });
+
+                    myViewModel = {
+                        from: ko.observable(undefined), to: ko.observable(undefined),
+                        arrTime: ko.observable(undefined), depTime: ko.observable(undefined)
+                    };
+                    ko.applyBindings(myViewModel);
+
+                    function updateItem() {
+// convert string to JSON
+                        var jsonData = '[{"rank":"9","content":"Alon","UID":"5"},{"rank":"6","content":"Tala","UID":"6"}]';
+                        var response = '[{"rank":"9","content":"Alon","UID":"5"},{"rank":"6","content":"Tala","UID":"6"}]';
+                        response = $.parseJSON(response);
+// $.ajax({
+//     url: '/echo/json/',
+//     type: 'POST',
+//     data: {
+//         json: jsonData
+//     },
+//     success: function (response) {
+//         var trHTML = '';
+//         $.each(response, function (i, item) {
+//             trHTML += '<tr><td>' + item.rank + '</td><td>' + item.content + '</td><td>' + item.UID + '</td></tr>';
+//         });
+//         $('#records_table').append(trHTML);
+//     }
+// });
+                        var trHTML = '';
+                        $.each(response, function (i, item) {
+                            trHTML += '<tr><td>' + item.rank + '</td><td>' + item.content + '</td><td>' + item.UID + '</td></tr>';
+                        });
+                        $('#records_table').append(trHTML);
+                    }
+
+                    function updateItem1() {
+                        $.ajax({
+                            url: 'myservlet',
+                            dataType: 'json',
+                            success: function (response) {
+                                $.each(response, function (i, item) {
+                                    var $tr = $('<tr>').append(
+                                        $('<td>').text(item.from),
+                                        $('<td>').text(item.to),
+                                        $('<td>').text(item.arrTime),
+                                        $('<td>').text(item.depTime)
+                                    ); //.appendTo('#records_table');
+                                    console.log($tr.wrap('<p>').html());
+                                });
+                            }
+                        });
+                    }
+
+                    $("#formButton").click(function () {
+                        $("#routeform").validate({
+                            rules: {
+                                fromid: {
+                                    required: true
+                                },
+                                toid: {
+                                    required: true
+                                },
+                                dateid: {
+                                    required: true
+                                }
+                            },
+                            messages: {
+                                fromid: {
+                                    required: "<div style='text-align:center; color: red; margin-top:5px'>Invalid input</div>"
+                                },
+                                toid: {
+                                    required: "<div style='text-align:center; color: red'>Invalid input</div>"
+                                },
+                                dateid: "<div style='text-align:center; color: red'>Invalid input</div>"
+                            },
+                            submitHandler: subform2
+                        })
+
+                        function subform2() {
+                            var data = $("#routeform").serialize();
+                            $.ajax({
+                                type: 'POST',
+                                url: '',
+                                data: data,
+                                beforeSend: function () {
+                                    $("#info").fadeOut();
+                                    $("#formButton").html("Sending...");
+                                }, success: function (resp) {
+                                    $("#formButton").html("<img src = 'ajax-loader.gif' width = '15'/> &nbsp: Sign Up");
+                                    updateItem2(resp);
+                                },
+                                error: function (request, status, error) {
+                                    $("#info").fadeIn(1000, function () {
+                                        $("#info").html("<div class = 'alert alert-danger'>" + resp + "</div>");
+                                        $("#formButton").html("Sign Up");
+                                    });
+                                }
+                            })
+                        }
+
+                        function updateItem2(response) {
+// convert string to JSON
+                            var jsonData = '[{"rank":"9","content":"Alon","UID":"5"},{"rank":"6","content":"Tala","UID":"6"}]';
+                            var response = '[{"rank":"9","content":"Alon","UID":"5"},{"rank":"6","content":"Tala","UID":"6"}]';
+                            response = $.parseJSON(response);
+// $.ajax({
+//     url: '/echo/json/',
+//     type: 'POST',
+//     data: {
+//         json: jsonData
+//     },
+//     success: function (response) {
+//         var trHTML = '';
+//         $.each(response, function (i, item) {
+//             trHTML += '<tr><td>' + item.rank + '</td><td>' + item.content + '</td><td>' + item.UID + '</td></tr>';
+//         });
+//         $('#records_table').append(trHTML);
+//     }
+// });
+                            var trHTML = '';
+                            $.each(response, function (i, item) {
+                                trHTML += '<tr><td>' + item.rank + '</td><td>' + item.content + '</td><td>' + item.UID + '</td></tr>';
+                            });
+                            $('#routes_table').append(trHTML);
+                        }
+                    });
+                }
+            })
+        });
+    </script>
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            width: 100%;
+            font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+        }
+
+        .bg {
+            /* The image used
+            background-image: url("back3.jpg");*/
+
+            /* Full height */
+            height: 100%;
+
+            /* Center and scale the image nicely */
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+
+        #overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+            filter: alpha(opacity=70);
+            -moz-opacity: 0.7;
+            -khtml-opacity: 0.7;
+            opacity: 0.7;
+            z-index: 100;
+            display: none;
+        }
+
+        .cnt223 a {
+            text-decoration: none;
+        }
+
+        #records_table {
+            margin: 0 auto;
+            text-align: center;
+            border-collapse: collapse;
+            width: 100%;
+            font-size: 15px;
+            color: gray;
+            line-height: 1.4;
+            background-color: #222;
+        }
+
+        th {
+            background-color: #222;
+            color: white;
+            height: 30px;
+        }
+
+        td {
+            height: 20px;
+        }
+
+        .popup {
+            width: 100%;
+            margin: 0 auto;
+            display: none;
+            position: fixed;
+            z-index: 101;
+        }
+
+        .cnt223 {
+            min-width: 600px;
+            width: 600px;
+            min-height: 150px;
+            margin: 100px auto;
+            background: #f3f3f3;
+            position: relative;
+            z-index: 103;
+            padding: 15px 35px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px #000;
+            font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+        }
+
+        .cnt223 p {
+            clear: both;
+            color: #555555;
+            /* text-align: justify; */
+            font-size: 20px;
+            font-family: sans-serif;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2
+        }
+
+        .cnt223 p a {
+            color: #d91900;
+            font-weight: bold;
+        }
+
+        .cnt223 .x {
+            float: right;
+            height: 35px;
+            left: 22px;
+            position: relative;
+            top: -25px;
+            width: 34px;
+        }
+
+        .cnt223 .x:hover {
+            cursor: pointer;
+        }
+
+        #rcorners1 {
+            background-color: white;
+            margin-top: 20pt;
+            margin-bottom: 0pt;
+            height: 113px;
+            font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+        }
+
+        .text-center {
+            width: 100%;
+        }
+
+        .btn-success2 {
+            color: #fff;
+            background-color: #000000;
+            border-color: #ff0000;
+        }
+
+    </style>
+</head>
+<body class="bg">
+<div class="navigation-bar">
+    <div id="navigation-container">
+
+        <img src="PicsArt_10-05-10.27.58.jpg" width="70" height="70">
+
+        <ul>
+            <li><a href="index.html">Main</a></li>
+            <li><a href="LogSign.html">Log In</a></li>
+            <li><a href="#">About Us</a></li>
+            <li><a href="#">Get in Touch</a></li>
+        </ul>
+    </div>
+    <div id="rcorners1">
+        <div class="text-center">
+            <h1>Search the routes</h1>
+        </div>
+        <div class="text-center">
+
+            <form method="post" id="routeform" class="form-inline">
+                <div class="form-group">
+                    <label for="exampleInputName2">From</label>
+                    <input type="text" class="form-control" name="fromid" id="fromid" placeholder="From">
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputEmail2">To</label>
+                    <input type="text" class="form-control" name="toid" id="toid" placeholder="To">
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputDate2">Date</label>
+                    <input type="date" class="form-control" name="dateid" id="dateid" placeholder="Date">
+                </div>
+
+                <button type="button" class="btn btn-success2">Send</button>
+            </form>
+        </div>
+        <script type='text/javascript'>
+
+        </script>
+        <div class='popup'>
+            <div class='cnt223'>
+                <form autocomplete="off" action="treeMain.html">
+                    <div class="autocomplete">
+                        <p>Please, choose your city</p>
+                        <input id="myInput" type="text">
+                    </div>
+                    <input type="submit" class='close'>
+                </form>
+            </div>
+        </div>
+
+        <script>
+
+
+        </script>
+
+
+    </div>
+    <table id="records_table" style="width:90%;text-align:center" border='1' ,>
+        <tr>
+            <th style="text-align: center;">Rank</th>
+            <th style="text-align: center;">Content</th>
+            <th style="text-align: center;">UID</th>
+        </tr>
+    </table>
+    <table id="routes_table" style="width:90%;text-align:center" border='1' ,>
+        <tr>
+            <th style="text-align: center;">Rank</th>
+            <th style="text-align: center;">Content</th>
+            <th style="text-align: center;">UID</th>
+        </tr>
+    </table>
+    <div></div>
+
 </body>
 </html>
