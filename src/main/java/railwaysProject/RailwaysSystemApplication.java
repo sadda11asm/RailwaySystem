@@ -1,5 +1,6 @@
 package railwaysProject;
 
+import railwaysProject.view.Cities;
 import railwaysProject.view.HelloWorld;
 import railwaysProject.view.ListItemsService;
 
@@ -18,6 +19,7 @@ public class RailwaysSystemApplication extends Application {
     public RailwaysSystemApplication() {
         singletons.add(new HelloWorld());
         singletons.add(new ListItemsService());
+        singletons.add(new Cities());
     }
     
     @Override
