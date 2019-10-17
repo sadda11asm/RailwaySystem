@@ -23,7 +23,12 @@ public class HelloWorld {
         Connection conn;
         try {
             conn = ConnectionPool.getDatabaseConnection();
-            System.out.println(conn.createStatement().executeQuery("select * from Locality"));
+            ResultSet result = conn.createStatement().executeQuery("select * from Locality");
+            while(result.next()) {
+                int id = result.getInt("locality_id");
+                String locality_name = result.getString("locality_name");
+                System.out.println("id: " + id + ", locality_name: " + locality_name);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

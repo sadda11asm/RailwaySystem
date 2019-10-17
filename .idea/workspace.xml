@@ -7,21 +7,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a6dcd861-038c-49f9-83d6-408038da67cd" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__mysql_mysql_connector_java_6_0_6.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/artifacts/RailwaysSystemApplication_war_exploded.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/artifacts/RailwaysSystemApplication_war_exploded.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/railwaysProject/model/Passenger/Passenger.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/RailwaysSystemApplication.iml" beforeDir="false" afterPath="$PROJECT_DIR$/RailwaysSystemApplication.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/railwaysProject/model/passenger/PassengerDaoImpl.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/railwaysProject/util/Database.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/railwaysProject/util/StatusMessage.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/railwaysProject/model/passenger/Passenger.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/railwaysProject/model/passenger/PassengerDAO.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/railwaysProject/view/HelloWorld.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/railwaysProject/view/HelloWorld.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tomcat-8.5.47/conf/context.xml" beforeDir="false" afterPath="$PROJECT_DIR$/tomcat-8.5.47/conf/context.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tomcat-8.5.47/conf/web.xml" beforeDir="false" afterPath="$PROJECT_DIR$/tomcat-8.5.47/conf/web.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tomcat-8.5.47/webapps/host-manager/META-INF/context.xml" beforeDir="false" afterPath="$PROJECT_DIR$/tomcat-8.5.47/webapps/host-manager/META-INF/context.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tomcat-8.5.47/webapps/host-manager/WEB-INF/web.xml" beforeDir="false" afterPath="$PROJECT_DIR$/tomcat-8.5.47/webapps/host-manager/WEB-INF/web.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tomcat-8.5.47/webapps/manager/META-INF/context.xml" beforeDir="false" afterPath="$PROJECT_DIR$/tomcat-8.5.47/webapps/manager/META-INF/context.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tomcat-8.5.47/webapps/manager/WEB-INF/web.xml" beforeDir="false" afterPath="$PROJECT_DIR$/tomcat-8.5.47/webapps/manager/WEB-INF/web.xml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -165,7 +155,7 @@
       <updated>1571153074043</updated>
       <workItem from="1571153075281" duration="2560000" />
       <workItem from="1571259329389" duration="349000" />
-      <workItem from="1571322878130" duration="1649000" />
+      <workItem from="1571322878130" duration="2784000" />
     </task>
     <task id="LOCAL-00001" summary="renamed dynamictodolist files to railwaysproject">
       <created>1571154260663</created>
@@ -174,7 +164,14 @@
       <option name="project" value="LOCAL" />
       <updated>1571154260663</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="connection to database works">
+      <created>1571324824942</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1571324824942</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -195,6 +192,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="renamed dynamictodolist files to railwaysproject" />
-    <option name="LAST_COMMIT_MESSAGE" value="renamed dynamictodolist files to railwaysproject" />
+    <MESSAGE value="connection to database works" />
+    <option name="LAST_COMMIT_MESSAGE" value="connection to database works" />
   </component>
 </project>
