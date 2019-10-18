@@ -1,6 +1,7 @@
-package railwaysProject.model.Passengers;
+package railwaysProject.controller;
 
 
+import railwaysProject.model.Passengers.Passenger;
 import railwaysProject.util.ConnectionPool;
 
 import javax.swing.plaf.nimbus.State;

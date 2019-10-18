@@ -7,16 +7,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a6dcd861-038c-49f9-83d6-408038da67cd" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/railwaysProject/controller/RoutesController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/railwaysProject/model/route/Route.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/railwaysProject/model/route/RouteDAO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/railwaysProject/model/route/RouteDaoImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/railwaysProject/view/Routes.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/railwaysProject/model/route/CityRoute.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/railwaysProject/model/route/Station.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/railwaysProject/view/ServiceLocator.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/RailwaysSystemApplication.iml" beforeDir="false" afterPath="$PROJECT_DIR$/RailwaysSystemApplication.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/railwaysProject/RailwaysSystemApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/railwaysProject/RailwaysSystemApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tomcat-8.5.47/conf/context.xml" beforeDir="false" afterPath="$PROJECT_DIR$/tomcat-8.5.47/conf/context.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/railwaysProject/controller/RoutesController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/railwaysProject/controller/RoutesController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/railwaysProject/model/Cities/CityController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/railwaysProject/controller/CityController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/railwaysProject/model/Passengers/PassengerController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/railwaysProject/controller/PassengerController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/railwaysProject/model/route/Route.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/railwaysProject/model/route/Route.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/railwaysProject/model/route/RouteDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/railwaysProject/model/route/RouteDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/railwaysProject/model/route/RouteDaoImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/railwaysProject/model/route/RouteDaoImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/railwaysProject/view/Cities.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/railwaysProject/view/Cities.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/railwaysProject/view/Passengers.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/railwaysProject/view/Passengers.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -59,6 +61,9 @@
     <property name="project.structure.side.proportion" value="0.0" />
   </component>
   <component name="RecentsManager">
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="railwaysProject.view" />
+    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/main/java/railwaysProject/controller" />
       <recent name="$PROJECT_DIR$/src/main/java/railwaysProject/view" />
