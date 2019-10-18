@@ -1,8 +1,10 @@
-package railwaysProject.model.Cities;
+package railwaysProject.controller;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+
+import railwaysProject.model.Cities.City;
 import railwaysProject.util.ConnectionPool;
 
 /* Java program to find a Pair which has maximum score*/
