@@ -11,7 +11,11 @@
 
     <script>
         var myViewModel;
-        var response = '[{"rank":"9","content":"Alon","UID":"5"},{"rank":"6","content":"Tala","UID":"6"}]';
+        var currentCityChoice;
+
+        function loadArrivalsAndDepartures() {
+            currentCityChoice = document.getElementById("myInput").value;
+        }
 
         function autocomplete(inp, arr) {
             /*the autocomplete function takes two arguments,
@@ -20,6 +24,7 @@
             /*execute a function when someone writes in the text field:*/
             inp.addEventListener("input", function (e) {
                 var a, b, i, val = this.value;
+                console.log(a,b,i,val);
                 /*close any already open lists of autocompleted values*/
                 closeAllLists();
                 if (!val) {
@@ -33,18 +38,23 @@
                 /*append the DIV element as a child of the autocomplete container:*/
                 this.parentNode.appendChild(a);
                 /*for each item in the array...*/
+                console.log(arr);
                 for (i = 0; i < arr.length; i++) {
                     /*check if the item starts with the same letters as the text field value:*/
-                    if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+                    var theJSON = arr[i];
+                    var currentCityName = theJSON.name;
+                    if (currentCityName.substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+                        console.log("here?");
                         /*create a DIV element for each matching element:*/
                         b = document.createElement("DIV");
                         /*make the matching letters bold:*/
-                        b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
-                        b.innerHTML += arr[i].substr(val.length);
+                        b.innerHTML = "<strong>" + currentCityName.substr(0, val.length) + "</strong>";
+                        b.innerHTML += currentCityName.substr(val.length);
                         /*insert a input field that will hold the current array item's value:*/
-                        b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
+                        b.innerHTML += "<input type='hidden' value='" + currentCityName + "'>";
                         /*execute a function when someone clicks on the item value (DIV element):*/
                         b.addEventListener("click", function (e) {
+                            console.log("clicked!");
                             /*insert the value for the autocomplete text field:*/
                             inp.value = this.getElementsByTagName("input")[0].value;
                             /*close the list of autocompleted values,
@@ -130,17 +140,25 @@
                     cities = [];
 
                     $.parseJSON(returnedCitiesList).forEach( function(item)  {
-                        cities.push(item.name);
+                        cities.push(item);
                     });
 
                     autocomplete(document.getElementById("myInput"), cities);
+                    autocomplete(document.getElementById("fromid"), cities);
+                    autocomplete(document.getElementById("toid"), cities);
                     var overlay = $('<div id="overlay"></div>');
                     overlay.show();
                     overlay.appendTo(document.body);
                     $('.popup').show();
                     $('.close').click(function () {
                         $('.popup').hide();
-                        updateItem();
+                        // $.ajax({
+                        //     url: "",
+                        //     success: function(r) {
+                        //         updateItem(r);
+                        //     }
+                        // });
+                        updateItem('[{"rank":"9","content":"Alon","UID":"5"},{"rank":"6","content":"Tala","UID":"6"}]');
                         overlay.appendTo(document.body).remove();
 
                         return false;
@@ -157,10 +175,10 @@
                     };
                     ko.applyBindings(myViewModel);
 
-                    function updateItem() {
+                    function updateItem(response) {
 // convert string to JSON
                         var jsonData = '[{"rank":"9","content":"Alon","UID":"5"},{"rank":"6","content":"Tala","UID":"6"}]';
-                        var response = '[{"rank":"9","content":"Alon","UID":"5"},{"rank":"6","content":"Tala","UID":"6"}]';
+                        // var response = '[{"rank":"9","content":"Alon","UID":"5"},{"rank":"6","content":"Tala","UID":"6"}]';
                         response = $.parseJSON(response);
 // $.ajax({
 //     url: '/echo/json/',
@@ -201,52 +219,54 @@
                         });
                     }
 
-                    $("#formButton").click(function () {
-                        $("#routeform").validate({
-                            rules: {
-                                fromid: {
-                                    required: true
-                                },
-                                toid: {
-                                    required: true
-                                },
-                                dateid: {
-                                    required: true
-                                }
+                    $("#routeform").validate({
+                        rules: {
+                            fromid: {
+                                required: true
                             },
-                            messages: {
-                                fromid: {
-                                    required: "<div style='text-align:center; color: red; margin-top:5px'>Invalid input</div>"
-                                },
-                                toid: {
-                                    required: "<div style='text-align:center; color: red'>Invalid input</div>"
-                                },
-                                dateid: "<div style='text-align:center; color: red'>Invalid input</div>"
+                            toid: {
+                                required: true
                             },
-                            submitHandler: subform2
-                        })
+                            dateid: {
+                                required: true
+                            }
+                        },
+                        messages: {
+                            fromid: {
+                                required: "<div style='text-align:center; color: red; margin-top:5px'>Invalid input</div>"
+                            },
+                            toid: {
+                                required: "<div style='text-align:center; color: red'>Invalid input</div>"
+                            },
+                            dateid: "<div style='text-align:center; color: red'>Invalid input</div>"
+                        },
+                        submitHandler: subform2
+                    })
 
-                        function subform2() {
-                            var data = $("#routeform").serialize();
-                            $.ajax({
-                                type: 'POST',
-                                url: '',
-                                data: data,
-                                beforeSend: function () {
-                                    $("#info").fadeOut();
-                                    $("#formButton").html("Sending...");
-                                }, success: function (resp) {
-                                    $("#formButton").html("<img src = 'ajax-loader.gif' width = '15'/> &nbsp: Sign Up");
-                                    updateItem2(resp);
-                                },
-                                error: function (request, status, error) {
-                                    $("#info").fadeIn(1000, function () {
-                                        $("#info").html("<div class = 'alert alert-danger'>" + resp + "</div>");
-                                        $("#formButton").html("Sign Up");
-                                    });
-                                }
-                            })
-                        }
+                    function subform2() {
+                        var data = $("#routeform").serialize();
+                        $.ajax({
+                            type: 'POST',
+                            url: '',
+                            data: data,
+                            beforeSend: function () {
+                                $("#info").fadeOut();
+                                $("#formButton").html("Sending...");
+                            }, success: function (resp) {
+                                $("#formButton").html("<img src = 'ajax-loader.gif' width = '15'/> &nbsp: Sign Up");
+                                updateItem2(resp);
+                            },
+                            error: function (request, status, error) {
+                                $("#info").fadeIn(1000, function () {
+                                    $("#info").html("<div class = 'alert alert-danger'>" + resp + "</div>");
+                                    $("#formButton").html("Sign Up");
+                                });
+                            }
+                        })
+                    }
+
+                    $("#formButton").click(function () {
+
 
                         function updateItem2(response) {
 // convert string to JSON
@@ -444,7 +464,7 @@
                     <input type="date" class="form-control" name="dateid" id="dateid" placeholder="Date">
                 </div>
 
-                <button type="button" class="btn btn-success2">Send</button>
+                <button type="button" class="btn btn-success2" id="formButton">Send</button>
             </form>
         </div>
         <script type='text/javascript'>
@@ -457,7 +477,7 @@
                         <p>Please, choose your city</p>
                         <input id="myInput" type="text">
                     </div>
-                    <input type="submit" class='close'>
+                    <input type="submit" class='close' onclick="loadArrivalsAndDepartures()">
                 </form>
             </div>
         </div>
@@ -469,11 +489,13 @@
 
 
     </div>
+    <br>
+    <br>
     <table id="records_table" style="width:90%;text-align:center" border='1' ,>
         <tr>
-            <th style="text-align: center;">Rank</th>
-            <th style="text-align: center;">Content</th>
-            <th style="text-align: center;">UID</th>
+            <th style="text-align: center;">Arrival time</th>
+            <th style="text-align: center;">Departure time</th>
+            <th style="text-align: center;">Route name</th>
         </tr>
     </table>
     <table id="routes_table" style="width:90%;text-align:center" border='1' ,>
