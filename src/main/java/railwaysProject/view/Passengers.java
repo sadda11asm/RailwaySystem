@@ -2,7 +2,7 @@ package railwaysProject.view;
 
 import com.google.gson.Gson;
 import railwaysProject.model.Passengers.Passenger;
-import railwaysProject.model.Passengers.PassengerController;
+import railwaysProject.controller.PassengerController;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;

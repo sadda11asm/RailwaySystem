@@ -1,15 +1,23 @@
 package railwaysProject.model.route;
 
-import java.time.LocalDateTime;
-
-public class Route {
+public class CityRoute {
     private int routeId;
     private String routeName;
     private String startDate;
-    private Station to;
-    private Station from;
+    private int stationId;
+    private String stationName;
     private String depDate;
     private String arrDate;
+
+    public CityRoute(int routeId, String routeName, String startDate, int stationId, String stationName, String depDate, String arrDate) {
+        this.routeId = routeId;
+        this.routeName = routeName;
+        this.startDate = startDate;
+        this.stationId = stationId;
+        this.stationName = stationName;
+        this.depDate = depDate;
+        this.arrDate = arrDate;
+    }
 
     public String getStartDate() {
         return startDate;
@@ -23,14 +31,6 @@ public class Route {
         return arrDate;
     }
 
-    public String getToName() {
-        return toName;
-    }
-
-    public String getFromName() {
-        return fromName;
-    }
-
     public void setStartDate(String startDate) {
         this.startDate = startDate;
     }
@@ -40,28 +40,6 @@ public class Route {
     }
 
     public void setArrDate(String arrDate) {
-        this.arrDate = arrDate;
-    }
-
-    public void setToName(String toName) {
-        this.toName = toName;
-    }
-
-    public void setFromName(String fromName) {
-        this.fromName = fromName;
-    }
-
-    private String toName;
-    private String fromName;
-
-
-    public Route(int routeId, String routeName, String startDate, Station to, Station from, String depDate, String arrDate) {
-        this.routeId = routeId;
-        this.routeName = routeName;
-        this.startDate = startDate;
-        this.to = to;
-        this.from = from;
-        this.depDate = depDate;
         this.arrDate = arrDate;
     }
 
@@ -77,12 +55,12 @@ public class Route {
         this.startDate = dateStart;
     }
 
-    public void setTo(Station to) {
-        this.to = to;
+    public void setStationId(int stationId) {
+        this.stationId = stationId;
     }
 
-    public void setFrom(Station from) {
-        this.from = from;
+    public void setStationName(String stationName) {
+        this.stationName = stationName;
     }
 
     public int getRouteId() {
@@ -97,8 +75,8 @@ public class Route {
         return startDate;
     }
 
-    public Station getTo() {
-        return to;
+    public int getStationId() {
+        return stationId;
     }
 
     @Override
@@ -107,18 +85,14 @@ public class Route {
                 "routeId=" + routeId +
                 ", routeName='" + routeName + '\'' +
                 ", startDate='" + startDate + '\'' +
-                ", to=" + to +
-                ", from=" + from +
+                ", to=" + stationId +
+                ", from=" + stationName +
                 ", depDate='" + depDate + '\'' +
                 ", arrDate='" + arrDate + '\'' +
                 '}';
     }
 
-    public Station getFrom() {
-        return from;
+    public String getStationName() {
+        return stationName;
     }
-
-
 }
-
-
