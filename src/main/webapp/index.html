@@ -8,16 +8,65 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js">
     </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.1/jquery.validate.js"></script>
 
     <script>
         var myViewModel;
         var currentCityChoice;
+        var currentFromChoice;
+        var currentToChoice;
 
-        function loadArrivalsAndDepartures() {
-            currentCityChoice = document.getElementById("myInput").value;
+        var timeTable = [];
+
+        function redrawTimetable() {
+            var trHTML = "";
+            $('#records_table').html("");
+            timeTable.forEach(function(item) {
+                var arrDate = item['arrDate'] === undefined ? "——" : item['arrDate'];
+                var depDate = item['depDate'] === undefined ? "——" : item['depDate'];
+                trHTML += '<tr><td>' + arrDate + '</td><td>' + depDate + '</td><td>' + item['routeName'] + '</td></tr>';
+            });
+            $('#records_table').append(trHTML);
         }
 
-        function autocomplete(inp, arr) {
+        function loadArrivalsAndDepartures() {
+            $.ajax({
+                url: "/dynamictodolist_war_exploded/api/cities/"+currentCityChoice,
+                success: function(r) {
+                    var response = $.parseJSON(r);
+                    timeTable = [];
+                    response.forEach(function(item, i) {
+                        timeTable.push(item);
+                    });
+                    redrawTimetable();
+
+                }
+            })
+        }
+
+        function fromToFormSubmit() {
+            var formData = $("#fromToForm").serializeArray();
+            var data = {};
+            console.log(formData);
+            data["from"] = currentFromChoice;
+            data["to"] = currentToChoice;
+            console.log("dataFrom");
+            console.log(data);
+
+            $.ajax({
+                url: "/dynamictodolist_war_exploded/api/routes/?"+$.param(data) + "&date_to='"+ formData[2]["value"]+"'",
+                success: function(r) {
+                    var response = $.parseJSON(r);
+                    timeTable = [];
+                    response.forEach(function(item) {
+                        timeTable.push(item);
+                    });
+                    redrawTimetable();
+                }
+            })
+        }
+
+        function autocomplete(inp, arr, whichVariable) {
             /*the autocomplete function takes two arguments,
             the text field element and an array of possible autocompleted values:*/
             var currentFocus;
@@ -52,11 +101,20 @@
                         b.innerHTML += currentCityName.substr(val.length);
                         /*insert a input field that will hold the current array item's value:*/
                         b.innerHTML += "<input type='hidden' value='" + currentCityName + "'>";
+                        b.innerHTML += "<input type='hidden' value='" + theJSON.localityId + "'>";
                         /*execute a function when someone clicks on the item value (DIV element):*/
                         b.addEventListener("click", function (e) {
                             console.log("clicked!");
                             /*insert the value for the autocomplete text field:*/
                             inp.value = this.getElementsByTagName("input")[0].value;
+                            if(whichVariable === "currentCityChoice") {
+                                currentCityChoice = this.getElementsByTagName("input")[1].value;
+                            } else if(whichVariable === "currentFromChoice") {
+                                currentFromChoice = this.getElementsByTagName("input")[1].value;
+                            } else {
+                                currentToChoice = this.getElementsByTagName("input")[1].value;
+                            }
+
                             /*close the list of autocompleted values,
                             (or any other open lists of autocompleted values:*/
                             closeAllLists();
@@ -133,6 +191,11 @@
         /*initiate the autocomplete function on the "myInput" element, and pass along the countries array as possible autocomplete values:*/
 
         $(document).ready(function () {
+            $('#records_table').css('opacity','0');
+            $('.form-inline').css('opacity', '0');
+            $("#fromToForm").submit(function (e) {
+                e.preventDefault();
+            });
             $.ajax({
                 url: "/dynamictodolist_war_exploded/api/cities",
                 success: function(returnedCitiesList) {
@@ -143,9 +206,9 @@
                         cities.push(item);
                     });
 
-                    autocomplete(document.getElementById("myInput"), cities);
-                    autocomplete(document.getElementById("fromid"), cities);
-                    autocomplete(document.getElementById("toid"), cities);
+                    autocomplete(document.getElementById("myInput"), cities, "currentCityChoice");
+                    autocomplete(document.getElementById("fromid"), cities, "currentFromChoice");
+                    autocomplete(document.getElementById("toid"), cities, "currentToChoice");
                     var overlay = $('<div id="overlay"></div>');
                     overlay.show();
                     overlay.appendTo(document.body);
@@ -158,8 +221,13 @@
                         //         updateItem(r);
                         //     }
                         // });
-                        updateItem('[{"rank":"9","content":"Alon","UID":"5"},{"rank":"6","content":"Tala","UID":"6"}]');
+                        // updateItem('[{"rank":"9","content":"Alon","UID":"5"},{"rank":"6","content":"Tala","UID":"6"}]');
                         overlay.appendTo(document.body).remove();
+
+
+
+                        $('#records_table').css('opacity','1');
+                        $('.form-inline').css('opacity', '1');
 
                         return false;
                     });
@@ -219,7 +287,7 @@
                         });
                     }
 
-                    $("#routeform").validate({
+                    $("#fromToForm").validate({
                         rules: {
                             fromid: {
                                 required: true
@@ -240,11 +308,14 @@
                             },
                             dateid: "<div style='text-align:center; color: red'>Invalid input</div>"
                         },
-                        submitHandler: subform2
+                        submitHandler: function(form) {
+                            console.log("FORM!");
+                            console.log(form);
+                        }
                     })
 
                     function subform2() {
-                        var data = $("#routeform").serialize();
+                        var data = $("#fromToForm").serialize();
                         $.ajax({
                             type: 'POST',
                             url: '',
@@ -265,35 +336,35 @@
                         })
                     }
 
-                    $("#formButton").click(function () {
-
-
-                        function updateItem2(response) {
-// convert string to JSON
-                            var jsonData = '[{"rank":"9","content":"Alon","UID":"5"},{"rank":"6","content":"Tala","UID":"6"}]';
-                            var response = '[{"rank":"9","content":"Alon","UID":"5"},{"rank":"6","content":"Tala","UID":"6"}]';
-                            response = $.parseJSON(response);
-// $.ajax({
-//     url: '/echo/json/',
-//     type: 'POST',
-//     data: {
-//         json: jsonData
-//     },
-//     success: function (response) {
-//         var trHTML = '';
-//         $.each(response, function (i, item) {
-//             trHTML += '<tr><td>' + item.rank + '</td><td>' + item.content + '</td><td>' + item.UID + '</td></tr>';
-//         });
-//         $('#records_table').append(trHTML);
-//     }
-// });
-                            var trHTML = '';
-                            $.each(response, function (i, item) {
-                                trHTML += '<tr><td>' + item.rank + '</td><td>' + item.content + '</td><td>' + item.UID + '</td></tr>';
-                            });
-                            $('#routes_table').append(trHTML);
-                        }
-                    });
+//                     $("#formButton").click(function () {
+//
+//
+//                         function updateItem2(response) {
+// // convert string to JSON
+//                             var jsonData = '[{"rank":"9","content":"Alon","UID":"5"},{"rank":"6","content":"Tala","UID":"6"}]';
+//                             var response = '[{"rank":"9","content":"Alon","UID":"5"},{"rank":"6","content":"Tala","UID":"6"}]';
+//                             response = $.parseJSON(response);
+// // $.ajax({
+// //     url: '/echo/json/',
+// //     type: 'POST',
+// //     data: {
+// //         json: jsonData
+// //     },
+// //     success: function (response) {
+// //         var trHTML = '';
+// //         $.each(response, function (i, item) {
+// //             trHTML += '<tr><td>' + item.rank + '</td><td>' + item.content + '</td><td>' + item.UID + '</td></tr>';
+// //         });
+// //         $('#records_table').append(trHTML);
+// //     }
+// // });
+//                             var trHTML = '';
+//                             $.each(response, function (i, item) {
+//                                 trHTML += '<tr><td>' + item.rank + '</td><td>' + item.content + '</td><td>' + item.UID + '</td></tr>';
+//                             });
+//                             $('#routes_table').append(trHTML);
+//                         }
+//                     });
                 }
             })
         });
@@ -450,26 +521,25 @@
         </div>
         <div class="text-center">
 
-            <form method="post" id="routeform" class="form-inline">
+            <form method="post" id="fromToForm" class="form-inline" onsubmit="fromToFormSubmit()">
                 <div class="form-group">
-                    <label for="exampleInputName2">From</label>
+                    <label for="fromid">From</label>
                     <input type="text" class="form-control" name="fromid" id="fromid" placeholder="From">
                 </div>
                 <div class="form-group">
-                    <label for="exampleInputEmail2">To</label>
+                    <label for="toid">To</label>
                     <input type="text" class="form-control" name="toid" id="toid" placeholder="To">
                 </div>
                 <div class="form-group">
-                    <label for="exampleInputDate2">Date</label>
+                    <label for="dateid">Date</label>
                     <input type="date" class="form-control" name="dateid" id="dateid" placeholder="Date">
                 </div>
 
-                <button type="button" class="btn btn-success2" id="formButton">Send</button>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-success2" id="formButton">Send</button>
+                </div>
             </form>
         </div>
-        <script type='text/javascript'>
-
-        </script>
         <div class='popup'>
             <div class='cnt223'>
                 <form autocomplete="off" action="treeMain.html">
@@ -497,14 +567,15 @@
             <th style="text-align: center;">Departure time</th>
             <th style="text-align: center;">Route name</th>
         </tr>
+        <span id="therecords"></span>
     </table>
-    <table id="routes_table" style="width:90%;text-align:center" border='1' ,>
-        <tr>
-            <th style="text-align: center;">Rank</th>
-            <th style="text-align: center;">Content</th>
-            <th style="text-align: center;">UID</th>
-        </tr>
-    </table>
+    <!--    <table id="routes_table" style="width:90%;text-align:center" border='1' ,>-->
+    <!--        <tr>-->
+    <!--            <th style="text-align: center;">Rank</th>-->
+    <!--            <th style="text-align: center;">Content</th>-->
+    <!--            <th style="text-align: center;">UID</th>-->
+    <!--        </tr>-->
+    <!--    </table>-->
     <div></div>
 
 </body>
