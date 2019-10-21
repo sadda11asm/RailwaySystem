@@ -6,6 +6,8 @@ import railwaysProject.model.route.CityRoute;
 import railwaysProject.model.route.Route;
 import railwaysProject.model.route.RouteDAO;
 
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 public class RoutesController {
@@ -26,7 +28,17 @@ public class RoutesController {
 
         List<CityRoute> routes = routeDAO.geArrivalToTheCity(cityId);
 
+
         List<CityRoute> depRoutes = routeDAO.geDepartureFromTheCity(cityId);
+
+//        for (CityRoute route: depRoutes) {
+//            if (finalRoutes.containsKey(new Pair<>(route.getRouteId(), new Pair(route.getStartDate(), route.getStationId())))) {
+//                CityRoute r = finalRoutes.get(new Pair<>(route.getRouteId(), new Pair(route.getStartDate(), route.getStationId())));
+//                r.setDepDate(route.getDepDate());
+//            } else {
+//                finalRoutes.put(new Pair<>(route.getRouteId(), new Pair(route.getStartDate(), route.getStationId())), route);
+//            }
+//        }
 
         for (int i = 0; i < routes.size(); i++) {
             for (int j = 0; j < depRoutes.size(); j++) {

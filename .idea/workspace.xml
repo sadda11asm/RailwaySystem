@@ -6,7 +6,11 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a6dcd861-038c-49f9-83d6-408038da67cd" name="Default Changelist" comment="" />
+    <list default="true" id="a6dcd861-038c-49f9-83d6-408038da67cd" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/railwaysProject/controller/RoutesController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/railwaysProject/controller/RoutesController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/index.html" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -162,6 +166,7 @@
       <workItem from="1571322878130" duration="2784000" />
       <workItem from="1571328729010" duration="1257000" />
       <workItem from="1571355770113" duration="360000" />
+      <workItem from="1571647584772" duration="379000" />
     </task>
     <task id="LOCAL-00001" summary="renamed dynamictodolist files to railwaysproject">
       <created>1571154260663</created>
