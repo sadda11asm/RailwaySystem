@@ -3,7 +3,6 @@ package railwaysProject.view;
 import com.google.gson.Gson;
 import railwaysProject.model.Passengers.Passenger;
 import railwaysProject.controller.PassengerController;
-
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 
@@ -51,5 +50,30 @@ public class Passengers {
         Gson gson = new Gson();
         return Response.ok(passengerController.getAllUsers()).build();
     }
+
+    @GET
+    @Path("/profileType")
+    public Response getProfileType(@QueryParam("passengerId") int id){
+        return Response.ok(new Gson().toJson(passengerController.getTypeUser(id))).build();
+    }
+
+    @GET
+    @Path("/profileInfo")
+    public Response getProfileInfo(@QueryParam("passengerId") int id){
+        return Response.ok(new Gson().toJson(passengerController.getPassengerInfo(id))).build();
+    }
+
+    @GET
+    @Path("/pastTrip")  //past tripa
+    public Response getPastTrip(@QueryParam("passengerId") int id){
+        return Response.ok(new Gson().toJson(passengerController.getPastTrip(id))).build();
+    }
+
+    @GET
+    @Path("/nextTrip")  //past tripa
+    public Response getNextTrip(@QueryParam("passengerId") int id){
+        return Response.ok(new Gson().toJson(passengerController.getNextTrip(id))).build();
+    }
+
 
 }
