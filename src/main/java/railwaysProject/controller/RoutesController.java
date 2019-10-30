@@ -1,14 +1,18 @@
 package railwaysProject.controller;
 
 
-import railwaysProject.model.Cities.City;
+import railwaysProject.model.BookRequest;
+import railwaysProject.model.TicketEntity;
+import railwaysProject.model.seat.Seat;
 import railwaysProject.model.route.CityRoute;
 import railwaysProject.model.route.Route;
 import railwaysProject.model.route.RouteDAO;
+import railwaysProject.model.seat.SeatEntity;
 
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class RoutesController {
 
@@ -55,5 +59,40 @@ public class RoutesController {
 
     public List<Route> getRoutesFromTo(int from, int to, String dateTo) {
         return routeDAO.getRoutesFromTo(from, to, dateTo);
+    }
+
+
+    private boolean check(String depDate, String arrDate, String start, String end) {
+        if (depDate.compareTo(start)>=0 && depDate.compareTo(end)<=0) return false;
+        if (arrDate.compareTo(start)<=0 && arrDate.compareTo(end)>=0) return false;
+        if (depDate.compareTo(start)<0 && arrDate.compareTo(end)>0) return false;
+        return true;
+    }
+    public List<Seat> getSeatsInfo(String route_id,  String date, String depDate, String arrDate) {
+        List<SeatEntity> seats = routeDAO.getAllSeats(route_id);
+        List<TicketEntity> tickets = routeDAO.getBookedSeats(route_id, date);
+        Set<SeatEntity> booked = new TreeSet<>();
+
+        for (int i = 0; i < tickets.size(); i++) {
+            TicketEntity ticket = tickets.get(i);
+            if (!check(ticket.getDepDate(), ticket.getArrDate(), depDate, arrDate)) {
+                booked.add(new SeatEntity(ticket.getSeatNum(), ticket.getRouteId(), ticket.getCarriageNum(), ticket.getTrainId()));
+            }
+        }
+
+        List<Seat> ans = new ArrayList<>();
+        for (int i = 0; i < seats.size(); i++) {
+            SeatEntity seat = seats.get(i);
+            if (booked.contains(seat)) {
+                ans.add(new Seat(seat.getSeatNum(), seat.getCarriageNum(), false));
+            } else {
+                ans.add(new Seat(seat.getSeatNum(), seat.getCarriageNum(), true));
+            }
+        }
+        return ans;
+    }
+
+    public boolean bookTicket(BookRequest request) {
+        return routeDAO.bookTicket(request);
     }
 }

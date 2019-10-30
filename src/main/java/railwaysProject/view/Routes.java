@@ -3,16 +3,14 @@ package railwaysProject.view;
 
 import com.google.gson.Gson;
 import railwaysProject.controller.RoutesController;
+import railwaysProject.model.BookRequest;
+import railwaysProject.model.seat.Seat;
 import railwaysProject.model.route.Route;
-import railwaysProject.model.route.RouteDAO;
-import railwaysProject.model.route.RouteDaoImpl;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
+import javax.ws.rs.*;
+import javax.ws.rs.core.Application;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -27,5 +25,25 @@ public class Routes {
         String routesResponse = new Gson().toJson(routes);
 
         return Response.ok(routesResponse).build();
+    }
+
+    @GET
+    @Path("/{routeId:[0-9]+}/seats")
+    public Response getSeatsOfARoute(@PathParam("routeId") String routeId, @QueryParam("date") String date, @QueryParam("dep_date") String depDate,@QueryParam("arr_date") String arrDate) {
+//        System.out.println(route_id+date+depDate+arrDate);
+        List<Seat> res = controller.getSeatsInfo(routeId, date, depDate, arrDate);
+        String response = new Gson().toJson(res);
+        return Response.ok(response).build();
+    }
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/book")
+    public Response bookTicket(BookRequest request) {
+//        System.out.println(route_id+date+depDate+arrDate);
+        boolean res = controller.bookTicket(request);
+        if (!res) return Response.status(403).build();
+        return Response.ok().build();
     }
 }

@@ -2,13 +2,16 @@ package railwaysProject.model.route;
 
 
 
-import railwaysProject.model.Cities.City;
+import railwaysProject.model.BookRequest;
+import railwaysProject.model.TicketEntity;
+import railwaysProject.model.seat.Seat;
+import railwaysProject.model.seat.SeatEntity;
 import railwaysProject.util.ConnectionPool;
 
-import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -75,8 +78,8 @@ public class RouteDaoImpl implements RouteDAO {
 
         String newSqlQuery =    "SELECT " +
                                 "Route.route_id, Route.start_date, R.route_name,  Arrival.station_id, Arrival.date as arr_date, station.station_name " +
-                                "FROM Route R, ((Route_Instance Route INNER JOIN Arrival ON Arrival.route_id = Route.route_id " +
-                                "AND Route.start_date = Arrival.route_start_date) INNER JOIN station on station.station_id = arrival.station_id) " +
+                                "FROM ((Route_Instance Route INNER JOIN Arrival ON Arrival.route_id = Route.route_id " +
+                                "AND Route.start_date = Arrival.route_start_date) INNER JOIN station on station.station_id = arrival.station_id), Route R " +
                                 "WHERE R.route_id = Route.route_id AND Arrival.station_id in (SELECT station_id FROM station WHERE locality_locality_id = " + cityId + ");";
 
         Connection conn;
@@ -109,16 +112,16 @@ public class RouteDaoImpl implements RouteDAO {
     @Override
     public List<CityRoute> getDepartureFromTheCity(int cityId) {
         String newSqlQuery =    "SELECT " +
-                "R.route_name, Route.route_id, Route.start_date, Departure.station_id, Departure.date as dep_date, station.station_name " +
-                "FROM Route R, ((Route_Instance Route INNER JOIN Departure ON Departure.route_id = Route.route_id " +
-                "AND R.route_id = Route.route_id AND Route.start_date = Departure.route_start_date) INNER JOIN station on station.station_id = Departure.station_id) " +
-                "WHERE Departure.station_id in (SELECT station_id FROM station WHERE locality_locality_id = " + cityId + ");";
+                "Route.route_id, Route.start_date, R.route_name, Departure.station_id, Departure.date as dep_date, station.station_name " +
+                "FROM ((Route_Instance Route INNER JOIN Departure ON Departure.route_id = Route.route_id " +
+                "AND Route.start_date = Departure.route_start_date) INNER JOIN station on station.station_id = Departure.station_id), Route R " +
+                "WHERE R.route_id = Route.route_id AND Departure.station_id in (SELECT station_id FROM station WHERE locality_locality_id = " + cityId + ");";
 
         Connection conn;
         ArrayList<CityRoute> routes = new ArrayList<>();
         try {
             conn = ConnectionPool.getDatabaseConnection();
-            ResultSet result = conn.createStatement().executeQuery(newSqlQuery);
+             ResultSet result = conn.createStatement().executeQuery(newSqlQuery);
             while(result.next()) {
                 int routeId = result.getInt("route_id");
                 String routeName = result.getString("route_name");
@@ -137,5 +140,83 @@ public class RouteDaoImpl implements RouteDAO {
 
         System.out.println();
         return routes;
+    }
+
+    @Override
+    public List<SeatEntity> getAllSeats(String route_id) {
+        String query = "SELECT * FROM SEAT WHERE route_id = " + route_id + ";";
+        Connection conn;
+        ArrayList<SeatEntity> seats = new ArrayList<>();
+        try {
+            conn = ConnectionPool.getDatabaseConnection();
+            ResultSet result = conn.createStatement().executeQuery(query);
+            while(result.next()) {
+                int routeId = result.getInt("route_id");
+                int carriageNum = result.getInt("carriage_num");
+                int seatNum = result.getInt("seat_num");
+                int trainId = result.getInt("train_id");
+//                System.out.println("routeId: " + routeId + ", route_name: " + routeName + "to: " + to);
+                SeatEntity seat = new SeatEntity(seatNum, routeId, carriageNum, trainId);
+                System.out.println(seat.toString());
+                seats.add(seat);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return seats;
+    }
+
+    @Override
+    public List<TicketEntity> getBookedSeats(String routeId, String date) {
+        String query = "SELECT t.ticket_id, t.train_id, t.carriage_num, t.seat_num, a.date as arr_date, d.date as dep_date\n" +
+                "FROM Ticket t, Arrival a, Departure d\n" +
+                "WHERE t.route_id = " + routeId +" AND t.route_start_date = " + date + " \n" +
+                "AND t.station_from = a.station_id AND t.route_id = a.route_id AND t.route_start_date = a.route_start_date\n" +
+                "AND t.station_from = d.station_id AND t.route_id = d.route_id AND t.route_start_date = d.route_start_date;";
+        Connection conn;
+        ArrayList<TicketEntity> tickets = new ArrayList<>();
+        try {
+            conn = ConnectionPool.getDatabaseConnection();
+            ResultSet result = conn.createStatement().executeQuery(query);
+            while(result.next()) {
+                int ticketId = result.getInt("ticket_id");
+                int carriageNum = result.getInt("carriage_num");
+                int seatNum = result.getInt("seat_num");
+                int trainId = result.getInt("train_id");
+                String arrDate = result.getString("arr_date");
+                String depDate = result.getString("dep_date");
+//                System.out.println("routeId: " + routeId + ", route_name: " + routeName + "to: " + to);
+                TicketEntity ticket = new TicketEntity(seatNum, Integer.valueOf(routeId), carriageNum, trainId, date, ticketId, arrDate, depDate);
+                System.out.println(ticket.toString());
+                tickets.add(ticket);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return tickets;
+    }
+
+    @Override
+    public boolean bookTicket(BookRequest request) {
+
+//        PreparedStatement preparedStatement = ConnectionPool.getDatabaseConnection()
+//                .prepareStatement
+//                        ("INSERT into Ticket(, last_name, email, password) VALUES ('" +
+//                                firstName +
+//                                "','" +
+//                                lastName +
+//                                "','" +
+//                                email +
+//                                "','" +
+//                                password +
+//                                "')", Statement.RETURN_GENERATED_KEYS);
+//        preparedStatement.executeUpdate();
+//        ResultSet tableKeys = preparedStatement.getGeneratedKeys();
+//        while(tableKeys.next()) {
+//            System.out.println(tableKeys);
+//        }
+        return false;
     }
 }
