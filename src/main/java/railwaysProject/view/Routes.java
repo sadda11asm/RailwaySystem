@@ -19,13 +19,11 @@ import java.util.List;
 @Path("/routes")
 public class Routes {
 
-    RouteDAO dao = new RouteDaoImpl();
-    RoutesController controller = new RoutesController(dao);
-
+    RoutesController controller = ServiceLocator.getRoutesController();
     @GET
     public Response getRoutesByPreference(@QueryParam("from") int from, @QueryParam("to")int to, @QueryParam("date_to") String dateTo, @QueryParam("data_back") String dateFrom) {
-//        System.out.println("DEBUG from: " + from + ", to: " + to + "date: " + dateTo);
-        List<Route> routes =  dao.getRoutesFromTo(from, to, dateTo);
+        System.out.println("DEBUG from: " + from + ", to: " + to + "date: " + dateTo);
+        List<Route> routes =  controller.getRoutesFromTo(from, to, dateTo);
         String routesResponse = new Gson().toJson(routes);
 
         return Response.ok(routesResponse).build();

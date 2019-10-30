@@ -53,4 +53,7 @@ public class RoutesController {
         return routes;
     }
 
+    public List<Route> getRoutesFromTo(int from, int to, String dateTo) {
+        return routeDAO.getRoutesFromTo(from, to, dateTo);
+    }
 }

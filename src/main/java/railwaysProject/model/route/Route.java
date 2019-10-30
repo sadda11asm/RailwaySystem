@@ -57,8 +57,8 @@ public class Route {
 
     public Route(int routeId, String routeName, String startDate, Station to, Station from, String depDate, String arrDate) {
         this.routeId = routeId;
-        this.routeName = routeName;
         this.startDate = startDate;
+        this.routeName = routeName;
         this.to = to;
         this.from = from;
         this.depDate = depDate;
