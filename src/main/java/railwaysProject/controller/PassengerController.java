@@ -2,96 +2,46 @@ package railwaysProject.controller;
 
 
 import railwaysProject.model.Passengers.Passenger;
+import railwaysProject.model.Passengers.PassengerDAO;
+import railwaysProject.model.route.RouteDAO;
 import railwaysProject.util.ConnectionPool;
 import railwaysProject.model.trip.Trip;
 
+import javax.swing.plaf.nimbus.State;
+import javax.ws.rs.core.Response;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class PassengerController {
+
+    PassengerDAO passengerDAO;
+
+    public PassengerController(PassengerDAO passengerDAO) {
+        this.passengerDAO = passengerDAO;
+    }
+
+
     public Passenger getUserByEmailAndPassword(String email, String password) {
-        List<Passenger> passengers = new ArrayList<>();
-        try {
-            Connection myConnection = ConnectionPool.getDatabaseConnection();
-            Statement myStatement = myConnection.createStatement();
-            String query = "Select * from Passenger where email = '" + email + "' and password = '" + password + "'";
-            ResultSet lists = myStatement.executeQuery(query);
-
-            while(lists.next()){
-                passengers.add(new Passenger(
-                        lists.getInt("passenger_id"),
-                        lists.getString("first_name"),
-                        lists.getString("last_name"),
-                        lists.getString("email"),
-                        lists.getString("password"),
-                        lists.getString("phone_number")
-                ));
-            }
-
-
-        }catch (SQLException e){
-            e.printStackTrace();
-        }
-        return passengers.size() > 0 ? passengers.get(0) : null;
+        return passengerDAO.getUserByEmailAndPassword(email, password);
     }
 
     public List<Passenger> getAllUsers() {
-        List<Passenger> passengers = new ArrayList<>();
-        try {
-            Connection myConnection = ConnectionPool.getDatabaseConnection();
-            Statement myStatement = myConnection.createStatement();
-            String query = "Select * from Passenger";
-            ResultSet lists = myStatement.executeQuery(query);
-
-            while(lists.next()){
-                passengers.add(new Passenger(
-                        lists.getInt("passenger_id"),
-                        lists.getString("first_name"),
-                        lists.getString("last_name"),
-                        lists.getString("email"),
-                        lists.getString("password"),
-                        lists.getString("phone_number")
-                ));
-            }
-
-
-        }catch (SQLException e){
-            e.printStackTrace();
-        }
-        return passengers;
+        return passengerDAO.getAllUsers();
     }
 
     public Passenger getUserByEmail(String email) {
-        List<Passenger> passengers = new ArrayList<>();
-        try {
-            Connection myConnection = ConnectionPool.getDatabaseConnection();
-            Statement myStatement = myConnection.createStatement();
-            String query = "Select * from Passenger where email = '" + email+"'";
-            ResultSet lists = myStatement.executeQuery(query);
-
-            while(lists.next()){
-                passengers.add(new Passenger(
-                        lists.getInt("passenger_id"),
-                        lists.getString("first_name"),
-                        lists.getString("last_name"),
-                        lists.getString("email"),
-                        lists.getString("password"),
-                        lists.getString("phone_number")
-                ));
-            }
-
-
-        }catch (SQLException e){
-            e.printStackTrace();
-        }
-        return passengers.size() > 0 ? passengers.get(0) : null;
+       return passengerDAO.getUserByEmail(email);
     }
 
-    public boolean signUpUser(String email,
-                              String firstName,
-                              String lastName,
-                              String password) {
+    public Response signUpUser(String email,
+                               String firstName,
+                               String lastName,
+                               String password) {
+        Passenger passenger = getUserByEmail(email);
+        if (passenger != null) {
+            return Response.status(403).entity("User with such an email already exists").build();
+        }
         try {
             System.out.println(email + ", " + firstName + ", " + lastName + ", " + password);
             System.out.println("INSERT into Passenger(first_name, last_name, email, password) VALUES ('" +
@@ -122,7 +72,7 @@ public class PassengerController {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return false;
+        return Response.ok().build();
     }
 
     /*public boolean[] getTypeUser(int passengerId){

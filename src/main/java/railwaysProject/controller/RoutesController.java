@@ -29,9 +29,10 @@ public class RoutesController {
 
     public List<CityRoute> getScheduleOfCity(int cityId) {
 
-        List<CityRoute> routes = routeDAO.geArrivalToTheCity(cityId);
+        List<CityRoute> routes = routeDAO.getArrivalToTheCity(cityId);
 
-        List<CityRoute> depRoutes = routeDAO.geDepartureFromTheCity(cityId);
+
+        List<CityRoute> depRoutes = routeDAO.getDepartureFromTheCity(cityId);
 
 //        for (CityRoute route: depRoutes) {
 //            if (finalRoutes.containsKey(new Pair<>(route.getRouteId(), new Pair(route.getStartDate(), route.getStationId())))) {

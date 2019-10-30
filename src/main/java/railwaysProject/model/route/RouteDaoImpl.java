@@ -72,7 +72,7 @@ public class RouteDaoImpl implements RouteDAO {
 
 
     @Override
-    public List<CityRoute> geArrivalToTheCity(int cityId) {
+    public List<CityRoute> getArrivalToTheCity(int cityId) {
 
         String newSqlQuery =    "SELECT " +
                                 "Route.route_id, Route.start_date, Route.route_name, Arrival.station_id, Arrival.date as arr_date, station.station_name " +
@@ -108,7 +108,7 @@ public class RouteDaoImpl implements RouteDAO {
     }
 
     @Override
-    public List<CityRoute> geDepartureFromTheCity(int cityId) {
+    public List<CityRoute> getDepartureFromTheCity(int cityId) {
         String newSqlQuery =    "SELECT " +
                 "Route.route_id, Route.start_date, Route.route_name, Departure.station_id, Departure.date as dep_date, station.station_name " +
                 "FROM ((Route INNER JOIN Departure ON Departure.route_id = Route.route_id " +
