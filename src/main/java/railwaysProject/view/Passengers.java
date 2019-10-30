@@ -14,6 +14,7 @@ public class Passengers {
     @POST
     @Path("/login")
     public Response login(@FormParam("email") String email, @FormParam("password") String password) {
+        System.out.println(email + password);
         Passenger passenger = passengerController.getUserByEmailAndPassword(email, password);
         if (passenger == null) {
             return Response.status(403).build();
