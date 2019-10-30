@@ -1,18 +1,21 @@
 package railwaysProject.controller;
 
 
-import railwaysProject.model.Cities.City;
 import railwaysProject.model.route.CityRoute;
 import railwaysProject.model.route.Route;
 import railwaysProject.model.route.RouteDAO;
+import railwaysProject.model.route.newRoute;
+import railwaysProject.util.ConnectionPool;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.*;
 
 public class RoutesController {
 
-    RouteDAO routeDAO;
+    private RouteDAO routeDAO;
 
     public RoutesController(RouteDAO routeDAO) {
         this.routeDAO = routeDAO;
@@ -27,7 +30,6 @@ public class RoutesController {
     public List<CityRoute> getScheduleOfCity(int cityId) {
 
         List<CityRoute> routes = routeDAO.geArrivalToTheCity(cityId);
-
 
         List<CityRoute> depRoutes = routeDAO.geDepartureFromTheCity(cityId);
 
@@ -51,6 +53,50 @@ public class RoutesController {
         }
         if (routes.size()==0) return depRoutes;
         return routes;
+    }
+
+    private boolean routeExists(int routeID){
+        Connection conn = ConnectionPool.getDatabaseConnection();
+        boolean exists = false;
+        try{
+            Statement myStatement = conn.createStatement();
+            String query = "Select * from Route where roure_id = " + routeID;
+            ResultSet rs = myStatement.executeQuery(query);
+            while(rs.next()){
+                exists = true;
+            }
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+        return exists;
+    }
+
+    public newRoute crateNewRoute(String routeName, Date startDate){
+        int routeId = new Random().nextInt(1000000) + 1;
+        while(routeExists(routeId)){
+            routeId = new Random().nextInt(1000000) + 1;
+        }
+        newRoute route =  new newRoute(routeId, startDate, routeName);
+        insertRoute(route);
+
+
+
+        return route;
+    }
+
+
+
+    private void insertRoute(newRoute route){
+        Connection conn = ConnectionPool.getDatabaseConnection();
+
+        try{
+            Statement statement = conn.createStatement();
+            String query = "INSERT INTO Route(route_id, start_date, route_name) values ("+ route.getRouteId() + ", "
+                    + new java.sql.Date(route.getStartDate().getTime())+", '"+route.getRouteName()+"')";
+            statement.execute(query);
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
     }
 
 }

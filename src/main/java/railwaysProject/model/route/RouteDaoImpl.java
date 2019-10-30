@@ -19,7 +19,7 @@ public class RouteDaoImpl implements RouteDAO {
     public List<Route> getRoutesFromTo(int stationFrom, int stationTo, String date) {
 
 
-        String sqlQuery =   "SELECT Route.route_id, Route.start_date, Route.route_name, Arrival.date as arr_date, " +
+        /*String sqlQuery =   "SELECT Route.route_id, Route.start_date, Route.route_name, Arrival.date as arr_date, " +
                             "Arrival.station_id as to_station, Departure.date as dep_date, Departure.station_id as from_station, " +
                             "stto.station_name as to_name, stfrom.station_name as from_name " +
                             "FROM ((Route INNER JOIN Arrival ON Arrival.route_id = Route.route_id " +
@@ -37,13 +37,14 @@ public class RouteDaoImpl implements RouteDAO {
                                 "ON Departure.route_id = Route.route_id AND Departure.route_start_date = Route.start_date) " +
                                 "WHERE start_date = " + date + " " +
                                 "AND Arrival.station_id IN (SELECT station_id FROM station WHERE locality_locality_id = " + stationTo + ") " +
-                                "AND Departure.station_id IN (SELECT station_id FROM station WHERE locality_locality_id = " + stationFrom +");";
+                                "AND Departure.station_id IN (SELECT station_id FROM station WHERE locality_locality_id = " + stationFrom +");";*/
+        String correctQuery = "";
 
         Connection conn = null;
         ArrayList<Route> routes = new ArrayList<>();
         try {
             conn = ConnectionPool.getDatabaseConnection();
-            ResultSet result = conn.createStatement().executeQuery(sqlQuery);
+            ResultSet result = conn.createStatement().executeQuery(correctQuery);
             while(result.next()) {
                 int routeId = result.getInt("route_id");
                 String startDate = result.getString("start_date");

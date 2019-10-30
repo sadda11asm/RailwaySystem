@@ -5,7 +5,6 @@ import railwaysProject.model.Passengers.Passenger;
 import railwaysProject.util.ConnectionPool;
 import railwaysProject.model.trip.Trip;
 
-import javax.swing.plaf.nimbus.State;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -126,8 +125,8 @@ public class PassengerController {
         return false;
     }
 
-    public boolean[] getTypeUser(int passengerId){
-        boolean[] response = new boolean[2];
+    /*public boolean[] getTypeUser(int passengerId){
+        Type typeOfPass = new Type(false, false);
         try {
             Connection myConnection = ConnectionPool.getDatabaseConnection();
             Statement myStatement = myConnection.createStatement();
@@ -141,14 +140,15 @@ public class PassengerController {
             e.printStackTrace();
         }
         return response;
-    }
+    }*/
 
     public  Passenger getPassengerInfo(int passengerId){
         Passenger passenger = new Passenger(passengerId, null, null,null,null,null);
         try {
             Connection myConnection = ConnectionPool.getDatabaseConnection();
+            System.out.println("Error");
             Statement myStatement = myConnection.createStatement();
-            String infoQuery = "Select * from Passenger where id =  " + passengerId + ";";
+            String infoQuery = "Select * from Passenger where passenger_id =  " + passengerId + ";";
             ResultSet rs = myStatement.executeQuery(infoQuery);
             while(rs.next()){
                 passenger.setFirstName(rs.getString("first_name"));

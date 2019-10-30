@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+
+    <meta charset="utf-8">
+    <title>Welcome!</title>
+    <link rel="stylesheet" type="text/css" href="treeMainStyle.css">
+    <style>
+      body, html {
+        height: 100%;
+       margin: 0;
+    }
+    .bg {
+        /* The image used */
+        background-image: url("back.jpg");
+
+        /* Full height */
+        height: 100%; 
+
+        /* Center and scale the image nicely */
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+    .input_field{
+        width: 100%;
+        box-sizing: border-box;
+        border: 2px solid #ccc;
+        border-radius: 4px;
+        font-size: 16px;
+        background-color: white;
+        background-image: url('search.png');
+        background-position: 1px 1px; 
+        background-repeat: no-repeat;
+        padding: 12px 20px 12px 40px;}
+    
+    }
+    
+    
+     </style>
+  </head>
+  <body class="bg">
+
+    <div class="navigation-bar">
+    <div id="navigation-container">
+
+   <img src="PicsArt_10-05-10.27.58.jpg" width="70" height="70">
+
+    <ul>
+      <li><a href="#">Main</a></li>
+      <li><a href="#">Log In</a></li>
+      <li><a href="#">About Us</a></li>
+      <li><a href="#">Get in Touch</a></li>
+    </ul>
+  </div>
+  <div>
+    <div class="main-content">
+      <div class="ticket">
+        <div class="ticket__main">
+          <div class="header">treenatree</div>
+          <div class="info passenger">
+            <div class="info__item">Passenger</div>
+            <input class="input_field" type="text" value="" 
+            placeholder="Passenger Name" autocomplete="off">
+          </div>
+         <button class="button"> <span> Find routes </span></button>
+           <div class="info departure">
+            <div class="info__item">Depart</div>
+            <input class="input_field" type="text" value="" 
+            placeholder="input" autocomplete="off">
+          </div>
+          <div class="info arrival">
+            <div class="info__item">Arrive</div>
+            <input class="input_field" type="text" value="" 
+            placeholder="input" autocomplete="off">
+          </div>
+          <div class="info date">
+            <div class="info__item">Date</div>
+            <input class="input_field" type="text" value="" 
+            placeholder="input" autocomplete="off">
+          </div>
+          <div class="info time">
+            <div class="info__item">Time</div>
+            <div class="info__detail">input</div>
+          </div>
+          <div class="info carriage">
+            <div class="info__item">car</div>
+            <div class="info__detail">__</div>
+          </div>
+          <div class="info seat">
+            <div class="infox__item">Seat</div>
+            <div class="info__detail">__</div>
+          </div>
+          <div class="fineprint">
+            <p>Boarding begins 30 minutes before departure. Snacks available for purchase from The Honeydukes Express.</p>
+            <p>This ticket is Non-refundable • bla bla some information </p>
+          </div>
+
+          <div class="barcode">
+            <div class="barcode__scan"></div>
+            <div class="barcode__id">001256733</div>
+          </div>
+        </div>
+        <div class="ticket__side">
+          <div class="logo">
+            <p>treenatree</p>
+          </div>
+          <div class="info side-arrive">
+            <div class="info__item">Arrive</div>
+            <div class="info__detail">___</div>
+          </div>
+          <div class="info side-depart">
+            <div class="info__item">Depart</div>
+            <div class="info__detail">___</div>
+          </div>
+          <div class="info side-date">
+            <div class="info__item">Date</div>
+            <div class="info__detail">___</div>
+          </div>
+          <div class="info side-time">
+            <div class="info__item">Time</div>
+            <div class="info__detail">___</div>
+          </div>
+          <div class="barcode">
+            <div class="barcode__scan"></div>
+            <div class="barcode__id">001256733</div>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+  <section class="Ticket">
+  </section>
+  </body>
+</html>

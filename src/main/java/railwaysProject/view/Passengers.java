@@ -5,6 +5,7 @@ import railwaysProject.model.Passengers.Passenger;
 import railwaysProject.controller.PassengerController;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
+import java.util.Date;
 
 @Path("/passengers")
 public class Passengers {
@@ -52,28 +53,28 @@ public class Passengers {
     }
 
     @GET
-    @Path("/profileType")
-    public Response getProfileType(@QueryParam("passengerId") int id){
-        return Response.ok(new Gson().toJson(passengerController.getTypeUser(id))).build();
-    }
-
-    @GET
     @Path("/profileInfo")
     public Response getProfileInfo(@QueryParam("passengerId") int id){
+
         return Response.ok(new Gson().toJson(passengerController.getPassengerInfo(id))).build();
     }
 
     @GET
-    @Path("/pastTrip")  //past tripa
+    @Path("/pastTrip")  //past trips
     public Response getPastTrip(@QueryParam("passengerId") int id){
         return Response.ok(new Gson().toJson(passengerController.getPastTrip(id))).build();
     }
 
     @GET
-    @Path("/nextTrip")  //past tripa
+    @Path("/nextTrip")  //next trips
     public Response getNextTrip(@QueryParam("passengerId") int id){
         return Response.ok(new Gson().toJson(passengerController.getNextTrip(id))).build();
     }
 
-
+    @POST
+    @Path("/newRoute")
+    public Response createNewRoute(@FormParam("routeName") String routeName, @FormParam("startDate") Date startDate){
+        //int routeId =
+        return Response.ok().build();
+    }
 }

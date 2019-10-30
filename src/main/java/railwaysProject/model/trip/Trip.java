@@ -4,51 +4,80 @@ import java.util.Date;
 
 public class Trip {
     private String ticketId;
-    private String from;
-    private String to;
-    private Date from_date;
-    private Date to_date;
+    private String fromStation;
+    private String toStation;
+    private Date fromDate;
+    private Date toDate;
+    private int trainId;
+    private int carriageNum;
+    private int seat;
+    private int routeId;
 
+    public int getRouteId() {
+        return routeId;
+    }
 
+    public void setRouteId(int routeId) {
+        this.routeId = routeId;
+    }
 
-    public Trip(String ticketId, String from, String to, Date from_date, Date to_date){
-        this.ticketId = ticketId;
-        this.from = from;
-        this.to = to;
-        this.from_date = from_date;
-        this.to_date = to_date;
+    public int getSeat() {
+        return seat;
+    }
+
+    public void setSeat(int seat) {
+        this.seat = seat;
+    }
+
+    public int getCarriage_num() {
+        return carriageNum;
+    }
+
+    public void setCarriage_num(int carriageNum) {
+        this.carriageNum = carriageNum;
+    }
+
+    public int getTrainId() {
+        return trainId;
+    }
+
+    public void setTrainId(int trainId) {
+        this.trainId = trainId;
+    }
+
+    public Trip(){
     }
 
     public Date getFrom_date() {
-        return from_date;
+        return fromDate;
     }
 
     public Date getTo_date() {
-        return to_date;
+        return toDate;
     }
 
     public void setTo_date(Date to_date) {
-        this.to_date = to_date;
+        this.toDate = toDate;
     }
 
     public String getFrom() {
-        return from;
+        return fromStation;
     }
 
     public void setFrom(String from) {
-        this.from = from;
+        this.fromStation = from;
     }
 
     public String getTo() {
-        return to;
+        return toStation;
     }
 
     public void setTo(String to) {
-        this.to = to;
+        this.toStation = to;
     }
 
     public void setFrom_date(Date from_date) {
-        this.from_date = from_date;
+        this.fromDate = from_date;
     }
 
     public String getTicketId() {
