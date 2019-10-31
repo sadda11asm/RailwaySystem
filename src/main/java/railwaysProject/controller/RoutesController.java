@@ -51,7 +51,7 @@ public class RoutesController {
     }
 
 
-    public int crateNewRoute(newRoute route){
+    public int insertNewRoute(newRoute route){
         Connection conn = ConnectionPool.getDatabaseConnection();
         int routeId = -1;
         try{

@@ -2,6 +2,7 @@ package railwaysProject.view;
 
 import com.google.gson.Gson;
 import railwaysProject.controller.RoutesController;
+import railwaysProject.model.route.newRoute;
 
 import javax.ws.rs.FormParam;
 import javax.ws.rs.POST;
@@ -15,10 +16,12 @@ public class Employers {
 
     @POST
     @Path("/newRoute")
-    public Response createNewRoute(@FormParam("routeName") String routeName, @FormParam("carNum") int carNum,
-                                   @FormParam("seatNum") int seatNum, @FormParam("startDate") Date startDate){
-        int routeId = routesController.crateNewRoute(routeName, carNum, seatNum, startDate);
-        return Response.ok(new Gson().toJson(routeId)).build();
+    public Response createNewRoute(newRoute route){
+        int id = routesController.insertNewRoute(route);
+        if(id == -1){
+            return Response.serverError().build();
+        }
+        return Response.ok().build();
     }
 
 
