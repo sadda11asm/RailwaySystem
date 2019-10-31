@@ -3,9 +3,9 @@ package railwaysProject.view;
 import com.google.gson.Gson;
 import railwaysProject.model.Passengers.Passenger;
 import railwaysProject.controller.PassengerController;
-
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
+import java.util.Date;
 
 @Path("/passengers")
 public class Passengers {
@@ -49,4 +49,22 @@ public class Passengers {
         return Response.ok(passengerController.getAllUsers()).build();
     }
 
+    @GET
+    @Path("/profileInfo")
+    public Response getProfileInfo(@QueryParam("passengerId") int id){
+
+        return Response.ok(new Gson().toJson(passengerController.getPassengerInfo(id))).build();
+    }
+
+    @GET
+    @Path("/pastTrip")  //past trips
+    public Response getPastTrip(@QueryParam("passengerId") int id){
+        return Response.ok(new Gson().toJson(passengerController.getPastTrip(id))).build();
+    }
+
+    @GET
+    @Path("/nextTrip")  //next trips
+    public Response getNextTrip(@QueryParam("passengerId") int id){
+        return Response.ok(new Gson().toJson(passengerController.getNextTrip(id))).build();
+    }
 }

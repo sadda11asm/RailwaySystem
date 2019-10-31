@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+
+    <meta charset="utf-8">
+    <title>Welcome!</title>
+    <link rel="stylesheet" type="text/css" href="log.css">
+    <link rel="stylesheet" type="text/css" href="treeMainStyle.css">
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.1/jquery.validate.js"></script>
+    <style>
+        body, html {
+         height: 100%;
+         margin: 0;
+     }
+ 
+     .bg {
+         /* The image used */
+         background-image: url("back2.jpg");
+ 
+         /* Full height */
+         height: 100%;
+ 
+         /* Center and scale the image nicely */
+         background-position: center;
+         background-repeat: no-repeat;
+         background-size: cover;
+     }
+     
+      </style>
+    <script>
+        $(document).ready(function() {
+          $("#myform").validate({
+            rules: {
+              password: {
+                required: true
+              }, 
+              email: {
+                required: true, 
+                email: true
+              }
+            }, 
+            messages: {
+              password: {
+                required: "<div style='text-align:center; color: red; margin-top:5px'>Invalid input</div>"
+              }, 
+              email: "<div style='text-align:center; color: red'>Invalid input</div>"
+            }, 
+            submitHandler: subform
+          })
+          function subform() {
+            var data = $("#myform").serialize();
+            console.log("data", data);
+            $.ajax({
+              type: 'POST',
+              url: '/dynamictodolist_war_exploded/api/passengers/login',
+              data: data,
+              beforeSend: function() {
+                $("#info").fadeOut();
+                $("#login").html("Sending...");
+                }, success: function(resp) {
+                  $("#login").html("<img src = 'ajax-loader.gif' width = '15'/> &nbsp: Login");
+                  var token = resp;
+                  alert(resp);
+                // if (resp=='ok') {
+                //   $("#login").html("<img src = 'ajax-loader.gif' width = '15'/> &nbsp: Login");
+                // } else {
+                //   $("#info").fadeIn(1000, function() {
+                //     $("#info").html("<div class = 'alert alert-danger'>"+resp+"</div>");
+                //     $("#login").html("Login");
+                //   });
+                // }
+              },
+              error: function (request, status, error) {
+                  alert("Error, status code: " + request.status);
+                  $("#info").fadeIn(1000, function() {
+                  $("#info").html("<div class = 'alert alert-danger'>"+resp+"</div>");
+                  $("#login").html("Login");
+              })
+            }
+            })
+          }
+          $("#signupform").validate({
+            rules: {
+              password: {
+                required: true
+              }, 
+              email: {
+                required: true, 
+                email: true
+              }, 
+              firstName: {
+                required: true
+              }, 
+              lastName: {
+                required: true
+              }
+            }, 
+            messages: {
+              firstName: {
+                required: "<div style='text-align:center; color: red'>Invalid input</div>"
+              }, 
+              lastName: {
+                required: "<div style='text-align:center; color: red'>Invalid input</div>"
+              },
+              password: {
+                required: "<div style='text-align:center; color: red'>Invalid input</div>"
+              }, 
+              email: "<div style='text-align:center; color: red'>Invalid input</div>"
+            }, 
+            submitHandler: subform1
+          })
+          function subform1() {
+            var data = $("#signupform").serialize();
+            console.log("data", data);
+            $.ajax({
+              type: 'POST',
+              url: '/dynamictodolist_war_exploded/api/passengers/sign_up',
+              data: data,
+              beforeSend: function() {
+                $("#info").fadeOut();
+                $("#signup").html("Sending...");
+                }, success: function(resp) {
+                  $("#signup").html("<img src = 'ajax-loader.gif' width = '15'/> &nbsp: Sign Up");
+                // if (reps=='ok') {
+                //   $("#signup").html("<img src = 'ajax-loader.gif' width = '15'/> &nbsp: Sign U");
+                // } else {
+                //   $("#info").fadeIn(1000, function() {
+                //     $("#info").html("<div class = 'alert alert-danger'>"+resp+"</div>");
+                //     $("#signup").html("Sign Up");
+                //   });
+                // }
+              },
+              error: function (request, status, error) {
+                alert(request.responseText);
+                $("#info").fadeIn(1000, function() {
+                   $("#info").html("<div class = 'alert alert-danger'>"+resp+"</div>");
+                  $("#signup").html("Sign Up");
+                });
+            }
+            })
+          }
+          $(".info-item .btn").click(function(){
+            $(".container").toggleClass("log-in");
+          });
+         
+        })
+    </script>
+   </head>
+   <body class="bg"> 
+      <div class="navigation-bar">
+          <div id="navigation-container">
+      
+         <img src="PicsArt_10-05-10.27.58.jpg" width="70" height="70">
+      
+          <ul>
+            <li><a href="index.html">Main</a></li>
+            <li><a href="LogSign.html">Log In</a></li>
+            <li><a href="#">About Us</a></li>
+            <li><a href="#">Get in Touch</a></li>
+          </ul>
+        </div>
+        </div>
+        <div class="container">
+                <div class="box"></div>
+                <div class="container-forms">
+                  <div class="container-info">
+                    <div class="info-item">
+                      <div class="table">
+                        <div class="table-cell">
+                          <p>
+                            Have an account?
+                          </p>
+                          <div class="btn">
+                            Log in
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="info-item">
+                      <div class="table">
+                        <div class="table-cell">
+                          <p>
+                            Don't have an account? 
+                          </p>
+                          <div class="btn">
+                            Sign up
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="container-form">
+                    <form method = "post" id="myform">
+                    <div class="form-item log-in">
+                      <div class="table">
+                        <div class="table-cell">
+                          <div class = form-group>
+                          <input id = "Email" name="email" placeholder="Email" type="Email" class = "form-control"/>
+                          </div>
+                          <div class="form-group">
+                          <input id = "Password" name="password" placeholder="Password" type="Password" class = "form-control"/>
+                          </div>
+                          <div class="form-group">
+                          <input type="submit" id="login" class="btn btn-primary"/>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    </form>
+                    <form method = "post" id="signupform">
+                    <div class="form-item sign-up">
+                      <div class="table">
+                        <div class="table-cell">
+                          <input id = "Email" name="email" placeholder="Email" type="Email" class = "form-control"/>
+                          <input id = "firstName" name="firstName" placeholder="First Name" type="text" class = "form-control"/>
+                          <input id = "lastName" name="lastName" placeholder="Second Name" type="text" class = "form-control" />
+                          <input id = "Password" name="password" placeholder="Password" type="Password" class = "form-control"/>
+                          <div class="form-group">
+                              <input type="submit" id="signup" class="btn btn-primary"/>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                  </div>
+                </div>
+              </div>
+   </body>
+</html>

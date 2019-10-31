@@ -9,6 +9,7 @@ public class Passenger {
     private String email;
     private String password;
     private String phoneNumber;
+    //private boolean isManager;
 
     public Passenger(int passengerId, String firstName, String lastName, String email, String password, String phoneNumber) {
         this.passengerId =  passengerId;
@@ -17,6 +18,7 @@ public class Passenger {
         this.email =  email;
         this.password =  password;
         this.phoneNumber =  phoneNumber;
+        //this.isManager = false;
     }
 
     public void setFirstName(String firstName) {
@@ -66,4 +68,7 @@ public class Passenger {
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
+    /*public void makeManager(){
+        this.isManager = true;
+    }*/
 }
