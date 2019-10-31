@@ -36,10 +36,6 @@ public class RoutesController {
     }
 
 
-    protected List<Route> getRoutes(int from, int to, String date) {
-        return routeDAO.getRoutesFromTo(from, to, date);
-    }
-
     public List<CityRoute> getScheduleOfCity(int cityId) {
 
         List<CityRoute> routes = routeDAO.getArrivalToTheCity(cityId);
@@ -234,8 +230,9 @@ public class RoutesController {
         }catch(SQLException e){
             e.printStackTrace();
         }
-    }
 
+
+    }
 }
 
 
