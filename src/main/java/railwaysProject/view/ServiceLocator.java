@@ -33,7 +33,7 @@ public class ServiceLocator {
 
     public static RoutesController getRoutesController() {
         if (routesController == null) {
-            routesController = new RoutesController(getRouteDAO());
+            routesController = new RoutesController(getRouteDAO(), getPassengerDAO());
         }
         return routesController;
     }
