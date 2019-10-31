@@ -2,17 +2,17 @@ package railwaysProject.model.route;
 
 
 import java.time.*;
-public class newRoute {
+public class NewRoute {
     private String routeName;
     private int carNum;
     private int seatNum;
     private LocalDate[] dates;
     private LocalTime startTime;
-    private stationDuration[] stations;
+    private StationDuration[] stations;
     private int LastStation;
 
 
-    public newRoute(String name, int carNum, int seatNum, LocalDate[] dates, LocalTime startTime, stationDuration[] stations, int LastStation){
+    public NewRoute(String name, int carNum, int seatNum, LocalDate[] dates, LocalTime startTime, StationDuration[] stations, int LastStation){
         routeName = name;
         this.carNum = carNum;
         this.seatNum = seatNum;
@@ -26,7 +26,7 @@ public class newRoute {
         return LastStation;
     }
 
-    public stationDuration[] getStations() {
+    public StationDuration[] getStations() {
         return stations;
     }
 

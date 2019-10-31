@@ -51,7 +51,7 @@ public class RoutesController {
     }
 
 
-    public int insertNewRoute(newRoute route){
+    public int insertNewRoute(NewRoute route){
         Connection conn = ConnectionPool.getDatabaseConnection();
         int routeId = -1;
         try{
@@ -61,7 +61,8 @@ public class RoutesController {
             ResultSet rs = statement.getGeneratedKeys();
             while (rs.next()){
                 routeId = rs.getInt("route_id");
-            }if(routeId != -1){
+            }
+            if(routeId != -1){
                 addTrain(routeId, route.getCarNum(), route.getSeatNum());
                 insertRouteInstance(route, routeId);
                 insertStations(routeId, route);
@@ -78,9 +79,9 @@ public class RoutesController {
         return current;
 
     }
-    private void insertStations(int routeId, newRoute route){
+    private void insertStations(int routeId, NewRoute route){
         LocalDate[] dates = route.getDates();
-        stationDuration[] stations = route.getStations();
+        StationDuration[] stations = route.getStations();
         Connection conn = ConnectionPool.getDatabaseConnection();
         try{
             Statement statement = conn.createStatement();
@@ -116,7 +117,7 @@ public class RoutesController {
             e.printStackTrace();
         }
     }
-    private void insertRouteInstance(newRoute route, int routeId){
+    private void insertRouteInstance(NewRoute route, int routeId){
         Connection conn = ConnectionPool.getDatabaseConnection();
         try{
             Statement statement = conn.createStatement();

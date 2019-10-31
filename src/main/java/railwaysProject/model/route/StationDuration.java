@@ -1,9 +1,9 @@
 package railwaysProject.model.route;
 import java.time.*;
-public class stationDuration {
+public class StationDuration {
     private int stationId;
     private LocalTime duration;
-    public stationDuration(int id, LocalTime dur){
+    public StationDuration(int id, LocalTime dur){
         stationId = id;
         duration = dur;
 
