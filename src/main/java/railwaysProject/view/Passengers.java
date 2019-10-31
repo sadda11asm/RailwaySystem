@@ -66,11 +66,4 @@ public class Passengers {
     public Response getNextTrip(@QueryParam("passengerId") int id){
         return Response.ok(new Gson().toJson(passengerController.getNextTrip(id))).build();
     }
-
-    @POST
-    @Path("/newRoute")
-    public Response createNewRoute(@FormParam("routeName") String routeName, @FormParam("startDate") Date startDate){
-        //int routeId =
-        return Response.ok().build();
-    }
 }

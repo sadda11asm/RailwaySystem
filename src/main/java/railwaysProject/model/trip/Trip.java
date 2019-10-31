@@ -3,15 +3,67 @@ package railwaysProject.model.trip;
 import java.util.Date;
 
 public class Trip {
-    private String ticketId;
-    private String fromStation;
-    private String toStation;
-    private Date fromDate;
-    private Date toDate;
-    private int trainId;
-    private int carriageNum;
+    private int ticketId; //
+    private String fromStation;//
+    private String toStation;//
+    private Date fromDate;//
+    private Date toDate;//
+    private int trainId;//
+    private int carriageNum;//
     private int seat;
-    private int routeId;
+    private int routeId;//
+    private String routeName;
+
+    public Trip(){
+    }
+
+    public int getCarriageNum() {
+        return carriageNum;
+    }
+
+    public void setCarriageNum(int carriageNum) {
+        this.carriageNum = carriageNum;
+    }
+
+    public Date getToDate() {
+        return toDate;
+    }
+
+    public void setToDate(Date toDate) {
+        this.toDate = toDate;
+    }
+
+    public Date getFromDate() {
+        return fromDate;
+    }
+
+    public void setFromDate(Date fromDate) {
+        this.fromDate = fromDate;
+    }
+
+    public String getToStation() {
+        return toStation;
+    }
+
+    public void setToStation(String toStation) {
+        this.toStation = toStation;
+    }
+
+    public String getFromStation() {
+        return fromStation;
+    }
+
+    public void setFromStation(String fromStation) {
+        this.fromStation = fromStation;
+    }
+
+    public String getRouteName() {
+        return routeName;
+    }
+
+    public void setRouteName(String routeName) {
+        this.routeName = routeName;
+    }
 
     public int getRouteId() {
         return routeId;
@@ -33,9 +85,6 @@ public class Trip {
         return carriageNum;
     }
 
-    public void setCarriage_num(int carriageNum) {
-        this.carriageNum = carriageNum;
-    }
 
     public int getTrainId() {
         return trainId;
@@ -45,8 +94,7 @@ public class Trip {
         this.trainId = trainId;
     }
 
-    public Trip(){
-    }
+
 
     public Date getFrom_date() {
         return fromDate;
@@ -76,15 +124,11 @@ public class Trip {
         this.toStation = to;
     }
 
-    public void setFrom_date(Date from_date) {
-        this.fromDate = from_date;
-    }
-
-    public String getTicketId() {
+    public int getTicketId() {
         return ticketId;
     }
 
-    public void setTicketId(String ticketId) {
+    public void setTicketId(int ticketId) {
         this.ticketId = ticketId;
     }
 }

@@ -117,26 +117,39 @@ public class PassengerController {
         try {
             Connection myConnection = ConnectionPool.getDatabaseConnection();
             Statement myStatement = myConnection.createStatement();
-            String infoQuery = "Select ticket_id," +
-                    "DS.station_name as dep_name," +
-                    "AAS.station_name as arr_name," +
-                    "A.date  as arr_date," +
-                    "D.date as dep_date" +
-                    "from Ticket," +
-                    "Arrival as A," +
-                    "Departure as D, " +
-                    "Station as DS," +
-                    "Station as AAS" +
-                    "where pass_id =  " + passengerId + " and " +
-                    "station_from = D.station_id and " +
-                    "station_to = A.station_id and " +
-                    "D.station_id = DS.station_id and A.station_id = AAS.station_id and " +
-                    "D.date < current_date() " +
-                    "order by D.date desc ;";
+            String infoQuery = "Select T.train_id as trainId," +
+                    "       T.route_id as routeId," +
+                    "       D.date as fromDate," +
+                    "       A.date as toDate," +
+                    "       AS.station_name as toSation," +
+                    "       DS.station_name as fromStation," +
+                    "       T.carriage_num as carNum," +
+                    "       T.ticket_id as ticketId," +
+                    "       T.seat_num as seat," +
+                    "       R.route_name" +
+                    "       from Ticket T," +
+                    "            Departure D," +
+                    "            Arrival A," +
+                    "            Station AS," +
+                    "            Station DS," +
+                    "            Route R" +
+                    "            where T.Passenger_passenger_id = " + passengerId +
+                    "            and T.route_id = R.route_id" +
+                    "            and DS.station_id = T.station_from " +
+                    "            and D.station_id = DS.station_id" +
+                    "            and AS.station_id = T.station_to" +
+                    "            and A.station_id = AS.station_id" +
+                    "            and T.route_start_date < curdate() " +
+                    "            order by fromDate desc;";
             ResultSet rs = myStatement.executeQuery(infoQuery);
 
             while(rs.next()){
-                trips.add(new Trip(Integer.toString(rs.getInt("ticket_id")), rs.getString("dep_name"), rs.getString("arr_name"), rs.getDate("dep_date"), rs.getDate("arr_date") ));
+                try{
+                    Trip trip = setTrip(rs);
+                    trips.add(trip);
+                }catch(SQLException e){
+                    e.printStackTrace();
+                }
             }
 
         }catch (SQLException e){
@@ -144,32 +157,57 @@ public class PassengerController {
         }
         return trips;
     }
-
+    private Trip setTrip(ResultSet rs) throws SQLException {
+        Trip trip = new Trip();
+        trip.setCarriageNum(rs.getInt("carNum"));
+        trip.setTrainId(rs.getInt("trainId"));
+        trip.setRouteId(rs.getInt("routeId"));
+        trip.setFromDate(rs.getDate("fromDate"));
+        trip.setToDate(rs.getDate("toDate"));
+        trip.setToStation(rs.getString("toStation"));
+        trip.setFromStation(rs.getString("fromStation"));
+        trip.setTicketId(rs.getInt("ticketId"));
+        trip.setSeat(rs.getInt("seat"));
+        return trip;
+    }
     public List<Trip> getNextTrip(int passengerId){
         List<Trip> trips = new ArrayList<>();
         try {
             Connection myConnection = ConnectionPool.getDatabaseConnection();
             Statement myStatement = myConnection.createStatement();
-            String infoQuery = "Select ticket_id," +
-                    "DS.station_name as dep_name," +
-                    "AAS.station_name as arr_name," +
-                    "A.date  as arr_date," +
-                    "D.date as dep_date" +
-                    "from Ticket," +
-                    "Arrival as A," +
-                    "Departure as D, " +
-                    "Station as DS," +
-                    "Station as AAS" +
-                    "where pass_id =  " + passengerId + " and " +
-                    "station_from = D.station_id and " +
-                    "station_to = A.station_id and " +
-                    "D.station_id = DS.station_id and A.station_id = AAS.station_id and " +
-                    "D.date >  current_date() " +
-                    "order by D.date asc;";
+            String infoQuery = "Select T.train_id as trainId," +
+                    "       T.route_id as routeId," +
+                    "       D.date as fromDate," +
+                    "       A.date as toDate," +
+                    "       AS.station_name as toSation," +
+                    "       DS.station_name as fromStation," +
+                    "       T.carriage_num as carNum," +
+                    "       T.ticket_id as ticketId," +
+                    "       T.seat_num as seat," +
+                    "       R.route_name" +
+                    "       from Ticket T," +
+                    "            Departure D," +
+                    "            Arrival A," +
+                    "            Station AS," +
+                    "            Station DS," +
+                    "            Route R" +
+                    "            where T.Passenger_passenger_id = " + passengerId +
+                    "            and T.route_id = R.route_id" +
+                    "            and DS.station_id = T.station_from " +
+                    "            and D.station_id = DS.station_id" +
+                    "            and AS.station_id = T.station_to" +
+                    "            and A.station_id = AS.station_id" +
+                    "            and T.route_start_date >=  curdate() " +
+                    "            order by fromDate asc;";
             ResultSet rs = myStatement.executeQuery(infoQuery);
 
             while(rs.next()){
-                trips.add(new Trip(Integer.toString(rs.getInt("ticket_id")), rs.getString("dep_name"), rs.getString("arr_name"), rs.getDate("dep_date"), rs.getDate("arr_date") ));
+                try{
+                    Trip trip = setTrip(rs);
+                    trips.add(trip);
+                }catch(SQLException e){
+                    e.printStackTrace();
+                }
             }
 
         }catch (SQLException e){

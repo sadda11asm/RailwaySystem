@@ -1,16 +1,16 @@
 package railwaysProject.controller;
 
 
-import railwaysProject.model.route.CityRoute;
-import railwaysProject.model.route.Route;
-import railwaysProject.model.route.RouteDAO;
-import railwaysProject.model.route.newRoute;
+import railwaysProject.model.route.*;
 import railwaysProject.util.ConnectionPool;
 
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.*;
 
 public class RoutesController {
@@ -24,16 +24,11 @@ public class RoutesController {
 
     protected List<Route> getRoutes(int from, int to, String date) {
         return routeDAO.getRoutesFromTo(from, to, date);
-//        List<Route>
     }
 
     public List<CityRoute> getScheduleOfCity(int cityId) {
-
         List<CityRoute> routes = routeDAO.getArrivalToTheCity(cityId);
-
-
         List<CityRoute> depRoutes = routeDAO.getDepartureFromTheCity(cityId);
-
 //        for (CityRoute route: depRoutes) {
 //            if (finalRoutes.containsKey(new Pair<>(route.getRouteId(), new Pair(route.getStartDate(), route.getStationId())))) {
 //                CityRoute r = finalRoutes.get(new Pair<>(route.getRouteId(), new Pair(route.getStartDate(), route.getStationId())));
@@ -42,7 +37,6 @@ public class RoutesController {
 //                finalRoutes.put(new Pair<>(route.getRouteId(), new Pair(route.getStartDate(), route.getStationId())), route);
 //            }
 //        }
-
         for (int i = 0; i < routes.size(); i++) {
             for (int j = 0; j < depRoutes.size(); j++) {
                 if (depRoutes.get(j).getRouteId() == routes.get(i).getRouteId() &&
@@ -56,48 +50,122 @@ public class RoutesController {
         return routes;
     }
 
-    private boolean routeExists(int routeID){
+
+    public int crateNewRoute(newRoute route){
         Connection conn = ConnectionPool.getDatabaseConnection();
-        boolean exists = false;
+        int routeId = -1;
         try{
-            Statement myStatement = conn.createStatement();
-            String query = "Select * from Route where roure_id = " + routeID;
-            ResultSet rs = myStatement.executeQuery(query);
-            while(rs.next()){
-                exists = true;
+            Statement statement = conn.createStatement();
+            String query = "INSERT INTO Route(route_name) values ('"+ route.getRouteName()+"')";
+            statement.execute(query);
+            ResultSet rs = statement.getGeneratedKeys();
+            while (rs.next()){
+                routeId = rs.getInt("route_id");
+            }if(routeId != -1){
+                addTrain(routeId, route.getCarNum(), route.getSeatNum());
+                insertRouteInstance(route, routeId);
+                insertStations(routeId, route);
             }
         }catch(SQLException e){
             e.printStackTrace();
         }
-        return exists;
+        return routeId;
     }
+    private LocalDateTime incrementDate(LocalDateTime current, LocalTime duration){
+        current = current.plusSeconds(duration.getSecond());
+        current = current.plusMinutes(duration.getMinute());
+        current = current.plusHours(duration.getHour());
+        return current;
 
-    public newRoute crateNewRoute(String routeName, Date startDate){
-        int routeId = new Random().nextInt(1000000) + 1;
-        while(routeExists(routeId)){
-            routeId = new Random().nextInt(1000000) + 1;
-        }
-        newRoute route =  new newRoute(routeId, startDate, routeName);
-        insertRoute(route);
-
-
-
-        return route;
     }
-
-
-
-    private void insertRoute(newRoute route){
+    private void insertStations(int routeId, newRoute route){
+        LocalDate[] dates = route.getDates();
+        stationDuration[] stations = route.getStations();
         Connection conn = ConnectionPool.getDatabaseConnection();
-
         try{
             Statement statement = conn.createStatement();
-            String query = "INSERT INTO Route(route_id, start_date, route_name) values ("+ route.getRouteId() + ", "
-                    + new java.sql.Date(route.getStartDate().getTime())+", '"+route.getRouteName()+"')";
+            for(int i = 0; i < dates.length; i ++){
+                LocalDateTime current  = LocalDateTime.of(dates[i], route.getStartTime());
+                for(int j = 0; j < stations.length; j++){
+                    String depQuery = "";
+                    String arQuery = "";
+                    if(j == stations.length - 1){
+                        depQuery = "Insert into Departure(station_id,route_id,route_start_date, date)" +
+                                "values("+ stations[j].getStationId() + ","+
+                                routeId + "," + dates[i] +","+ current + " )";
+                        current = incrementDate(current, stations[j].getDuration());
+                        arQuery = "INSERT INTO Arrival(station_id,route_id,route_start_date, date)" +
+                                "values(" + route.getLastStation() +","+ routeId +","+
+                                dates[i] +","+ current + ")";
+                    }
+                    else {
+                        depQuery = "Insert into Departure(station_id,route_id,route_start_date, date)" +
+                                "values(" + stations[j].getStationId() + "," +
+                                routeId + "," + dates[i] + "," + current + " )";
+                        current = incrementDate(current, stations[j].getDuration());
+                        arQuery = "INSERT INTO Arrival(station_id,route_id,route_start_date, date)" +
+                                "values(" + stations[j + 1].getStationId() + "," + routeId + "," +
+                                dates[i] + "," + current + ")";
+                    }
+                    statement.executeQuery(depQuery);
+                    new Object().wait(1000);
+                    statement.executeQuery(arQuery);
+                }
+            }
+        }catch(SQLException | InterruptedException e){
+            e.printStackTrace();
+        }
+    }
+    private void insertRouteInstance(newRoute route, int routeId){
+        Connection conn = ConnectionPool.getDatabaseConnection();
+        try{
+            Statement statement = conn.createStatement();
+            LocalDate[] startDates = route.getDates();
+            for(LocalDate startDate: startDates){
+                String query = "INSERT INTO Route_Instance(start_date, route_id)" +
+                        " values (" + startDate + "," + routeId+")";
+                statement.execute(query);
+            }
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+    }
+    private void addTrain(int routeId, int carNum, int seatNum){
+        Connection conn = ConnectionPool.getDatabaseConnection();
+        try{
+            Statement statement = conn.createStatement();
+            String query = "INSERT INTO Train(route_id) values (" + routeId + ")";
             statement.execute(query);
+            ResultSet rs = statement.getGeneratedKeys();
+            int trainId = -1;
+            if(rs.next()) trainId = rs.getInt("train_id");
+            if(trainId != -1) addCarrSeat(routeId, trainId, carNum, seatNum);
+
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+    }
+    private void addCarrSeat(int routeId, int trainId, int carNum, int seatNum){
+        Connection conn = ConnectionPool.getDatabaseConnection();
+        try{
+            Statement statement = conn.createStatement();
+            String car = "";
+            String seat = "";
+            for(int i = 1; i <= carNum; i++){
+                car = "INSERT INTO Carriage(train_id, route_id, carriage_num) values (" + trainId +
+                        "," + routeId + "," + i + ")";
+                statement.executeQuery(car);
+                for(int j = 1; j <= seatNum; j++){
+                    seat = "INSERT into Seat(train_id, route_id, carriage_num, seat_num) values(" +
+                            trainId + "," + routeId + "," + i + "," + j + ")";
+                    statement.executeQuery(seat);
+                }
+            }
         }catch(SQLException e){
             e.printStackTrace();
         }
     }
 
 }
+
+
