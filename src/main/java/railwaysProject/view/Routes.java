@@ -4,6 +4,7 @@ package railwaysProject.view;
 import com.google.gson.Gson;
 import railwaysProject.controller.RoutesController;
 import railwaysProject.model.BookRequest;
+import railwaysProject.model.BookResponse;
 import railwaysProject.model.seat.Seat;
 import railwaysProject.model.route.Route;
 
@@ -42,8 +43,8 @@ public class Routes {
     @Path("/book")
     public Response bookTicket(BookRequest request) {
 //        System.out.println(route_id+date+depDate+arrDate);
-        boolean res = controller.bookTicket(request);
-        if (!res) return Response.status(403).build();
-        return Response.ok().build();
+        BookResponse res = controller.bookTicket(request);
+        if (!res.isSuccess()) return Response.status(403).build();
+        return Response.ok(res).build();
     }
 }

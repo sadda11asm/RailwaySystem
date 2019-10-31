@@ -2,6 +2,10 @@ package railwaysProject.controller;
 
 
 import railwaysProject.model.BookRequest;
+import railwaysProject.model.BookResponse;
+import railwaysProject.model.Passengers.Passenger;
+import railwaysProject.model.Passengers.PassengerDAO;
+import railwaysProject.model.Passengers.PassengerDaoImpl;
 import railwaysProject.model.TicketEntity;
 import railwaysProject.model.seat.Seat;
 import railwaysProject.model.route.CityRoute;
@@ -9,17 +13,17 @@ import railwaysProject.model.route.Route;
 import railwaysProject.model.route.RouteDAO;
 import railwaysProject.model.seat.SeatEntity;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
+import java.nio.charset.Charset;
+import java.util.*;
 
 public class RoutesController {
 
     RouteDAO routeDAO;
+    PassengerDAO passengerDao;
 
-    public RoutesController(RouteDAO routeDAO) {
+    public RoutesController(RouteDAO routeDAO, PassengerDAO passengerDAO) {
         this.routeDAO = routeDAO;
+        this.passengerDao = passengerDAO;
     }
 
 
@@ -92,7 +96,19 @@ public class RoutesController {
         return ans;
     }
 
-    public boolean bookTicket(BookRequest request) {
+    public BookResponse bookTicket(BookRequest request) {
+        if (passengerDao.getUserByEmail(request.getEmail())==null) {
+            int passId = passengerDao.signUpUser(request.getEmail(), request.getFirst_name(), request.getLast_name(), generatePassword());
+            request.setPass_id(passId);
+        }
         return routeDAO.bookTicket(request);
+    }
+
+    private String generatePassword() {
+        byte[] array = new byte[7]; // length is bounded by 7
+        new Random().nextBytes(array);
+        String generatedString = new String(array, Charset.forName("UTF-8"));
+
+        return generatedString;
     }
 }

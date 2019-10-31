@@ -2,10 +2,12 @@ package railwaysProject.model.route;
 
 
 import railwaysProject.model.BookRequest;
+import railwaysProject.model.BookResponse;
 import railwaysProject.model.TicketEntity;
 import railwaysProject.model.seat.Seat;
 import railwaysProject.model.seat.SeatEntity;
 
+import javax.ws.rs.core.Response;
 import java.util.List;
 
 public interface RouteDAO {
@@ -20,5 +22,5 @@ public interface RouteDAO {
 
     List<TicketEntity> getBookedSeats(String route_id, String date);
 
-    boolean bookTicket(BookRequest request);
+    BookResponse bookTicket(BookRequest request);
 }

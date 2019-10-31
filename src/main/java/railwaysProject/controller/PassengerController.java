@@ -41,36 +41,10 @@ public class PassengerController {
         if (passenger != null) {
             return Response.status(403).entity("User with such an email already exists").build();
         }
-        try {
-            System.out.println(email + ", " + firstName + ", " + lastName + ", " + password);
-            System.out.println("INSERT into Passenger(first_name, last_name, email, password) VALUES ('" +
-                    firstName +
-                    "','" +
-                    lastName +
-                    "','" +
-                    email +
-                    "','" +
-                    password +
-                    "')");
-            PreparedStatement preparedStatement = ConnectionPool.getDatabaseConnection()
-                    .prepareStatement
-                            ("INSERT into Passenger(first_name, last_name, email, password) VALUES ('" +
-                                    firstName +
-                                    "','" +
-                                    lastName +
-                                    "','" +
-                                    email +
-                                    "','" +
-                                    password +
-                                    "')", Statement.RETURN_GENERATED_KEYS);
-            preparedStatement.executeUpdate();
-            ResultSet tableKeys = preparedStatement.getGeneratedKeys();
-            while(tableKeys.next()) {
-                System.out.println(tableKeys);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+        int passId = passengerDAO.signUpUser(email, firstName, lastName, password);
+        if (passId == -1) {
+            return Response.status(410).build();
         }
-        return Response.ok().build();
+        return Response.ok(passId).build();
     }
 }
