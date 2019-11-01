@@ -2,126 +2,193 @@ package railwaysProject.controller;
 
 
 import railwaysProject.model.Passengers.Passenger;
+import railwaysProject.model.Passengers.PassengerDAO;
+import railwaysProject.model.route.RouteDAO;
 import railwaysProject.util.ConnectionPool;
+import railwaysProject.model.trip.Trip;
 
 import javax.swing.plaf.nimbus.State;
+import javax.ws.rs.core.Response;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class PassengerController {
+
+    PassengerDAO passengerDAO;
+
+    public PassengerController(PassengerDAO passengerDAO) {
+        this.passengerDAO = passengerDAO;
+    }
+
+
     public Passenger getUserByEmailAndPassword(String email, String password) {
-        List<Passenger> passengers = new ArrayList<>();
-        try {
-            Connection myConnection = ConnectionPool.getDatabaseConnection();
-            Statement myStatement = myConnection.createStatement();
-            String query = "Select * from Passenger where email = '" + email + "' and password = '" + password + "'";
-            ResultSet lists = myStatement.executeQuery(query);
-
-            while(lists.next()){
-                passengers.add(new Passenger(
-                        lists.getInt("passenger_id"),
-                        lists.getString("first_name"),
-                        lists.getString("last_name"),
-                        lists.getString("email"),
-                        lists.getString("password"),
-                        lists.getString("phone_number")
-                ));
-            }
-
-
-        }catch (SQLException e){
-            e.printStackTrace();
-        }
-        return passengers.size() > 0 ? passengers.get(0) : null;
+        return passengerDAO.getUserByEmailAndPassword(email, password);
     }
 
     public List<Passenger> getAllUsers() {
-        List<Passenger> passengers = new ArrayList<>();
-        try {
-            Connection myConnection = ConnectionPool.getDatabaseConnection();
-            Statement myStatement = myConnection.createStatement();
-            String query = "Select * from Passenger";
-            ResultSet lists = myStatement.executeQuery(query);
-
-            while(lists.next()){
-                passengers.add(new Passenger(
-                        lists.getInt("passenger_id"),
-                        lists.getString("first_name"),
-                        lists.getString("last_name"),
-                        lists.getString("email"),
-                        lists.getString("password"),
-                        lists.getString("phone_number")
-                ));
-            }
-
-
-        }catch (SQLException e){
-            e.printStackTrace();
-        }
-        return passengers;
+        return passengerDAO.getAllUsers();
     }
 
     public Passenger getUserByEmail(String email) {
-        List<Passenger> passengers = new ArrayList<>();
+       return passengerDAO.getUserByEmail(email);
+    }
+
+    public Response signUpUser(String email,
+                               String firstName,
+                               String lastName,
+                               String password) {
+        Passenger passenger = getUserByEmail(email);
+        if (passenger != null) {
+            return Response.status(403).entity("User with such an email already exists").build();
+        }
+        int passId = passengerDAO.signUpUser(email, firstName, lastName, password);
+        if (passId == -1) {
+            return Response.status(410).build();
+        }
+        return Response.ok(passId).build();
+    }
+
+    /*public boolean[] getTypeUser(int passengerId){
+        Type typeOfPass = new Type(false, false);
         try {
             Connection myConnection = ConnectionPool.getDatabaseConnection();
             Statement myStatement = myConnection.createStatement();
-            String query = "Select * from Passenger where email = '" + email+"'";
-            ResultSet lists = myStatement.executeQuery(query);
+            String man_query = "Select id from Manager where id =  " + passengerId + ";";
+            ResultSet man_rs = myStatement.executeQuery(man_query);
+            String agent_query = "Select id from Agent where id =  " + passengerId + ";";
+            ResultSet ag_rs = myStatement.executeQuery(agent_query);
+            while(man_rs.next()) response[0] = true;
+            while(ag_rs.next()) response[1] = true;
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return response;
+    }*/
 
-            while(lists.next()){
-                passengers.add(new Passenger(
-                        lists.getInt("passenger_id"),
-                        lists.getString("first_name"),
-                        lists.getString("last_name"),
-                        lists.getString("email"),
-                        lists.getString("password"),
-                        lists.getString("phone_number")
-                ));
+    public  Passenger getPassengerInfo(int passengerId){
+        Passenger passenger = new Passenger(passengerId, null, null,null,null,null);
+        try {
+            Connection myConnection = ConnectionPool.getDatabaseConnection();
+            System.out.println("Error");
+            Statement myStatement = myConnection.createStatement();
+            String infoQuery = "Select * from Passenger where passenger_id =  " + passengerId + ";";
+            ResultSet rs = myStatement.executeQuery(infoQuery);
+            while(rs.next()){
+                passenger.setFirstName(rs.getString("first_name"));
+                passenger.setLastName(rs.getString("last_name"));
+                passenger.setEmail(rs.getString("email"));
+                passenger.setPhoneNumber(rs.getString("phone"));
             }
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return passenger;
+    }
 
+    public List<Trip> getPastTrip(int passengerId){
+        List<Trip> trips = new ArrayList<>();
+        try {
+            Connection myConnection = ConnectionPool.getDatabaseConnection();
+            Statement myStatement = myConnection.createStatement();
+            String infoQuery = "Select T.train_id as trainId," +
+                    "       T.route_id as routeId," +
+                    "       D.date as fromDate," +
+                    "       A.date as toDate," +
+                    "       ASS.station_name as toStation," +
+                    "       DS.station_name as fromStation," +
+                    "       T.carriage_num as carNum," +
+                    "       T.ticket_id as ticketId," +
+                    "       T.seat_num as seat," +
+                    "       R.route_name" +
+                    "       from Ticket T," +
+                    "            Departure D," +
+                    "            Arrival A," +
+                    "            Station ASS," +
+                    "            Station DS," +
+                    "            Route R" +
+                    "            where T.Passenger_passenger_id = " + passengerId +
+                    "            and T.route_id = R.route_id" +
+                    "            and DS.station_id = T.station_from " +
+                    "            and D.station_id = DS.station_id" +
+                    "            and ASS.station_id = T.station_to" +
+                    "            and A.station_id = ASS.station_id" +
+                    "            and T.route_start_date < curdate() " +
+                    "            order by fromDate desc;";
+            ResultSet rs = myStatement.executeQuery(infoQuery);
+
+            while(rs.next()){
+                try{
+                    Trip trip = setTrip(rs);
+                    trips.add(trip);
+                }catch(SQLException e){
+                    e.printStackTrace();
+                }
+            }
 
         }catch (SQLException e){
             e.printStackTrace();
         }
-        return passengers.size() > 0 ? passengers.get(0) : null;
+        return trips;
     }
-
-    public boolean signUpUser(String email,
-                              String firstName,
-                              String lastName,
-                              String password) {
+    private Trip setTrip(ResultSet rs) throws SQLException {
+        Trip trip = new Trip();
+        trip.setCarriageNum(rs.getInt("carNum"));
+        trip.setTrainId(rs.getInt("trainId"));
+        trip.setRouteId(rs.getInt("routeId"));
+        trip.setFromDate(rs.getDate("fromDate"));
+        trip.setToDate(rs.getDate("toDate"));
+        trip.setToStation(rs.getString("toStation"));
+        trip.setFromStation(rs.getString("fromStation"));
+        trip.setTicketId(rs.getInt("ticketId"));
+        trip.setSeat(rs.getInt("seat"));
+        trip.setRouteName(rs.getString("route_name"));
+        return trip;
+    }
+    public List<Trip> getNextTrip(int passengerId){
+        List<Trip> trips = new ArrayList<>();
         try {
-            System.out.println(email + ", " + firstName + ", " + lastName + ", " + password);
-            System.out.println("INSERT into Passenger(first_name, last_name, email, password) VALUES ('" +
-                    firstName +
-                    "','" +
-                    lastName +
-                    "','" +
-                    email +
-                    "','" +
-                    password +
-                    "')");
-            PreparedStatement preparedStatement = ConnectionPool.getDatabaseConnection()
-                    .prepareStatement
-                            ("INSERT into Passenger(first_name, last_name, email, password) VALUES ('" +
-                                    firstName +
-                                    "','" +
-                                    lastName +
-                                    "','" +
-                                    email +
-                                    "','" +
-                                    password +
-                                    "')", Statement.RETURN_GENERATED_KEYS);
-            preparedStatement.executeUpdate();
-            ResultSet tableKeys = preparedStatement.getGeneratedKeys();
-            while(tableKeys.next()) {
-                System.out.println(tableKeys);
+            Connection myConnection = ConnectionPool.getDatabaseConnection();
+            Statement myStatement = myConnection.createStatement();
+            String infoQuery = "Select T.train_id as trainId," +
+                    "       T.route_id as routeId," +
+                    "       D.date as fromDate," +
+                    "       A.date as toDate," +
+                    "       ASS.station_name as toStation ," +
+                    "       DS.station_name as fromStation," +
+                    "       T.carriage_num as carNum," +
+                    "       T.ticket_id as ticketId," +
+                    "       T.seat_num as seat," +
+                    "       R.route_name" +
+                    "       from Ticket T," +
+                    "            Departure D," +
+                    "            Arrival A," +
+                    "            Station ASS," +
+                    "            Station DS," +
+                    "            Route R" +
+                    "            where T.Passenger_passenger_id = " + passengerId +
+                    "            and T.route_id = R.route_id" +
+                    "            and DS.station_id = T.station_from " +
+                    "            and D.station_id = DS.station_id" +
+                    "            and ASS.station_id = T.station_to" +
+                    "            and A.station_id = ASS.station_id" +
+                    "            and T.route_start_date >=  curdate() " +
+                    "            order by fromDate asc;";
+            ResultSet rs = myStatement.executeQuery(infoQuery);
+
+            while(rs.next()){
+                System.out.println("DEBUG" );
+                try{
+                    Trip trip = setTrip(rs);
+                    trips.add(trip);
+                }catch(SQLException e){
+                    e.printStackTrace();
+                }
             }
-        } catch (Exception e) {
+
+        }catch (SQLException e){
             e.printStackTrace();
         }
-        return false;
+        return trips;
     }
 }
