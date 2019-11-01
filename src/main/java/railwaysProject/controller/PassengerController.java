@@ -70,7 +70,6 @@ public class PassengerController {
         Passenger passenger = new Passenger(passengerId, null, null,null,null,null);
         try {
             Connection myConnection = ConnectionPool.getDatabaseConnection();
-            System.out.println("Error");
             Statement myStatement = myConnection.createStatement();
             String infoQuery = "Select * from Passenger where passenger_id =  " + passengerId + ";";
             ResultSet rs = myStatement.executeQuery(infoQuery);
@@ -95,7 +94,7 @@ public class PassengerController {
                     "       T.route_id as routeId," +
                     "       D.date as fromDate," +
                     "       A.date as toDate," +
-                    "       ASS.station_name as toStation," +
+                    "       ASS.station_name as toStation ," +
                     "       DS.station_name as fromStation," +
                     "       T.carriage_num as carNum," +
                     "       T.ticket_id as ticketId," +
@@ -112,9 +111,10 @@ public class PassengerController {
                     "            and DS.station_id = T.station_from " +
                     "            and D.station_id = DS.station_id" +
                     "            and ASS.station_id = T.station_to" +
+                    " and D.route_start_date = T.route_start_date  and D.route_start_date = A.route_start_date"+
                     "            and A.station_id = ASS.station_id" +
-                    "            and T.route_start_date < curdate() " +
-                    "            order by fromDate desc;";
+                    "            and T.route_start_date <=  curdate() " +
+                    "            order by fromDate asc;";
             ResultSet rs = myStatement.executeQuery(infoQuery);
 
             while(rs.next()){
@@ -171,13 +171,13 @@ public class PassengerController {
                     "            and DS.station_id = T.station_from " +
                     "            and D.station_id = DS.station_id" +
                     "            and ASS.station_id = T.station_to" +
+                    " and D.route_start_date = T.route_start_date  and D.route_start_date = A.route_start_date"+
                     "            and A.station_id = ASS.station_id" +
-                    "            and T.route_start_date >=  curdate() " +
+                    "            and T.route_start_date >  curdate() " +
                     "            order by fromDate asc;";
             ResultSet rs = myStatement.executeQuery(infoQuery);
 
             while(rs.next()){
-                System.out.println("DEBUG" );
                 try{
                     Trip trip = setTrip(rs);
                     trips.add(trip);
