@@ -11,6 +11,7 @@ public class ConnectionPool {
         if (conn == null) {
             try {
                 Context initCtx = new InitialContext();
+                System.out.println(initCtx.getNameInNamespace());
                 Context envCtx = (Context) initCtx.lookup("java:comp/env");
                 DataSource ds = (DataSource) envCtx.lookup("jdbc/TestDB");
                 conn = ds.getConnection();
