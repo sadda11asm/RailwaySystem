@@ -61,7 +61,7 @@ public class BookRequest {
         this.train_id = train_id;
         this.seat_num = seat_num;
         this.phone = phone;
-        this.pass_id = pass_id;
+
     }
 
     public int getRoute_id() {

@@ -1,8 +1,10 @@
 package railwaysProject.view;
 
+import railwaysProject.controller.EmployeeController;
 import railwaysProject.controller.PassengerController;
 import railwaysProject.controller.RoutesController;
 import railwaysProject.controller.CityController;
+import railwaysProject.model.Employees.EmployeeDaoImpl;
 import railwaysProject.model.Passengers.Passenger;
 import railwaysProject.model.Passengers.PassengerDAO;
 import railwaysProject.model.Passengers.PassengerDaoImpl;
@@ -16,12 +18,28 @@ public class ServiceLocator {
     private static PassengerController passengerController;
     private static RouteDAO routeDAO;
     private static PassengerDAO passengerDAO;
+    private static EmployeeDaoImpl employeeDAO;
+    private static EmployeeController employeeController;
 
     public static RouteDAO getRouteDAO() {
         if (routeDAO == null) {
             routeDAO = new RouteDaoImpl();
         }
         return routeDAO;
+    }
+
+    public static EmployeeDaoImpl getEmployeeDAO() {
+        if (employeeDAO == null) {
+            employeeDAO = new EmployeeDaoImpl();
+        }
+        return employeeDAO;
+    }
+
+    public static EmployeeController getEmployeeController(){
+        if(employeeController == null){
+            employeeController = new EmployeeController(getEmployeeDAO());
+        }
+        return employeeController;
     }
 
     public static CityController getCityController() {
