@@ -110,10 +110,12 @@ public class RoutesController {
     }
 
     public BookResponse bookTicket(BookRequest request) {
-        if (passengerDao.getUserByEmail(request.getEmail())==null) {
+        Passenger pass = passengerDao.getUserByEmail(request.getEmail());
+        if (pass==null) {
             int passId = passengerDao.signUpUser(request.getEmail(), request.getFirst_name(), request.getLast_name(), generatePassword());
+            System.out.println("PASSID " + passId);
             request.setPass_id(passId);
-        }
+        } else request.setPass_id(pass.getPassengerId());
         return routeDAO.bookTicket(request);
     }
 

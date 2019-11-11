@@ -1,32 +1,55 @@
 package railwaysProject.model;
 
 
+import javax.json.bind.annotation.JsonbCreator;
+import javax.json.bind.annotation.JsonbProperty;
+
 public class BookRequest {
 
-    private int route_id;
-    private String date;
-    private int to;
-    private int from;
-    private String email;
-    private String phone;
-    private String first_name;
-    private String last_name;
-    private int carriage_num;
-    private int train_id;
-    private int seat_num;
-    private int pass_id;
+    @JsonbProperty("route_id") private int route_id;
+    @JsonbProperty("date") private String date;
+    @JsonbProperty("to") private int to;
+    @JsonbProperty("from") private int from;
+    @JsonbProperty("email") private String email;
+    @JsonbProperty("phone") private String phone;
+    @JsonbProperty("first_name") private String first_name;
+    @JsonbProperty("last_name") private String last_name;
+    @JsonbProperty("carriage_num") private int carriage_num;
+    @JsonbProperty("train_id") private int train_id;
+    @JsonbProperty("seat_num") private int seat_num;
+    @JsonbProperty("pass_id") private int pass_id;
 
-    public BookRequest( int route_id,
-             String date,
-             int to,
-             int from,
-             String email,
-             String phone,
-             String first_name,
-             String last_name,
-             int carriage_num,
-             int train_id,
-             int seat_num) {
+    @Override
+    public String toString() {
+        return "BookRequest{" +
+                "route_id=" + route_id +
+                ", date='" + date + '\'' +
+                ", to=" + to +
+                ", from=" + from +
+                ", email='" + email + '\'' +
+                ", phone='" + phone + '\'' +
+                ", first_name='" + first_name + '\'' +
+                ", last_name='" + last_name + '\'' +
+                ", carriage_num=" + carriage_num +
+                ", train_id=" + train_id +
+                ", seat_num=" + seat_num +
+                ", pass_id=" + pass_id +
+                '}';
+    }
+
+    @JsonbCreator()
+    public BookRequest(
+            @JsonbProperty("route_id") int route_id,
+            @JsonbProperty("date")  String date,
+            @JsonbProperty("to")  int to,
+            @JsonbProperty("from")  int from,
+            @JsonbProperty("email")  String email,
+            @JsonbProperty("phone")  String phone,
+            @JsonbProperty("first_name")  String first_name,
+            @JsonbProperty("last_name")  String last_name,
+            @JsonbProperty("carriage_num")  int carriage_num,
+            @JsonbProperty("train_id")  int train_id,
+            @JsonbProperty("seat_num")  int seat_num) {
         this.date = date;
         this.to = to;
         this.route_id = route_id;
@@ -38,6 +61,7 @@ public class BookRequest {
         this.train_id = train_id;
         this.seat_num = seat_num;
         this.phone = phone;
+        this.pass_id = pass_id;
     }
 
     public int getRoute_id() {

@@ -38,9 +38,8 @@ public class Routes {
     }
 
     @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
     @Path("/book")
+    @Consumes(MediaType.APPLICATION_JSON)
     public Response bookTicket(BookRequest request) {
         System.out.println(request.getRoute_id()+request.getPass_id()+request.getEmail()+request.getDate());
         BookResponse res = controller.bookTicket(request);

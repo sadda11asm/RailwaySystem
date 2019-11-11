@@ -197,6 +197,25 @@ public class RouteDaoImpl implements RouteDAO {
     @Override
     public BookResponse bookTicket(BookRequest request) {
 
+        System.out.println(request.toString());
+        System.out.println("INSERT into Ticket (train_id, route_id, route_start_date, carriage_num, seat_num, station_from, station_to, Passenger_passenger_id) VALUES (" +
+                request.getTrain_id() +
+                "," +
+                request.getRoute_id() +
+                ",'" +
+                request.getDate() +
+                "'," +
+                request.getCarriage_num() +
+                "," +
+                request.getSeat_num() +
+                "," +
+                request.getFrom() +
+                "," +
+                request.getTo() +
+                "," +
+                request.getPass_id() +
+                ");");
+
         PreparedStatement preparedStatement = null;
         try {
             preparedStatement = ConnectionPool.getDatabaseConnection()
@@ -205,9 +224,9 @@ public class RouteDaoImpl implements RouteDAO {
                                     request.getTrain_id() +
                                     "," +
                                     request.getRoute_id() +
-                                    "," +
+                                    ",'" +
                                     request.getDate() +
-                                    "," +
+                                    "'," +
                                     request.getCarriage_num() +
                                     "," +
                                     request.getSeat_num() +
@@ -222,7 +241,7 @@ public class RouteDaoImpl implements RouteDAO {
             ResultSet tableKeys = preparedStatement.getGeneratedKeys();
             int ticket_id = -1;
             while(tableKeys.next()) {
-                ticket_id = (int) tableKeys.getLong(8);
+                ticket_id = (int) tableKeys.getLong(1);
                 return new BookResponse(true, ticket_id);
             }
             return new BookResponse(false, ticket_id);
