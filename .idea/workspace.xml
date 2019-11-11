@@ -7,11 +7,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a6dcd861-038c-49f9-83d6-408038da67cd" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/railwaysProject/controller/RoutesController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/railwaysProject/controller/RoutesController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/railwaysProject/model/BookRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/railwaysProject/model/BookRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/railwaysProject/model/route/RouteDaoImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/railwaysProject/model/route/RouteDaoImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/railwaysProject/view/Routes.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/railwaysProject/view/Routes.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -45,13 +43,14 @@
   <component name="ProjectId" id="1SFImM6K97BRfcQ7JQ1eidmCv74" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="PropertiesComponent">
+    <property name="Git.Branch.Popup.ShowAllRemotes" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/java/railwaysProject/controller" />
-    <property name="project.structure.last.edited" value="Artifacts" />
-    <property name="project.structure.proportion" value="0.0" />
-    <property name="project.structure.side.proportion" value="0.0" />
+    <property name="project.structure.last.edited" value="Project" />
+    <property name="project.structure.proportion" value="0.15" />
+    <property name="project.structure.side.proportion" value="0.2" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -197,7 +196,7 @@
       <workItem from="1573185420134" duration="3429000" />
       <workItem from="1573374504712" duration="7665000" />
       <workItem from="1573401096280" duration="1455000" />
-      <workItem from="1573493243718" duration="10541000" />
+      <workItem from="1573493243718" duration="12253000" />
     </task>
     <task id="LOCAL-00001" summary="renamed dynamictodolist files to railwaysproject">
       <created>1571154260663</created>
