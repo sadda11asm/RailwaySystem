@@ -70,27 +70,36 @@ public class RoutesController {
     }
 
 
-    private boolean check(String depDate, String arrDate, String start, String end) {
-        if (depDate.compareTo(start)>=0 && depDate.compareTo(end)<=0) return false;
-        if (arrDate.compareTo(start)<=0 && arrDate.compareTo(end)>=0) return false;
-        if (depDate.compareTo(start)<0 && arrDate.compareTo(end)>0) return false;
+    private boolean coolTicket(String depDate, String arrDate, String start, String end) {
+        System.out.println("cool ticket  " + depDate + " " + arrDate + " " + start + " " + end);
+        if (depDate.compareTo(start)>=0 && depDate.compareTo(end)<0) return false;
+        if (arrDate.compareTo(start)>0 && arrDate.compareTo(end)<=0) return false;
+        if (depDate.compareTo(start)<=0 && arrDate.compareTo(end)>=0) return false;
+        if (depDate.compareTo(start)>=0 && arrDate.compareTo(end)<=0) return false;
         return true;
     }
     public List<Seat> getSeatsInfo(String route_id,  String date, String depDate, String arrDate) {
         List<SeatEntity> seats = routeDAO.getAllSeats(route_id);
         List<TicketEntity> tickets = routeDAO.getBookedSeats(route_id, date);
-        Set<SeatEntity> booked = new TreeSet<>();
+//        System.out.println("tickets " + tickets.get(0).toString());
+        Set<SeatEntity> booked = new HashSet<>();
 
         for (int i = 0; i < tickets.size(); i++) {
             TicketEntity ticket = tickets.get(i);
-            if (!check(ticket.getDepDate(), ticket.getArrDate(), depDate, arrDate)) {
-                booked.add(new SeatEntity(ticket.getSeatNum(), ticket.getRouteId(), ticket.getCarriageNum(), ticket.getTrainId()));
+            if (!coolTicket(ticket.getDepDate(), ticket.getArrDate(), depDate, arrDate)) {
+                System.out.println("Bad ticket: " + ticket.getSeatNum());
+                SeatEntity seat = new SeatEntity(ticket.getSeatNum(), ticket.getRouteId(), ticket.getCarriageNum(), ticket.getTrainId());
+                System.out.println(seat.toString());
+                booked.add(seat);
             }
         }
+
+        System.out.println(booked.size());
 
         List<Seat> ans = new ArrayList<>();
         for (int i = 0; i < seats.size(); i++) {
             SeatEntity seat = seats.get(i);
+//            System.out.println(seat.toString());
             if (booked.contains(seat)) {
                 ans.add(new Seat(seat.getSeatNum(), seat.getCarriageNum(), false));
             } else {
