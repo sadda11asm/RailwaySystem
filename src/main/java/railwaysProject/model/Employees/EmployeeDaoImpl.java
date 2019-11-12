@@ -1,6 +1,5 @@
 package railwaysProject.model.Employees;
 
-import railwaysProject.model.Passengers.Passenger;
 import railwaysProject.util.ConnectionPool;
 
 import java.sql.Connection;
@@ -34,8 +33,28 @@ public class EmployeeDaoImpl {
         return employees.size() > 0 ? employees.get(0) : null;
     }
 
-    /*public boolean deleteTicket(int ticketId,int trainId, int routeId){
+    public boolean deleteTicket(int ticketId,int trainId, int routeId){
+        boolean ticketExists = false;
+        boolean ticketDeleted = false;
+        try {
+            Connection myConnection = ConnectionPool.getDatabaseConnection();
+            Statement myStatement = myConnection.createStatement();
+            String query = "Select * from Ticket where ticket_id = " + ticketId + " and train_id = " + trainId +
+                    " and route_id = " + routeId + " and route_start_date > curdate();";
+            ResultSet ticket = myStatement.executeQuery(query);
 
-    }*/
+            if(ticket.next()){
+                ticketExists = true;
+            }
+            if(!ticketExists) return false;
+            query = "Delete from Ticket where ticket_id = " + ticketId + " and train_id = " + trainId +
+                    " and route_id = " + routeId;
+            myStatement.executeUpdate(query);
+            ticketDeleted = true;
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return ticketDeleted;
+    }
 
 }

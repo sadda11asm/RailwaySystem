@@ -7,7 +7,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a6dcd861-038c-49f9-83d6-408038da67cd" name="Default Changelist" comment="All functionality of passenger (retrieve the data from the profile of the user, past trips,future trips )">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/railwaysProject/controller/EmployeeController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/railwaysProject/controller/EmployeeController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/railwaysProject/model/Employees/EmployeeDaoImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/railwaysProject/model/Employees/EmployeeDaoImpl.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -196,7 +198,7 @@
       <workItem from="1572574629058" duration="24753000" />
       <workItem from="1573200915205" duration="728000" />
       <workItem from="1573469127054" duration="107000" />
-      <workItem from="1573493201614" duration="11656000" />
+      <workItem from="1573493201614" duration="15316000" />
     </task>
     <task id="LOCAL-00001" summary="renamed dynamictodolist files to railwaysproject">
       <created>1571154260663</created>

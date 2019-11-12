@@ -15,8 +15,7 @@ public class EmployeeController {
     }
 
     public boolean deleteTicket(int ticketId,int trainId, int routeId){
-//        return employeeDAO.deleteTicket(ticketId,trainId, routeId);
-        return true;
+        return employeeDAO.deleteTicket(ticketId,trainId, routeId);
     }
 
 }
