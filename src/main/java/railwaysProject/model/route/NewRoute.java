@@ -1,18 +1,28 @@
 package railwaysProject.model.route;
 
 
+import javax.json.bind.annotation.JsonbCreator;
+import javax.json.bind.annotation.JsonbProperty;
 import java.time.*;
 public class NewRoute {
-    private String routeName;
-    private int carNum;
-    private int seatNum;
-    private LocalDate[] dates;
-    private LocalTime startTime;
-    private StationDuration[] stations;
-    private int LastStation;
+    @JsonbProperty("routeName") private String routeName;
+    @JsonbProperty("carNum") private int carNum;
+    @JsonbProperty("seatNum") private int seatNum;
+    //private LocalDate[] dates;
+    @JsonbProperty("dates") private String[] dates;
+    //private LocalTime startTime;
+    @JsonbProperty("startTime") private String startTime;
+    @JsonbProperty("stations") private StationDuration[] stations;
+    @JsonbProperty("LastStation") private int LastStation;
 
-
-    public NewRoute(String name, int carNum, int seatNum, LocalDate[] dates, LocalTime startTime, StationDuration[] stations, int LastStation){
+    @JsonbCreator()
+    public NewRoute(@JsonbProperty("routeName") String name,
+                    @JsonbProperty("carNum") int carNum,
+                    @JsonbProperty("seatNum") int seatNum,
+                    @JsonbProperty("dates") String[] dates,
+                    @JsonbProperty("startTime") String startTime,
+                    @JsonbProperty("stations") StationDuration[] stations,
+                    @JsonbProperty("LastStation") int LastStation){
         routeName = name;
         this.carNum = carNum;
         this.seatNum = seatNum;
@@ -30,11 +40,11 @@ public class NewRoute {
         return stations;
     }
 
-    public LocalTime getStartTime() {
+    public String getStartTime() {
         return startTime;
     }
 
-    public LocalDate[] getDates() {
+    public String[] getDates() {
         return dates;
     }
 
