@@ -87,5 +87,20 @@ public class TicketEntity {
         this.depDate = depDate;
     }
 
-//     TicketEntity(seatNum, Integer.valueOf(routeId), carriageNum, trainId, String date, ticketId, arrDate, depDate);
+    @Override
+    public String toString() {
+        return "TicketEntity{" +
+                "seatNum=" + seatNum +
+                ", routeId=" + routeId +
+                ", carriageNum=" + carriageNum +
+                ", trainId=" + trainId +
+                ", startDate='" + startDate + '\'' +
+                ", ticketId=" + ticketId +
+                ", arrDate='" + arrDate + '\'' +
+                ", depDate='" + depDate + '\'' +
+                '}';
+    }
+
+
+    //     TicketEntity(seatNum, Integer.valueOf(routeId), carriageNum, trainId, String date, ticketId, arrDate, depDate);
 }

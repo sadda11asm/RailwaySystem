@@ -24,7 +24,7 @@ public class PassengerDaoImpl implements PassengerDAO {
                         lists.getString("last_name"),
                         lists.getString("email"),
                         lists.getString("password"),
-                        lists.getString("phone#")
+                        lists.getString("phone")
                 ));
             }
 
@@ -53,7 +53,7 @@ public class PassengerDaoImpl implements PassengerDAO {
                         lists.getString("last_name"),
                         lists.getString("email"),
                         lists.getString("password"),
-                        lists.getString("phone_number")
+                        lists.getString("phone")
                 ));
             }
 
@@ -80,7 +80,7 @@ public class PassengerDaoImpl implements PassengerDAO {
                         lists.getString("last_name"),
                         lists.getString("email"),
                         lists.getString("password"),
-                        lists.getString("phone_number")
+                        lists.getString("phone")
                 ));
             }
 

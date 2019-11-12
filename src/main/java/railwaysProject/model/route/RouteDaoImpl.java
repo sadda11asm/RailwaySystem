@@ -155,7 +155,6 @@ public class RouteDaoImpl implements RouteDAO {
                 int trainId = result.getInt("train_id");
 //                System.out.println("routeId: " + routeId + ", route_name: " + routeName + "to: " + to);
                 SeatEntity seat = new SeatEntity(seatNum, routeId, carriageNum, trainId);
-                System.out.println(seat.toString());
                 seats.add(seat);
             }
         } catch (Exception e) {
@@ -168,10 +167,10 @@ public class RouteDaoImpl implements RouteDAO {
     @Override
     public List<TicketEntity> getBookedSeats(String routeId, String date) {
         String query = "SELECT t.ticket_id, t.train_id, t.carriage_num, t.seat_num, a.date as arr_date, d.date as dep_date\n" +
-                "FROM Ticket t, Arrival a, Departure d\n" +
-                "WHERE t.route_id = " + routeId +" AND t.route_start_date = " + date + " \n" +
-                "AND t.station_from = a.station_id AND t.route_id = a.route_id AND t.route_start_date = a.route_start_date\n" +
-                "AND t.station_from = d.station_id AND t.route_id = d.route_id AND t.route_start_date = d.route_start_date;";
+                "FROM Ticket t\n" +
+                "left outer join Arrival a on t.station_to = a.station_id AND t.route_id = a.route_id AND t.route_start_date = a.route_start_date\n" +
+                "left outer join Departure d on t.station_from = d.station_id AND t.route_id = d.route_id AND t.route_start_date = d.route_start_date\n" +
+                "WHERE t.route_id = " + routeId + " AND t.route_start_date = '" + date +"';";
         Connection conn;
         ArrayList<TicketEntity> tickets = new ArrayList<>();
         try {
@@ -186,7 +185,6 @@ public class RouteDaoImpl implements RouteDAO {
                 String depDate = result.getString("dep_date");
 //                System.out.println("routeId: " + routeId + ", route_name: " + routeName + "to: " + to);
                 TicketEntity ticket = new TicketEntity(seatNum, Integer.valueOf(routeId), carriageNum, trainId, date, ticketId, arrDate, depDate);
-                System.out.println(ticket.toString());
                 tickets.add(ticket);
             }
         } catch (Exception e) {
@@ -199,6 +197,25 @@ public class RouteDaoImpl implements RouteDAO {
     @Override
     public BookResponse bookTicket(BookRequest request) {
 
+        System.out.println(request.toString());
+        System.out.println("INSERT into Ticket (train_id, route_id, route_start_date, carriage_num, seat_num, station_from, station_to, Passenger_passenger_id) VALUES (" +
+                request.getTrain_id() +
+                "," +
+                request.getRoute_id() +
+                ",'" +
+                request.getDate() +
+                "'," +
+                request.getCarriage_num() +
+                "," +
+                request.getSeat_num() +
+                "," +
+                request.getFrom() +
+                "," +
+                request.getTo() +
+                "," +
+                request.getPass_id() +
+                ");");
+
         PreparedStatement preparedStatement = null;
         try {
             preparedStatement = ConnectionPool.getDatabaseConnection()
@@ -207,9 +224,9 @@ public class RouteDaoImpl implements RouteDAO {
                                     request.getTrain_id() +
                                     "," +
                                     request.getRoute_id() +
-                                    "," +
+                                    ",'" +
                                     request.getDate() +
-                                    "," +
+                                    "'," +
                                     request.getCarriage_num() +
                                     "," +
                                     request.getSeat_num() +
@@ -224,7 +241,7 @@ public class RouteDaoImpl implements RouteDAO {
             ResultSet tableKeys = preparedStatement.getGeneratedKeys();
             int ticket_id = -1;
             while(tableKeys.next()) {
-                ticket_id = (int) tableKeys.getLong(8);
+                ticket_id = (int) tableKeys.getLong(1);
                 return new BookResponse(true, ticket_id);
             }
             return new BookResponse(false, ticket_id);

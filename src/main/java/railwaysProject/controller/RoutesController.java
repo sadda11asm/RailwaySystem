@@ -3,7 +3,9 @@ package railwaysProject.controller;
 
 import railwaysProject.model.BookRequest;
 import railwaysProject.model.BookResponse;
+import railwaysProject.model.Passengers.Passenger;
 import railwaysProject.model.Passengers.PassengerDAO;
+import railwaysProject.model.Passengers.PassengerDaoImpl;
 import railwaysProject.model.TicketEntity;
 import railwaysProject.model.seat.Seat;
 import railwaysProject.model.route.CityRoute;
@@ -19,7 +21,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.nio.charset.Charset;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class RoutesController {
@@ -67,27 +68,36 @@ public class RoutesController {
     }
 
 
-    private boolean check(String depDate, String arrDate, String start, String end) {
-        if (depDate.compareTo(start)>=0 && depDate.compareTo(end)<=0) return false;
-        if (arrDate.compareTo(start)<=0 && arrDate.compareTo(end)>=0) return false;
-        if (depDate.compareTo(start)<0 && arrDate.compareTo(end)>0) return false;
+    private boolean coolTicket(String depDate, String arrDate, String start, String end) {
+        System.out.println("cool ticket  " + depDate + " " + arrDate + " " + start + " " + end);
+        if (depDate.compareTo(start)>=0 && depDate.compareTo(end)<0) return false;
+        if (arrDate.compareTo(start)>0 && arrDate.compareTo(end)<=0) return false;
+        if (depDate.compareTo(start)<=0 && arrDate.compareTo(end)>=0) return false;
+        if (depDate.compareTo(start)>=0 && arrDate.compareTo(end)<=0) return false;
         return true;
     }
     public List<Seat> getSeatsInfo(String route_id,  String date, String depDate, String arrDate) {
         List<SeatEntity> seats = routeDAO.getAllSeats(route_id);
         List<TicketEntity> tickets = routeDAO.getBookedSeats(route_id, date);
-        Set<SeatEntity> booked = new TreeSet<>();
+//        System.out.println("tickets " + tickets.get(0).toString());
+        Set<SeatEntity> booked = new HashSet<>();
 
         for (int i = 0; i < tickets.size(); i++) {
             TicketEntity ticket = tickets.get(i);
-            if (!check(ticket.getDepDate(), ticket.getArrDate(), depDate, arrDate)) {
-                booked.add(new SeatEntity(ticket.getSeatNum(), ticket.getRouteId(), ticket.getCarriageNum(), ticket.getTrainId()));
+            if (!coolTicket(ticket.getDepDate(), ticket.getArrDate(), depDate, arrDate)) {
+                System.out.println("Bad ticket: " + ticket.getSeatNum());
+                SeatEntity seat = new SeatEntity(ticket.getSeatNum(), ticket.getRouteId(), ticket.getCarriageNum(), ticket.getTrainId());
+                System.out.println(seat.toString());
+                booked.add(seat);
             }
         }
+
+        System.out.println(booked.size());
 
         List<Seat> ans = new ArrayList<>();
         for (int i = 0; i < seats.size(); i++) {
             SeatEntity seat = seats.get(i);
+//            System.out.println(seat.toString());
             if (booked.contains(seat)) {
                 ans.add(new Seat(seat.getSeatNum(), seat.getCarriageNum(), false));
             } else {
@@ -98,11 +108,12 @@ public class RoutesController {
     }
 
     public BookResponse bookTicket(BookRequest request) {
-        if (passengerDao.getUserByEmail(request.getEmail())==null) {
+        Passenger pass = passengerDao.getUserByEmail(request.getEmail());
+        if (pass==null) {
             int passId = passengerDao.signUpUser(request.getEmail(), request.getFirst_name(), request.getLast_name(), generatePassword());
+            System.out.println("PASSID " + passId);
             request.setPass_id(passId);
-        }
-
+        } else request.setPass_id(pass.getPassengerId());
         return routeDAO.bookTicket(request);
     }
 
@@ -110,6 +121,7 @@ public class RoutesController {
         byte[] array = new byte[7]; // length is bounded by 7
         new Random().nextBytes(array);
         String generatedString = new String(array, Charset.forName("UTF-8"));
+
         return generatedString;
     }
 
@@ -180,7 +192,7 @@ public class RoutesController {
             String[] startDates = route.getDates();
             for(String startDate: startDates){
                 String query = "INSERT INTO Route_Instance(start_date, route_id)" +
-                               " values ('" + startDate + "'," + routeId+")";
+                        " values ('" + startDate + "'," + routeId+")";
                 statement.executeUpdate(query);
             }
         }catch(SQLException e){
@@ -224,22 +236,22 @@ public class RoutesController {
                     String arQuery = "";
                     if(j == stations.length - 1){
                         depQuery = "Insert into Departure(station_id,route_id,route_start_date, date)" +
-                                   "values("+ stations[j].getStationId() + ","+
-                                    routeId + ",'" + dates[i] +"','"+ current + "')";
+                                "values("+ stations[j].getStationId() + ","+
+                                routeId + ",'" + dates[i] +"','"+ current + "')";
                         LocalTime duration = strToLocalTime(stations[j].getDuration());
                         current = incrementDate(current, duration);
                         arQuery = "INSERT INTO Arrival(station_id,route_id,route_start_date, date)" +
-                                  "values(" + route.getLastStation() +","+ routeId +",'"+
-                                   dates[i] +"','"+ current + "')";
+                                "values(" + route.getLastStation() +","+ routeId +",'"+
+                                dates[i] +"','"+ current + "')";
                     }else {
                         depQuery = "Insert into Departure(station_id,route_id,route_start_date, date)" +
-                                   "values(" + stations[j].getStationId() + "," +
-                                    routeId + ",'" + dates[i] + "','" + current + "' )";
+                                "values(" + stations[j].getStationId() + "," +
+                                routeId + ",'" + dates[i] + "','" + current + "' )";
                         LocalTime duration = strToLocalTime(stations[j].getDuration());
                         current = incrementDate(current, duration);
                         arQuery = "INSERT INTO Arrival(station_id,route_id,route_start_date, date)" +
-                                  "values(" + stations[j + 1].getStationId() + "," + routeId + ",'" +
-                                   dates[i] + "','" + current + "')";
+                                "values(" + stations[j + 1].getStationId() + "," + routeId + ",'" +
+                                dates[i] + "','" + current + "')";
                     }
                     statement.executeUpdate(depQuery);
                     statement.executeUpdate(arQuery);

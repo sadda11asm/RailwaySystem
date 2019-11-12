@@ -31,18 +31,17 @@ public class Routes {
     @GET
     @Path("/{routeId:[0-9]+}/seats")
     public Response getSeatsOfARoute(@PathParam("routeId") String routeId, @QueryParam("date") String date, @QueryParam("dep_date") String depDate,@QueryParam("arr_date") String arrDate) {
-//        System.out.println(route_id+date+depDate+arrDate);
+        System.out.println(routeId+date+depDate+arrDate);
         List<Seat> res = controller.getSeatsInfo(routeId, date, depDate, arrDate);
         String response = new Gson().toJson(res);
         return Response.ok(response).build();
     }
 
     @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
     @Path("/book")
+    @Consumes(MediaType.APPLICATION_JSON)
     public Response bookTicket(BookRequest request) {
-//        System.out.println(route_id+date+depDate+arrDate);
+        System.out.println(request.getRoute_id()+request.getPass_id()+request.getEmail()+request.getDate());
         BookResponse res = controller.bookTicket(request);
         if (!res.isSuccess()) return Response.status(403).build();
         return Response.ok(res).build();
