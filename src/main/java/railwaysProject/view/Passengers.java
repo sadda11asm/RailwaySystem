@@ -28,6 +28,8 @@ public class Passengers {
     public Response signUp(@FormParam("email") String email, @FormParam("firstName") String firstName,
                            @FormParam("lastName") String lastName, @FormParam("password") String password) {
 
+        System.out.println(email + lastName + firstName + password);
+
         return passengerController.signUpUser(email, firstName, lastName, password);
     }
 

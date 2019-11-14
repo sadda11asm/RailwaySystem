@@ -3,6 +3,8 @@ package railwaysProject.view;
 import com.google.gson.Gson;
 import railwaysProject.controller.EmployeeController;
 import railwaysProject.controller.RoutesController;
+import railwaysProject.model.BookRequest;
+import railwaysProject.model.BookResponse;
 import railwaysProject.model.Employees.Employee;
 import railwaysProject.model.Passengers.Passenger;
 import railwaysProject.model.route.NewRoute;
@@ -55,6 +57,18 @@ public class Employees {
         }
         return Response.status(401).build();
     }
+
+
+    @POST
+    @Path("/createTicket")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response createTicket(BookRequest request) {
+        System.out.println(request.getRoute_id()+request.getPass_id()+request.getEmail()+request.getDate());
+        BookResponse res = routesController.bookTicket(request);
+        if (!res.isSuccess()) return Response.status(403).build();
+        return Response.ok(res).build();
+    }
+
 
 
 }
