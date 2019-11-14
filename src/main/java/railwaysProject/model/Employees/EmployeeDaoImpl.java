@@ -1,15 +1,19 @@
 package railwaysProject.model.Employees;
 
+import railwaysProject.controller.RoutesController;
 import railwaysProject.util.ConnectionPool;
+import railwaysProject.view.ServiceLocator;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 public class EmployeeDaoImpl {
+    RoutesController routesController = ServiceLocator.getRoutesController();
     public Employee getEmployeeByEmailAndPassword(String email, String password) {
         List<Employee> employees = new ArrayList<>();
         try {
@@ -55,6 +59,37 @@ public class EmployeeDaoImpl {
             e.printStackTrace();
         }
         return ticketDeleted;
+    }
+    public void notifyAboutDelete(int routeId, LocalDate startDate){
+        Connection conn = ConnectionPool.getDatabaseConnection();
+        try{
+
+        }
+    }
+    public boolean cancelRoute(int routeId, String startDate){
+        boolean isCanceled = false;
+        Connection conn = ConnectionPool.getDatabaseConnection();
+        try{
+            Statement statement = conn.createStatement();
+            LocalDate date = routesController.strToLocalDate(startDate);
+            String query = "Select * from Route_Instance where start_date = " + date
+                         + " and route_id = " + routeId + ";";
+            ResultSet rs = statement.executeQuery(query);
+            if(!rs.next()) return false;
+            notifyAboutDelete(routeId,date);
+            String routeInstance = "DELETE FROM Route_Instance where start_date = " + date
+                    + " and route_id = " + routeId + ";";
+            String arrivals = "DELETE FROM  Arrival where route_start_date = " + date
+                    + " and route_id = " + routeId + ";";
+            String departures = "DELETE FROM  Departure where route_start_date = " + date
+                    + " and route_id = " + routeId + ";";
+            statement.executeUpdate(departures);
+            statement.executeUpdate(arrivals);
+            statement.executeUpdate(routeInstance);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return isCanceled;
     }
 
 }

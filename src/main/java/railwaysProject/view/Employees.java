@@ -19,19 +19,11 @@ public class Employees {
     @Path("/newRoute")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createNewRoute(NewRoute route){
-        System.out.println("DEBUG: " + route);
         int id = routesController.insertNewRoute(route);
         if(id == -1){
             return Response.serverError().build();
         }
         return Response.ok(new Gson().toJson(id)).build();
-    }
-
-    @POST
-    @Path("/doRoute")
-    public Response doNewRoute(){
-        routesController.addCarrSeat(0, 1, 2, 10);
-        return Response.ok().build();
     }
 
     @POST
@@ -54,6 +46,13 @@ public class Employees {
             return Response.ok().build();
         }
         return Response.status(401).build();
+    }
+
+    @DELETE
+    @Path("/cancelRoute")
+    public Response cancelRoute(@FormParam("routeId") int routeId, @FormParam("startDate") String startDate){
+        if(employeeController.cancelRoute(routeId, startDate)) return Response.ok().build();
+        return Response.status(304).build();
     }
 
 

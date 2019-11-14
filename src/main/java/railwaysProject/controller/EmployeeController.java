@@ -18,4 +18,7 @@ public class EmployeeController {
         return employeeDAO.deleteTicket(ticketId,trainId, routeId);
     }
 
+    public boolean cancelRoute(int routeId, String startDate){
+        return employeeDAO.cancelRoute(routeId, startDate);
+    }
 }

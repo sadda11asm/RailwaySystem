@@ -214,7 +214,7 @@ public class RoutesController {
         return LocalTime.of(hour, min, sec);
     }
 
-    private LocalDate strToLocalDate(String date){
+    public LocalDate strToLocalDate(String date){
         int year = Integer.parseInt(date.substring(0,4));
         int month = Integer.parseInt(date.substring(5,7));
         int day = Integer.parseInt(date.substring(8));
