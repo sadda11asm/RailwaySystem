@@ -8,6 +8,8 @@ import railwaysProject.model.Employees.EmployeeDaoImpl;
 import railwaysProject.model.Passengers.Passenger;
 import railwaysProject.model.Passengers.PassengerDAO;
 import railwaysProject.model.Passengers.PassengerDaoImpl;
+import railwaysProject.model.Schedule.ScheduleDAO;
+import railwaysProject.model.Schedule.ScheduleDaoImpl;
 import railwaysProject.model.route.RouteDAO;
 import railwaysProject.model.route.RouteDaoImpl;
 
@@ -17,6 +19,7 @@ public class ServiceLocator {
     private static RoutesController routesController;
     private static PassengerController passengerController;
     private static RouteDAO routeDAO;
+    private static ScheduleDAO scheduleDAO;
     private static PassengerDAO passengerDAO;
     private static EmployeeDaoImpl employeeDAO;
     private static EmployeeController employeeController;
@@ -35,9 +38,16 @@ public class ServiceLocator {
         return employeeDAO;
     }
 
+
+    public static ScheduleDAO getScheduleDAO() {
+        if (scheduleDAO == null) {
+            scheduleDAO = new ScheduleDaoImpl();
+        }
+        return scheduleDAO;
+    }
     public static EmployeeController getEmployeeController(){
         if(employeeController == null){
-            employeeController = new EmployeeController(getEmployeeDAO());
+            employeeController = new EmployeeController(getEmployeeDAO(), getScheduleDAO());
         }
         return employeeController;
     }

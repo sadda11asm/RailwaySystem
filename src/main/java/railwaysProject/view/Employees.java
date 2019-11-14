@@ -1,17 +1,21 @@
 package railwaysProject.view;
 
 import com.google.gson.Gson;
+import com.google.gson.internal.$Gson$Preconditions;
 import railwaysProject.controller.EmployeeController;
 import railwaysProject.controller.RoutesController;
 import railwaysProject.model.BookRequest;
 import railwaysProject.model.BookResponse;
 import railwaysProject.model.Employees.Employee;
 import railwaysProject.model.Passengers.Passenger;
+import railwaysProject.model.Schedule.FinalSchedule;
+import railwaysProject.model.Schedule.Schedule;
 import railwaysProject.model.route.NewRoute;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.ArrayList;
 
 @Path("/employees")
 public class Employees {
@@ -67,6 +71,15 @@ public class Employees {
         BookResponse res = routesController.bookTicket(request);
         if (!res.isSuccess()) return Response.status(403).build();
         return Response.ok(res).build();
+    }
+
+
+    @GET
+    @Path("/schedule")
+    public Response getSchedule(@QueryParam("e_id") int employee_id) {
+        ArrayList<FinalSchedule> schedule = employeeController.getSchedule(employee_id);
+        Gson gson = new Gson();
+        return Response.ok(gson.toJson(schedule)).build();
     }
 
 
