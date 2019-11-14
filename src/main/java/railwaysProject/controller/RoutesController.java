@@ -152,6 +152,7 @@ public class RoutesController {
     private void addTrain(int routeId, int carNum, int seatNum){
         Connection conn = ConnectionPool.getDatabaseConnection();
         try{
+            System.out.println("ROUTE ID " + routeId);
             String query = "INSERT INTO Train(route_id) values (" + routeId + ")";
             PreparedStatement statement = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
             statement.executeUpdate();

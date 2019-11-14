@@ -4,6 +4,10 @@ import railwaysProject.controller.RoutesController;
 import railwaysProject.util.ConnectionPool;
 import railwaysProject.view.ServiceLocator;
 
+import javax.mail.*;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -11,6 +15,7 @@ import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 public class EmployeeDaoImpl {
     RoutesController routesController = ServiceLocator.getRoutesController();
@@ -60,10 +65,81 @@ public class EmployeeDaoImpl {
         }
         return ticketDeleted;
     }
-    public void notifyAboutDelete(int routeId, LocalDate startDate){
+
+    private void sendDeleteRouteAdvisory(List<String> emails, int routeId,LocalDate startDate){
+        String subject = "[URGENT!] Your route was cancelled";
+        String textBody = "Hello, dear User!\n"
+                        + "I want to notify you about cancellation of route which would start on " + startDate
+                        + " and with route id " + routeId;
+
+        final String fromEmail = "horpus.nostrum@gmail.com";
+        final String password = "12344321m";
+        String host = "localhost";
+
+        // Port of SMTP
+        String port = "25";
+        Properties properties = System.getProperties();
+
+        // Setting up the mail server
+        properties.setProperty("mail.smtp.host", host);
+        properties.setProperty("mail.smtp.port", port);
+
+        //create Authenticator object to pass in Session.getInstance argument
+        Authenticator auth = new Authenticator() {
+            //override the getPasswordAuthentication method
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(fromEmail, password);
+            }
+        };
+        Session session = Session.getInstance(properties, auth);
+
+        for(String email : emails){
+            try
+            {
+                // Create MimeMessage object
+                MimeMessage message = new MimeMessage(session);
+
+                // Set the Senders mail to From
+                message.setFrom(new InternetAddress(fromEmail));
+
+                // Set the recipients email address
+                message.addRecipient(Message.RecipientType.TO, new InternetAddress(email));
+
+                // Subject of the email
+                message.setSubject(subject);
+
+                // Body of the email
+                message.setText(textBody);
+
+                // Send email
+                Transport.send(message);
+                System.out.println("Mail sent successfully");
+            }  catch (MessagingException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    public void notifyAboutDeleteRoute(int routeId, LocalDate startDate){
         Connection conn = ConnectionPool.getDatabaseConnection();
         try{
+            Statement statement = conn.createStatement();
+            String getEmails = "Select P.email as email"
+                             + "from Passenger as P,"
+                             + "Ticket as T where P.passenger_id = T.Passenger_passenger_id "
+                             + " and T.route_start_date = " + startDate
+                             + " and T.route_id = " + routeId + ";";
+            List<String> emails = new ArrayList<>();
+            ResultSet rs = statement.executeQuery(getEmails);
+            while(rs.next()){
+                emails.add(rs.getString("email"));
+            }
+            String deleteTicket = "Delete from Ticket where T.route_start_date = " + startDate
+                    + " and T.route_id = " + routeId + ";";
+            statement.executeUpdate(deleteTicket);
 
+            sendDeleteRouteAdvisory(emails, routeId, startDate);
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
     public boolean cancelRoute(int routeId, String startDate){
@@ -73,10 +149,10 @@ public class EmployeeDaoImpl {
             Statement statement = conn.createStatement();
             LocalDate date = routesController.strToLocalDate(startDate);
             String query = "Select * from Route_Instance where start_date = " + date
-                         + " and route_id = " + routeId + ";";
+                         + " and start_date > curdate() and route_id = " + routeId + ";";
             ResultSet rs = statement.executeQuery(query);
             if(!rs.next()) return false;
-            notifyAboutDelete(routeId,date);
+            notifyAboutDeleteRoute(routeId,date);
             String routeInstance = "DELETE FROM Route_Instance where start_date = " + date
                     + " and route_id = " + routeId + ";";
             String arrivals = "DELETE FROM  Arrival where route_start_date = " + date
@@ -86,6 +162,7 @@ public class EmployeeDaoImpl {
             statement.executeUpdate(departures);
             statement.executeUpdate(arrivals);
             statement.executeUpdate(routeInstance);
+            isCanceled = true;
         } catch (SQLException e) {
             e.printStackTrace();
         }
