@@ -91,6 +91,15 @@ public class Employees {
     }
 
 
+    @PUT
+    @Path("/salary/{e_id: [0-9]+}")
+    public Response updateSalary(@PathParam("e_id") int e_id, @QueryParam("salary") int salary) {
+        Boolean updated = employeeController.updateSalary(e_id, salary);
+        if (updated) {
+            return Response.ok().build();
+        }
+        return Response.status(401).build();
+    }
 
 
 }

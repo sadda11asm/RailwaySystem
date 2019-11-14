@@ -79,4 +79,17 @@ public class EmployeeDaoImpl {
         }
         return employees.size() > 0 ? employees.get(0) : null;
     }
+
+    public Boolean updateSalary(int e_id, int salary) {
+        try {
+            Connection myConnection = ConnectionPool.getDatabaseConnection();
+            Statement myStatement = myConnection.createStatement();
+            String query = "UPDATE Employee SET salary = " + salary + " WHERE employee_id = " + e_id + ";";
+            myStatement.executeUpdate(query);
+        }catch (SQLException e){
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
 }

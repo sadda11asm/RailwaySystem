@@ -62,4 +62,8 @@ public class EmployeeController {
     public Employee getEmployeeById(int e_id) {
         return employeeDAO.getEmployeeById(e_id);
     }
+
+    public Boolean updateSalary(int e_id, int salary) {
+        return employeeDAO.updateSalary(e_id, salary);
+    }
 }
