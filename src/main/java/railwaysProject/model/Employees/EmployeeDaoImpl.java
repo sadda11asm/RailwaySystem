@@ -57,4 +57,26 @@ public class EmployeeDaoImpl {
         return ticketDeleted;
     }
 
+    public Employee getEmployeeById(int e_id) {
+        List<Employee> employees = new ArrayList<>();
+        try {
+            Connection myConnection = ConnectionPool.getDatabaseConnection();
+            Statement myStatement = myConnection.createStatement();
+            String query = "Select * from Employee where employee_id = " + e_id + ";";
+            ResultSet lists = myStatement.executeQuery(query);
+
+            while(lists.next()){
+                employees.add(new Employee(
+                        lists.getInt("employee_id"),
+                        lists.getInt ("salary"),
+                        lists.getInt("Station_station_id"),
+                        lists.getString("email"),
+                        lists.getString("password")
+                ));
+            }
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return employees.size() > 0 ? employees.get(0) : null;
+    }
 }

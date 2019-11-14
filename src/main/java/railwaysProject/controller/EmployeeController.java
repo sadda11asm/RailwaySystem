@@ -59,4 +59,7 @@ public class EmployeeController {
         return finalSchedule;
     }
 
+    public Employee getEmployeeById(int e_id) {
+        return employeeDAO.getEmployeeById(e_id);
+    }
 }

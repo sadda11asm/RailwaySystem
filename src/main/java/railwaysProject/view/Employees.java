@@ -82,6 +82,15 @@ public class Employees {
         return Response.ok(gson.toJson(schedule)).build();
     }
 
+    @GET
+    @Path("{e_id: [0-9]+}")
+    public Response getEmployee(@PathParam("e_id") int e_id) {
+        Employee schedule = employeeController.getEmployeeById(e_id);
+        Gson gson = new Gson();
+        return Response.ok(gson.toJson(schedule)).build();
+    }
+
+
 
 
 }
