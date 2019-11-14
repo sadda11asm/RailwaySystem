@@ -6,6 +6,7 @@ import railwaysProject.controller.EmployeeController;
 import railwaysProject.controller.RoutesController;
 import railwaysProject.model.BookRequest;
 import railwaysProject.model.BookResponse;
+import railwaysProject.model.Employees.Adjustment;
 import railwaysProject.model.Employees.Employee;
 import railwaysProject.model.Passengers.Passenger;
 import railwaysProject.model.Schedule.FinalSchedule;
@@ -95,6 +96,16 @@ public class Employees {
     @Path("/salary/{e_id: [0-9]+}")
     public Response updateSalary(@PathParam("e_id") int e_id, @QueryParam("salary") int salary) {
         Boolean updated = employeeController.updateSalary(e_id, salary);
+        if (updated) {
+            return Response.ok().build();
+        }
+        return Response.status(401).build();
+    }
+
+    @PUT
+    @Path("/adjust/{e_id: [0-9]+}")
+    public Response makeAdjustment(@PathParam("e_id") int e_id, Adjustment adjustment) {
+        Boolean updated = employeeController.adjustHours(e_id, adjustment);
         if (updated) {
             return Response.ok().build();
         }

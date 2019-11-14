@@ -1,5 +1,6 @@
 package railwaysProject.model.Employees;
 
+import railwaysProject.model.Schedule.Schedule;
 import railwaysProject.util.ConnectionPool;
 
 import java.sql.Connection;
@@ -8,6 +9,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class EmployeeDaoImpl {
     public Employee getEmployeeByEmailAndPassword(String email, String password) {
@@ -86,6 +88,22 @@ public class EmployeeDaoImpl {
             Statement myStatement = myConnection.createStatement();
             String query = "UPDATE Employee SET salary = " + salary + " WHERE employee_id = " + e_id + ";";
             myStatement.executeUpdate(query);
+        }catch (SQLException e){
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
+    public Boolean adjustHours(Map<Integer, Schedule> schedule) {
+        try {
+            Connection myConnection = ConnectionPool.getDatabaseConnection();
+            Statement myStatement = myConnection.createStatement();
+            for (int weekDay: schedule.keySet()) {
+                Schedule row = schedule.get(weekDay);
+                String query = "UPDATE SCHEDULE SET week_day = " + weekDay + ", start_hour = " + row.getStart_hour() + ", hours_num = " + row.getHours_num() + ";";
+                myStatement.executeUpdate(query);
+            }
         }catch (SQLException e){
             e.printStackTrace();
             return false;

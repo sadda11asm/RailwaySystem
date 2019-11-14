@@ -1,17 +1,16 @@
 package railwaysProject.controller;
 
+import railwaysProject.model.Employees.Adjustment;
 import railwaysProject.model.Employees.Employee;
 import railwaysProject.model.Employees.EmployeeDaoImpl;
+import railwaysProject.model.Employees.ReqSchedule;
 import railwaysProject.model.Schedule.FinalSchedule;
 import railwaysProject.model.Schedule.Schedule;
 import railwaysProject.model.Schedule.ScheduleDAO;
 import railwaysProject.model.Schedule.ScheduleDaoImpl;
 
 import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 public class EmployeeController {
     private EmployeeDaoImpl employeeDAO;
@@ -65,5 +64,28 @@ public class EmployeeController {
 
     public Boolean updateSalary(int e_id, int salary) {
         return employeeDAO.updateSalary(e_id, salary);
+    }
+
+    public Boolean adjustHours(int e_id, Adjustment adjustment) {
+        Map<Integer, Schedule> schedule = new HashMap<>();
+        for (ReqSchedule req: adjustment.getSchedule()) {
+            int weekDay = req.getWeekDay();
+            int startHour = req.getStartHour();
+            int endHour = req.getEndHour();
+            int numHours = findDuration(startHour, endHour);
+            Schedule row = new Schedule(e_id, weekDay, startHour, numHours);
+            schedule.put(weekDay, row);
+        }
+        return employeeDAO.adjustHours(schedule);
+
+    }
+
+    private int findDuration(int startHour, int endHour) {
+
+        int dif = endHour-startHour;
+        if (dif < 0) {
+            dif+=24;
+        }
+        return dif;
     }
 }
