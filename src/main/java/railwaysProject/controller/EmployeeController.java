@@ -3,12 +3,20 @@ package railwaysProject.controller;
 import railwaysProject.model.Employees.Adjustment;
 import railwaysProject.model.Employees.Employee;
 import railwaysProject.model.Employees.EmployeeDaoImpl;
+import railwaysProject.model.route.Station;
+import railwaysProject.util.ConnectionPool;
 import railwaysProject.model.Employees.ReqSchedule;
 import railwaysProject.model.Schedule.FinalSchedule;
 import railwaysProject.model.Schedule.Schedule;
 import railwaysProject.model.Schedule.ScheduleDAO;
 import railwaysProject.model.Schedule.ScheduleDaoImpl;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 import java.lang.reflect.Array;
 import java.util.*;
 
@@ -87,5 +95,50 @@ public class EmployeeController {
             dif+=24;
         }
         return dif;
+    }
+
+    public boolean cancelRoute(int routeId, String startDate){
+        return employeeDAO.cancelRoute(routeId, startDate);
+    }
+
+    public List<Station> getStations(){
+        List<Station> stations = new ArrayList<>();
+        Connection conn = ConnectionPool.getDatabaseConnection();
+        try{
+            Statement statement = conn.createStatement();
+            String query = "Select station_id," +
+                    "station_name from Station order by station_name asc ; ";
+            ResultSet rs = statement.executeQuery(query);
+            while(rs.next()){
+                stations.add(new Station(rs.getInt("station_id"), rs.getString("station_name")));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return stations;
+    }
+
+    public List<Employee> getEmployees(int stationId){
+        List<Employee> employees = new ArrayList<>();
+        Connection conn = ConnectionPool.getDatabaseConnection();
+        try{
+            Statement statement = conn.createStatement();
+            String query = "Select * from Employee" +
+                    " where Station_station_id = " + stationId +
+                    ";" ;
+            ResultSet lists = statement.executeQuery(query);
+            while(lists.next()){
+                employees.add(new Employee(
+                        lists.getInt("employee_id"),
+                        lists.getInt ("salary"),
+                        lists.getInt("Station_station_id"),
+                        lists.getString("email"),
+                        lists.getString("password")
+                ));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return employees;
     }
 }

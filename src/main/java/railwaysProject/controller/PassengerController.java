@@ -39,6 +39,7 @@ public class PassengerController {
                                String lastName,
                                String password) {
         Passenger passenger = getUserByEmail(email);
+
         if (passenger != null) {
             return Response.status(403).entity("User with such an email already exists").build();
         }

@@ -152,6 +152,7 @@ public class RoutesController {
     private void addTrain(int routeId, int carNum, int seatNum){
         Connection conn = ConnectionPool.getDatabaseConnection();
         try{
+            System.out.println("ROUTE ID " + routeId);
             String query = "INSERT INTO Train(route_id) values (" + routeId + ")";
             PreparedStatement statement = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
             statement.executeUpdate();
@@ -214,7 +215,7 @@ public class RoutesController {
         return LocalTime.of(hour, min, sec);
     }
 
-    private LocalDate strToLocalDate(String date){
+    public LocalDate strToLocalDate(String date){
         int year = Integer.parseInt(date.substring(0,4));
         int month = Integer.parseInt(date.substring(5,7));
         int day = Integer.parseInt(date.substring(8));
