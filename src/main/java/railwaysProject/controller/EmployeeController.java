@@ -76,7 +76,9 @@ public class EmployeeController {
 
     public Boolean adjustHours(int e_id, Adjustment adjustment) {
         Map<Integer, Schedule> schedule = new HashMap<>();
-        for (ReqSchedule req: adjustment.getSchedule()) {
+        ReqSchedule[] list = adjustment.getSchedule();
+        for (int i = 0; i < list.length; i++) {
+            ReqSchedule req = list[i];
             int weekDay = req.getWeekDay();
             int startHour = req.getStartHour();
             int endHour = req.getEndHour();
@@ -84,7 +86,7 @@ public class EmployeeController {
             Schedule row = new Schedule(e_id, weekDay, startHour, numHours);
             schedule.put(weekDay, row);
         }
-        return employeeDAO.adjustHours(schedule);
+        return employeeDAO.adjustHours(schedule, e_id);
 
     }
 

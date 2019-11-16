@@ -8,14 +8,14 @@ import java.util.List;
 
 public class Adjustment {
 
-    @JsonbProperty("schedule") private List<ReqSchedule> schedule;
+    @JsonbProperty("schedule") private ReqSchedule[] schedule;
 
     @JsonbCreator()
-    public Adjustment(@JsonbProperty("schedule")List<ReqSchedule> schedule) {
+    public Adjustment(@JsonbProperty("schedule")ReqSchedule[] schedule) {
         this.schedule = schedule;
     }
 
-    public List<ReqSchedule> getSchedule() {
+    public ReqSchedule[] getSchedule() {
         return schedule;
     }
 }

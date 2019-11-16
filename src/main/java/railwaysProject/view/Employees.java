@@ -98,6 +98,7 @@ public class Employees {
     }
 
     @PUT
+    @Consumes(MediaType.APPLICATION_JSON)
     @Path("/adjust/{e_id: [0-9]+}")
     public Response makeAdjustment(@PathParam("e_id") int e_id, Adjustment adjustment) {
         Boolean updated = employeeController.adjustHours(e_id, adjustment);

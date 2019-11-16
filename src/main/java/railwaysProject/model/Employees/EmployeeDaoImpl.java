@@ -108,14 +108,21 @@ public class EmployeeDaoImpl {
         return true;
     }
 
-    public Boolean adjustHours(Map<Integer, Schedule> schedule) {
+    public Boolean adjustHours(Map<Integer, Schedule> schedule, int e_id) {
         try {
             Connection myConnection = ConnectionPool.getDatabaseConnection();
             Statement myStatement = myConnection.createStatement();
             for (int weekDay: schedule.keySet()) {
                 Schedule row = schedule.get(weekDay);
-                String query = "UPDATE SCHEDULE SET week_day = " + weekDay + ", start_hour = " + row.getStart_hour() + ", hours_num = " + row.getHours_num() + ";";
-                myStatement.executeUpdate(query);
+                String querySelect = "SELECT * FROM SCHEDULE WHERE week_day = " + weekDay + ";";
+                String queryUpdate = "UPDATE SCHEDULE SET start_hour = " + row.getStart_hour() + ", hours_num = " + row.getHours_num() + " WHERE week_day = " + weekDay + ";";
+                String queryInsert = "INSERT INTO SCHEDULE (e_id, week_day, start_hour, hours_num) VALUES(" + e_id + "," + weekDay + ", " + row.getStart_hour() + "," + row.getHours_num() + ");";
+                ResultSet rs = myStatement.executeQuery(querySelect);
+                if(!rs.next()) {
+                    myStatement.executeUpdate(queryInsert);
+                } else {
+                    myStatement.executeUpdate(queryUpdate);
+                }
             }
         }catch (SQLException e){
             e.printStackTrace();
