@@ -121,46 +121,47 @@ public class EmployeeDaoImpl {
             }
         }
     }
+    */
     public void notifyAboutDeleteRoute(int routeId, LocalDate startDate){
         Connection conn = ConnectionPool.getDatabaseConnection();
         try{
             Statement statement = conn.createStatement();
-            String getEmails = "Select P.email as email"
-                             + "from Passenger as P,"
-                             + "Ticket as T where P.passenger_id = T.Passenger_passenger_id "
-                             + " and T.route_start_date = " + startDate
-                             + " and T.route_id = " + routeId + ";";
-            List<String> emails = new ArrayList<>();
-            ResultSet rs = statement.executeQuery(getEmails);
-            while(rs.next()){
-                emails.add(rs.getString("email"));
-            }
-            String deleteTicket = "Delete from Ticket where T.route_start_date = " + startDate
-                    + " and T.route_id = " + routeId + ";";
+//            String getEmails = "Select P.email as email"
+//                             + "from Passenger as P,"
+//                             + "Ticket as T where P.passenger_id = T.Passenger_passenger_id "
+//                             + " and T.route_start_date = " + startDate
+//                             + " and T.route_id = " + routeId + ";";
+//            List<String> emails = new ArrayList<>();
+//            ResultSet rs = statement.executeQuery(getEmails);
+//            while(rs.next()){
+//                emails.add(rs.getString("email"));
+//            }
+            String deleteTicket = "Delete from Ticket where route_start_date = '" + startDate
+                    + "' and route_id = " + routeId + ";";
             statement.executeUpdate(deleteTicket);
 
-            sendDeleteRouteAdvisory(emails, routeId, startDate);
+            //sendDeleteRouteAdvisory(emails, routeId, startDate);
         } catch (SQLException e) {
             e.printStackTrace();
         }
-    }*/
+    }
     public boolean cancelRoute(int routeId, String startDate){
         boolean isCanceled = false;
         Connection conn = ConnectionPool.getDatabaseConnection();
         try{
             Statement statement = conn.createStatement();
             LocalDate date = routesController.strToLocalDate(startDate);
-            String query = "Select * from Route_Instance where start_date = " + date
-                         + " and start_date > curdate() and route_id = " + routeId + ";";
+            String query = "Select * from Route_Instance where start_date = '" + date
+                         + "' and start_date > curdate() and route_id = " + routeId + ";";
             ResultSet rs = statement.executeQuery(query);
             if(!rs.next()) return false;
-            //notifyAboutDeleteRoute(routeId,date);
-            String routeInstance = "DELETE FROM Route_Instance where start_date = " + date
-                    + " and route_id = " + routeId + ";";
-            String arrivals = "DELETE FROM  Arrival where route_start_date = " + date
-                    + " and route_id = " + routeId + ";";
-            String departures = "DELETE FROM  Departure where route_start_date = " + date
-                    + " and route_id = " + routeId + ";";
+            notifyAboutDeleteRoute(routeId,date);
+            String routeInstance = "DELETE FROM Route_Instance where start_date = '" + date
+                    + "' and route_id = " + routeId + ";";
+            String arrivals = "DELETE FROM  Arrival where route_start_date = '" + date
+                    + "' and route_id = " + routeId + ";";
+            String departures = "DELETE FROM  Departure where route_start_date = '" + date
+                    + "' and route_id = " + routeId + ";";
             statement.executeUpdate(departures);
             statement.executeUpdate(arrivals);
             statement.executeUpdate(routeInstance);
