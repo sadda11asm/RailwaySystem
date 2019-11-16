@@ -4,10 +4,12 @@ import railwaysProject.controller.RoutesController;
 import railwaysProject.util.ConnectionPool;
 import railwaysProject.view.ServiceLocator;
 
-import javax.mail.*;
+/*import javax.mail.*;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+
+ */
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -66,7 +68,7 @@ public class EmployeeDaoImpl {
         return ticketDeleted;
     }
 
-    private void sendDeleteRouteAdvisory(List<String> emails, int routeId,LocalDate startDate){
+    /*private void sendDeleteRouteAdvisory(List<String> emails, int routeId,LocalDate startDate){
         String subject = "[URGENT!] Your route was cancelled";
         String textBody = "Hello, dear User!\n"
                         + "I want to notify you about cancellation of route which would start on " + startDate
@@ -141,7 +143,7 @@ public class EmployeeDaoImpl {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-    }
+    }*/
     public boolean cancelRoute(int routeId, String startDate){
         boolean isCanceled = false;
         Connection conn = ConnectionPool.getDatabaseConnection();
@@ -152,7 +154,7 @@ public class EmployeeDaoImpl {
                          + " and start_date > curdate() and route_id = " + routeId + ";";
             ResultSet rs = statement.executeQuery(query);
             if(!rs.next()) return false;
-            notifyAboutDeleteRoute(routeId,date);
+            //notifyAboutDeleteRoute(routeId,date);
             String routeInstance = "DELETE FROM Route_Instance where start_date = " + date
                     + " and route_id = " + routeId + ";";
             String arrivals = "DELETE FROM  Arrival where route_start_date = " + date
@@ -168,5 +170,7 @@ public class EmployeeDaoImpl {
         }
         return isCanceled;
     }
+
+
 
 }

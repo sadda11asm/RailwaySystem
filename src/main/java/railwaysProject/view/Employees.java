@@ -6,10 +6,12 @@ import railwaysProject.controller.RoutesController;
 import railwaysProject.model.Employees.Employee;
 import railwaysProject.model.Passengers.Passenger;
 import railwaysProject.model.route.NewRoute;
+import railwaysProject.model.route.Station;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.List;
 
 @Path("/employees")
 public class Employees {
@@ -51,9 +53,22 @@ public class Employees {
     @DELETE
     @Path("/cancelRoute")
     public Response cancelRoute(@FormParam("routeId") int routeId, @FormParam("startDate") String startDate){
+        System.out.println(5);
         if(employeeController.cancelRoute(routeId, startDate)) return Response.ok().build();
         return Response.status(304).build();
     }
 
+    @GET
+    @Path("/getStations")
+    public Response getStations(){
+        List<Station> listOfStations = employeeController.getStations();
+        return listOfStations.size() > 0 ? Response.ok(new Gson().toJson(listOfStations)).build() : Response.status(204).build();
+    }
 
+    @GET
+    @Path("/getEmployees")
+    public Response getEmployees(@QueryParam("stationId") int stationId){
+        List<Employee> employees = employeeController.getEmployees(stationId);
+        return Response.ok(new Gson().toJson(employees)).build();
+    }
 }

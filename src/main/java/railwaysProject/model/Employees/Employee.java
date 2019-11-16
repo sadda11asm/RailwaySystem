@@ -7,6 +7,7 @@ public class Employee {
     private String email;
     private String password;
 
+
     public Employee(int employeeId, int salary, int stationId, String email, String password) {
         this.employeeId =  employeeId;
         this.salary =  salary;
