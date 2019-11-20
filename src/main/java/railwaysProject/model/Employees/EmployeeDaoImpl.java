@@ -154,6 +154,7 @@ public class EmployeeDaoImpl {
             e.printStackTrace();
         }
     }
+
     public boolean cancelRoute(int routeId, String startDate){
         boolean isCanceled = false;
         Connection conn = ConnectionPool.getDatabaseConnection();
