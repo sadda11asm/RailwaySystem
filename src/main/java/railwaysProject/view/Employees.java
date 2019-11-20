@@ -44,6 +44,8 @@ public class Employees {
             return Response.status(401).build();
         }
         Gson gson = new Gson();
+        if(employeeController.isAgent(employee)) employee.setAgent(true);
+        if(employeeController.isManager(employee)) employee.setManager(true);
         return Response.ok(gson.toJson(employee)).build();
     }
 
