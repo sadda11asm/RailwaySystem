@@ -22,14 +22,17 @@ public class RouteDaoImpl implements RouteDAO {
 
         String sqlQuery =   "SELECT Route.route_id, Route.start_date, R.route_name, Arrival.date as arr_date, " +
                             "Arrival.station_id as to_station, Departure.date as dep_date, Departure.station_id as from_station, " +
-                            "stto.station_name as to_name, stfrom.station_name as from_name " +
-                            "FROM ((Route_Instance as Route INNER JOIN Arrival ON Arrival.route_id = Route.route_id " +
+                            "stto.station_name as to_name, stfrom.station_name as from_name, " +
+                            "Train.train_id "+
+                            "FROM Train,  " +
+                            "((Route_Instance as Route INNER JOIN Arrival ON Arrival.route_id = Route.route_id " +
                             "AND Route.start_date = Arrival.route_start_date) INNER JOIN Departure " +
-                            "ON Departure.route_id = Route.route_id AND Departure.route_start_date = Route.start_date), Route R, station stto, " +
-                            "station stfrom\n" +
+                            "ON Departure.route_id = Route.route_id AND Departure.route_start_date = Route.start_date), Route R, Station stto, " +
+                            "Station stfrom\n" +
                             "WHERE R.route_id = Route.route_id AND start_date = " + date + " AND stto.station_id = Arrival.station_id AND stfrom.station_id = Departure.station_id " +
-                            "AND Arrival.station_id IN (SELECT station_id FROM station WHERE locality_locality_id = " + stationTo + ") " +
-                            "AND Departure.station_id IN (SELECT station_id FROM station WHERE locality_locality_id = " + stationFrom +");";
+                            "AND Arrival.station_id IN (SELECT station_id FROM Station WHERE locality_locality_id = " + stationTo + ") " +
+                            "AND Departure.station_id IN (SELECT station_id FROM Station WHERE locality_locality_id = " + stationFrom +") " +
+                            "and Train.route_id = Route.route_id;";
 
         String newSqlQuery =    "SELECT Route.route_id, Route.start_date, Arrival.date as arr_date, " +
                                 "Arrival.station_id as to_station, Departure.date as dep_date, Departure.station_id as from_station " +
@@ -55,8 +58,9 @@ public class RouteDaoImpl implements RouteDAO {
                 String fromName = result.getString("from_name");
                 String arrDate = result.getString("arr_date");
                 String depDate = result.getString("dep_date");
+                int trainId = result.getInt("train_id");
 //                System.out.println("routeId: " + routeId + ", route_name: " + routeName + "to: " + to);
-                Route route = new Route(routeId, routeName, startDate, new Station(to, toName), new Station(from, fromName), depDate, arrDate);
+                Route route = new Route(routeId, trainId, routeName, startDate, new Station(to, toName), new Station(from, fromName), depDate, arrDate);
                 System.out.println(route.toString());
                 routes.add(route);
             }
