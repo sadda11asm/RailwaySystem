@@ -1,5 +1,6 @@
 package railwaysProject.model.Employees;
 
+import railwaysProject.controller.EmailService;
 import railwaysProject.model.Schedule.Schedule;
 import railwaysProject.util.ConnectionPool;
 import railwaysProject.view.ServiceLocator;
@@ -133,29 +134,31 @@ public class EmployeeDaoImpl {
 
     public void notifyAboutDeleteRoute(int routeId, LocalDate startDate){
         Connection conn = ConnectionPool.getDatabaseConnection();
+        EmailService mail = new EmailService();
         try{
             Statement statement = conn.createStatement();
-//            String getEmails = "Select P.email as email"
-//                             + "from Passenger as P,"
-//                             + "Ticket as T where P.passenger_id = T.Passenger_passenger_id "
-//                             + " and T.route_start_date = " + startDate
-//                             + " and T.route_id = " + routeId + ";";
-//            List<String> emails = new ArrayList<>();
-//            ResultSet rs = statement.executeQuery(getEmails);
-//            while(rs.next()){
-//                emails.add(rs.getString("email"));
-//            }
+
+            String getEmails = "Select P.email as email "
+                             + "from Passenger as P,"
+                             + "Ticket as T where P.passenger_id = T.Passenger_passenger_id "
+                             + " and T.route_start_date = '" + startDate
+                             + "' and T.route_id = " + routeId + ";";
+            List<String> emails = new ArrayList<>();
+            ResultSet rs = statement.executeQuery(getEmails);
+            while(rs.next()){
+                emails.add(rs.getString("email"));
+            }
+
             String deleteTicket = "Delete from Ticket where route_start_date = '" + startDate
                     + "' and route_id = " + routeId + ";";
             statement.executeUpdate(deleteTicket);
 
-            //sendDeleteRouteAdvisory(emails, routeId, startDate);
+            mail.sendDeleteRouteAdvisory(emails, routeId, startDate);
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
     public boolean cancelRoute(int routeId, String startDate){
-        boolean isCanceled = false;
         Connection conn = ConnectionPool.getDatabaseConnection();
         try{
             Statement statement = conn.createStatement();
@@ -163,8 +166,12 @@ public class EmployeeDaoImpl {
             String query = "Select * from Route_Instance where start_date = '" + date
                     + "' and start_date > curdate() and route_id = " + routeId + ";";
             ResultSet rs = statement.executeQuery(query);
+            System.out.println("CANCEL ROUTE 169 EMPLOYEEDAOIMPL");
             if(!rs.next()) return false;
+            System.out.println("CANCEL ROUTE 171 EMPLOYEEDAOIMPL");
+
             notifyAboutDeleteRoute(routeId,date);
+            System.out.println("CANCEL ROUTE 174 EMPLOYEEDAOIMPL");
             String routeInstance = "DELETE FROM Route_Instance where start_date = '" + date
                     + "' and route_id = " + routeId + ";";
             String arrivals = "DELETE FROM  Arrival where route_start_date = '" + date
@@ -174,10 +181,10 @@ public class EmployeeDaoImpl {
             statement.executeUpdate(departures);
             statement.executeUpdate(arrivals);
             statement.executeUpdate(routeInstance);
-            isCanceled = true;
+            return true;
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return isCanceled;
+        return false;
     }
 }

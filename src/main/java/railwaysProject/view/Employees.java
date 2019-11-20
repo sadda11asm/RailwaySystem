@@ -111,7 +111,6 @@ public class Employees {
     @DELETE
     @Path("/cancelRoute")
     public Response cancelRoute(@FormParam("routeId") int routeId, @FormParam("startDate") String startDate){
-        System.out.println(5);
         if(employeeController.cancelRoute(routeId, startDate)) return Response.ok().build();
         return Response.status(304).build();
     }
