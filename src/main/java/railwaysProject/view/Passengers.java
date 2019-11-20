@@ -23,12 +23,24 @@ public class Passengers {
         return Response.ok(gson.toJson(passenger)).build();
     }
 
+    @OPTIONS
+    @Path("/login")
+    public Response login(){
+        return Response.ok().build();
+    }
+
     @POST
     @Path("/sign_up")
     public Response signUp(@FormParam("email") String email, @FormParam("firstName") String firstName,
                            @FormParam("lastName") String lastName, @FormParam("password") String password) {
         System.out.println("receiving email = " + email + ", firstName = " + firstName + ", lastName = " + lastName + ", password = " + password);
         return passengerController.signUpUser(email, firstName, lastName, password);
+    }
+
+    @OPTIONS
+    @Path("/sign_up")
+    public Response signUp(){
+        return Response.ok().build();
     }
 
     @GET
