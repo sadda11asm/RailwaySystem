@@ -8,6 +8,7 @@ import railwaysProject.model.BookRequest;
 import railwaysProject.model.BookResponse;
 import railwaysProject.model.Employees.Adjustment;
 import railwaysProject.model.Employees.Employee;
+import railwaysProject.model.LoggerInfo;
 import railwaysProject.model.Passengers.Passenger;
 import railwaysProject.model.Schedule.FinalSchedule;
 import railwaysProject.model.Schedule.Schedule;
@@ -15,8 +16,11 @@ import railwaysProject.model.route.NewRoute;
 import railwaysProject.model.route.Station;
 
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -25,10 +29,12 @@ import java.util.ArrayList;
 public class Employees {
     RoutesController routesController = ServiceLocator.getRoutesController();
     EmployeeController employeeController = ServiceLocator.getEmployeeController();
+    LoggerInfo loggerInfo = ServiceLocator.getLoggerInfo();
+
     @POST
     @Path("/newRoute")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response createNewRoute(NewRoute route){
+    public Response createNewRoute(NewRoute route, @Context Request request){
         int id = routesController.insertNewRoute(route);
         if(id == -1){
             return Response.serverError().build();
@@ -128,5 +134,17 @@ public class Employees {
     public Response getEmployees(@QueryParam("stationId") int stationId){
         List<Employee> employees = employeeController.getEmployees(stationId);
         return Response.ok(new Gson().toJson(employees)).build();
+    }
+
+    private void addLogRouteCreation(Request request) {
+        if (ServiceLocator.isLoggingOn()) {
+            String requestType = request.getMethod();
+            String whoIs = "Unknown user";
+            String action = "Create Route request";
+            String addInfo = "";
+            LocalDateTime time = LocalDateTime.now();
+            ApiRequestInfo log = new ApiRequestInfo(requestType, time, addInfo, whoIs, action);
+            loggerInfo.addLogs(log);
+        }
     }
 }
