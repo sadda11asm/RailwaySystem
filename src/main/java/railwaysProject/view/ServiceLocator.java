@@ -1,9 +1,6 @@
 package railwaysProject.view;
 
-import railwaysProject.controller.EmployeeController;
-import railwaysProject.controller.PassengerController;
-import railwaysProject.controller.RoutesController;
-import railwaysProject.controller.CityController;
+import railwaysProject.controller.*;
 import railwaysProject.model.Employees.EmployeeDaoImpl;
 import railwaysProject.model.Passengers.Passenger;
 import railwaysProject.model.Passengers.PassengerDAO;
@@ -23,6 +20,14 @@ public class ServiceLocator {
     private static PassengerDAO passengerDAO;
     private static EmployeeDaoImpl employeeDAO;
     private static EmployeeController employeeController;
+    private static EmailService emailService;
+
+    public static EmailService getEmailService() {
+        if (emailService == null) {
+            emailService = new EmailService();
+        }
+        return emailService;
+    }
 
     public static RouteDAO getRouteDAO() {
         if (routeDAO == null) {
