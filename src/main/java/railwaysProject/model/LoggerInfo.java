@@ -3,6 +3,7 @@ package railwaysProject.model;
 import railwaysProject.view.ApiRequestInfo;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class LoggerInfo {
@@ -22,12 +23,13 @@ public class LoggerInfo {
     }
 
 
-    public List<String> getLogs() {
+    public String getLogs() {
         List<String> logsFinal = new ArrayList<>();
         for (ApiRequestInfo log: logs) {
             logsFinal.add(log.toString());
         }
-        return logsFinal;
+        Collections.reverse(logsFinal);
+        return logsFinal.toString();
     }
 
 

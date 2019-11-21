@@ -22,6 +22,7 @@ public class RailwaysSystemApplication extends Application {
         singletons.add(new Routes());
         singletons.add(new CORSFilter());
         singletons.add(new Employees());
+        singletons.add(new Logs());
     }
     
     @Override
