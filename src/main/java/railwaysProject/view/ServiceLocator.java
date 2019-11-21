@@ -2,6 +2,7 @@ package railwaysProject.view;
 
 import railwaysProject.controller.*;
 import railwaysProject.model.Employees.EmployeeDaoImpl;
+import railwaysProject.model.LoggerInfo;
 import railwaysProject.model.Passengers.Passenger;
 import railwaysProject.model.Passengers.PassengerDAO;
 import railwaysProject.model.Passengers.PassengerDaoImpl;
@@ -21,6 +22,19 @@ public class ServiceLocator {
     private static EmployeeDaoImpl employeeDAO;
     private static EmployeeController employeeController;
     private static EmailService emailService;
+    private static LoggerInfo loggerInfo;
+    private static boolean loggingOn = true;
+
+
+    public static boolean isLoggingOn() {
+        return loggingOn;
+    }
+    public static LoggerInfo getLoggerInfo() {
+        if (loggerInfo == null) {
+            loggerInfo = new LoggerInfo();
+        }
+        return loggerInfo;
+    }
 
     public static EmailService getEmailService() {
         if (emailService == null) {
