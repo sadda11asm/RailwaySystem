@@ -200,6 +200,31 @@ public class RouteDaoImpl implements RouteDAO {
     }
 
     @Override
+    public List<Route> getRoutes(){
+        String query = "Select * from Route;";
+        ArrayList<Route> routes = new ArrayList<>();
+        try{
+            Connection conn = ConnectionPool.getDatabaseConnection();
+            Statement statement = conn.createStatement();
+            ResultSet rs = statement.executeQuery(query);
+            while(rs.next()){
+                routes.add(new Route(rs.getInt("route_id"),
+                        0,
+                        rs.getString("route_name"),
+                        null,
+                        null,
+                        null,
+                        null,
+                        null
+                ));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return routes;
+    }
+
+    @Override
     public BookResponse bookTicket(BookRequest request) {
 
         System.out.println(request.toString());

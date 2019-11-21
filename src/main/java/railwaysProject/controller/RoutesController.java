@@ -67,7 +67,9 @@ public class RoutesController {
         return routeDAO.getRoutesFromTo(from, to, dateTo);
     }
 
-
+    public List<Route> getRoutes(){
+        return routeDAO.getRoutes();
+    }
     private boolean coolTicket(String depDate, String arrDate, String start, String end) {
         System.out.println("cool ticket  " + depDate + " " + arrDate + " " + start + " " + end);
         if (depDate.compareTo(start)>=0 && depDate.compareTo(end)<0) return false;
@@ -109,8 +111,11 @@ public class RoutesController {
 
     public BookResponse bookTicket(BookRequest request) {
         Passenger pass = passengerDao.getUserByEmail(request.getEmail());
+        EmailService mail = new EmailService();
         if (pass==null) {
-            int passId = passengerDao.signUpUser(request.getEmail(), request.getFirst_name(), request.getLast_name(), generatePassword());
+            String password = generatePassword();
+            int passId = passengerDao.signUpUser(request.getEmail(), request.getFirst_name(), request.getLast_name(), password);
+            mail.sendCreationOfProfile(request.getEmail(), password);
             System.out.println("PASSID " + passId);
             request.setPass_id(passId);
         } else request.setPass_id(pass.getPassengerId());
@@ -127,6 +132,7 @@ public class RoutesController {
 
     public int insertNewRoute(NewRoute route){
         Connection conn = ConnectionPool.getDatabaseConnection();
+        EmailService mail = new EmailService();
         int routeId = -1;
         try{
             String query = "INSERT INTO Route(route_name) values ('"+ route.getRouteName()+"')";
@@ -136,6 +142,7 @@ public class RoutesController {
             if (rs.next())routeId = rs.getInt(1);
             if(routeId != -1){
                 insertNewRouteHelper(routeId, route);
+                mail.sendCreateRouteAdvisory(routeId);
             }
         }catch(SQLException e){
             e.printStackTrace();
@@ -222,6 +229,7 @@ public class RoutesController {
         return LocalDate.of(year, month, day);
 
     }
+
     private void insertStations(int routeId, NewRoute route){
         String[] dates = route.getDates();
         StationDuration[] stations = route.getStations();

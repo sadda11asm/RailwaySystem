@@ -27,6 +27,14 @@
         <res-auth>Container</res-auth>
     </resource-ref>
 
+    <resource-ref>
+        <description>Votre description </description>
+        <res-ref-name>mail/NomDeLaRessource</res-ref-name>
+        <res-type>javax.mail.Session</res-type>
+        <res-auth>Container</res-auth>
+        <res-sharing-scope>Shareable</res-sharing-scope>
+    </resource-ref>
+
   <!-- ======================== Introduction ============================== -->
   <!-- This document defines default values for *all* web applications      -->
   <!-- loaded into this instance of Tomcat.  As each application is         -->

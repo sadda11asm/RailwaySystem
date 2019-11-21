@@ -187,6 +187,8 @@ grant {
     // Applications need to access these packages to use the Servlet 4.0 Preview
     permission java.lang.RuntimePermission "accessClassInPackage.org.apache.catalina.servlet4preview";
     permission java.lang.RuntimePermission "accessClassInPackage.org.apache.catalina.servlet4preview.http";
+    permission java.net.SocketPermission "smtp.host:25", "connect,resolve" ;
+
 };
 
 
@@ -270,3 +272,4 @@ grant codeBase "file:${catalina.home}/webapps/host-manager/-" {
 // The permissions granted to a specific JAR
 // grant codeBase "war:file:${catalina.base}/webapps/examples.war*/WEB-INF/lib/foo.jar" {
 // };
+

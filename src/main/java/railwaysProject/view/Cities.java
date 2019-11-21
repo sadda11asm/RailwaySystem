@@ -5,6 +5,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Response;
 import java.util.List;
 
+import railwaysProject.controller.EmailService;
 import railwaysProject.controller.RoutesController;
 import railwaysProject.model.Cities.City;
 import railwaysProject.controller.CityController;
@@ -15,10 +16,12 @@ import railwaysProject.model.route.CityRoute;
 public class Cities {
     private CityController cityController = ServiceLocator.getCityController();
     private RoutesController routesController = ServiceLocator.getRoutesController();
+    private EmailService emailService = ServiceLocator.getEmailService();
 
 
     @GET
     public Response getListOfCities(){
+        //emailService.sendAgentCreated("saddam.asmatullayev@nu.edu.kz");
         List<City> listOfCities = cityController.getCities();
         String cities = new Gson().toJson(listOfCities);
         return Response.ok(cities).build();

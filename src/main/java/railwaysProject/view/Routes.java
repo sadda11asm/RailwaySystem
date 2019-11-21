@@ -52,4 +52,10 @@ public class Routes {
     public Response login(){
         return Response.ok().build();
     }
+
+    @GET
+    @Path("/getRoutes")
+    public Response getRoutes(){
+        return Response.ok(new Gson().toJson(controller.getRoutes())).build();
+    }
 }

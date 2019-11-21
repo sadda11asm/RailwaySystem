@@ -13,6 +13,7 @@ import java.util.List;
 public interface RouteDAO {
 
     public List<Route> getRoutesFromTo(int from, int to, String date);
+    List<Route> getRoutes();
 
     List<CityRoute> getArrivalToTheCity(int cityId);
 
