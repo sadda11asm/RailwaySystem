@@ -100,7 +100,10 @@ public class PassengerController {
                     "       T.carriage_num as carNum," +
                     "       T.ticket_id as ticketId," +
                     "       T.seat_num as seat," +
-                    "       R.route_name" +
+                    "       R.route_name," +
+                    "       T.firstName as firstName," +
+                    "       T.lastName as lastName," +
+                    "       T.documentID as documentID" +
                     "       from Ticket T," +
                     "            Departure D," +
                     "            Arrival A," +
@@ -144,6 +147,10 @@ public class PassengerController {
         trip.setTicketId(rs.getInt("ticketId"));
         trip.setSeat(rs.getInt("seat"));
         trip.setRouteName(rs.getString("route_name"));
+        trip.setFirstName(rs.getString("firstName"));
+        trip.setLastName(rs.getString("lastName"));
+        trip.setDocumentID(rs.getString("documentID"));
+
         return trip;
     }
     public List<Trip> getNextTrip(int passengerId){
@@ -160,6 +167,9 @@ public class PassengerController {
                     "       T.carriage_num as carNum," +
                     "       T.ticket_id as ticketId," +
                     "       T.seat_num as seat," +
+                    "       T.firstName as firstName," +
+                    "       T.lastName as lastName," +
+                    "       T.documentID as documentID," +
                     "       R.route_name" +
                     "       from Ticket T," +
                     "            Departure D," +

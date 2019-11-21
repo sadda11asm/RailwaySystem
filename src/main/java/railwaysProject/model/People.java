@@ -1,5 +1,6 @@
 package railwaysProject.model;
 
+import javax.json.bind.annotation.JsonbCreator;
 import javax.json.bind.annotation.JsonbProperty;
 
 public class People {
@@ -8,12 +9,19 @@ public class People {
     @JsonbProperty("last_name") private String last_name;
     @JsonbProperty("carriage_num") private int carriage_num;
     @JsonbProperty("seat_num") private int seat_num;
+    @JsonbProperty("documentID") private String documentID;
 
-    public People(String first_name, String last_name, int carriage_num, int seat_num) {
+    @JsonbCreator()
+    public People( @JsonbProperty("first_name") String first_name,
+                   @JsonbProperty("last_name") String last_name,
+                   @JsonbProperty("carriage_num") int carriage_num,
+                   @JsonbProperty("seat_num") int seat_num,
+                   @JsonbProperty("documentID") String documentID) {
         this.first_name = first_name;
         this.last_name = last_name;
         this.carriage_num = carriage_num;
         this.seat_num = seat_num;
+        this.documentID = documentID;
     }
 
     public String getFirst_name() {
@@ -48,6 +56,14 @@ public class People {
         this.seat_num = seat_num;
     }
 
+    public String getDocumentID() {
+        return documentID;
+    }
+
+    public void setDocumentID(String documentID) {
+        this.documentID = documentID;
+    }
+
     @Override
     public String toString() {
         return "People{" +
@@ -55,6 +71,7 @@ public class People {
                 ", last_name='" + last_name + '\'' +
                 ", carriage_num=" + carriage_num +
                 ", seat_num=" + seat_num +
+                ", documentID='" + documentID + '\'' +
                 '}';
     }
 }

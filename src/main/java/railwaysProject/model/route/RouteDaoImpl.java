@@ -4,6 +4,7 @@ package railwaysProject.model.route;
 
 import railwaysProject.model.BookRequest;
 import railwaysProject.model.BookResponse;
+import railwaysProject.model.People;
 import railwaysProject.model.TicketEntity;
 import railwaysProject.model.seat.Seat;
 import railwaysProject.model.seat.SeatEntity;
@@ -202,56 +203,71 @@ public class RouteDaoImpl implements RouteDAO {
     public BookResponse bookTicket(BookRequest request) {
 
         System.out.println(request.toString());
-        System.out.println("INSERT into Ticket (train_id, route_id, route_start_date, carriage_num, seat_num, station_from, station_to, Passenger_passenger_id) VALUES (" +
-                request.getTrain_id() +
-                "," +
-                request.getRoute_id() +
-                ",'" +
-                request.getDate() +
-                "'," +
-                request.getCarriage_num() +
-                "," +
-                request.getSeat_num() +
-                "," +
-                request.getFrom() +
-                "," +
-                request.getTo() +
-                "," +
-                request.getPass_id() +
-                ");");
+//        System.out.println("INSERT into Ticket (train_id, route_id, route_start_date, carriage_num, seat_num, station_from, station_to, Passenger_passenger_id) VALUES (" +
+//                request.getTrain_id() +
+//                "," +
+//                request.getRoute_id() +
+//                ",'" +
+//                request.getDate() +
+//                "'," +
+//                request.getCarriage_num() +
+//                "," +
+//                request.getSeat_num() +
+//                "," +
+//                request.getFrom() +
+//                "," +
+//                request.getTo() +
+//                "," +
+//                request.getPass_id() +
+//                ");");
 
         PreparedStatement preparedStatement = null;
-        try {
-            preparedStatement = ConnectionPool.getDatabaseConnection()
-                    .prepareStatement
-                            ("INSERT into Ticket (train_id, route_id, route_start_date, carriage_num, seat_num, station_from, station_to, Passenger_passenger_id) VALUES (" +
-                                    request.getTrain_id() +
-                                    "," +
-                                    request.getRoute_id() +
-                                    ",'" +
-                                    request.getDate() +
-                                    "'," +
-                                    request.getCarriage_num() +
-                                    "," +
-                                    request.getSeat_num() +
-                                    "," +
-                                    request.getFrom() +
-                                    "," +
-                                    request.getTo() +
-                                    "," +
-                                    request.getPass_id() +
-                                    ");", Statement.RETURN_GENERATED_KEYS);
-            preparedStatement.executeUpdate();
-            ResultSet tableKeys = preparedStatement.getGeneratedKeys();
-            int ticket_id = -1;
-            while(tableKeys.next()) {
-                ticket_id = (int) tableKeys.getLong(1);
-                return new BookResponse(true, ticket_id);
+        boolean ok = true;
+        int[] ticketIDs = new int[request.getPassengers().length];
+        for (int i = 0; i < request.getPassengers().length; i++) {
+            People passenger = request.getPassengers()[i];
+            try {
+                preparedStatement = ConnectionPool.getDatabaseConnection()
+                        .prepareStatement
+                                ("INSERT into Ticket (train_id, route_id, route_start_date, carriage_num, seat_num, station_from, station_to, Passenger_passenger_id, firstName, lastName, documentID) VALUES (" +
+                                        request.getTrain_id() +
+                                        "," +
+                                        request.getRoute_id() +
+                                        ",'" +
+                                        request.getDate() +
+                                        "'," +
+                                        passenger.getCarriage_num() +
+                                        "," +
+                                        passenger.getSeat_num() +
+                                        "," +
+                                        request.getFrom() +
+                                        "," +
+                                        request.getTo() +
+                                        "," +
+                                        request.getPass_id() +
+                                        ",'" +
+                                        passenger.getFirst_name() +
+                                        "','" +
+                                        passenger.getLast_name() +
+                                        "','" +
+                                        passenger.getDocumentID() +
+                                        "');", Statement.RETURN_GENERATED_KEYS);
+                preparedStatement.executeUpdate();
+                ResultSet tableKeys = preparedStatement.getGeneratedKeys();
+                int ticket_id = -1;
+                while(tableKeys.next()) {
+                    ticket_id = (int) tableKeys.getLong(1);
+                    ticketIDs[i] = ticket_id;
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+                ok = false;
+                ticketIDs[i] = -1;
             }
-            return new BookResponse(false, ticket_id);
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return new BookResponse(false, -1);
+
         }
+
+        return new BookResponse(ok, ticketIDs);
+
     }
 }
