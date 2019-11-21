@@ -10,6 +10,20 @@ public class Route {
     private Station from;
     private String depDate;
     private String arrDate;
+    private String toName;
+    private String fromName;
+    private int trainId;
+
+    public Route(int routeId, int trainId, String routeName, String startDate, Station to, Station from, String depDate, String arrDate) {
+        this.routeId = routeId;
+        this.trainId = trainId;
+        this.startDate = startDate;
+        this.routeName = routeName;
+        this.to = to;
+        this.from = from;
+        this.depDate = depDate;
+        this.arrDate = arrDate;
+    }
 
     public String getStartDate() {
         return startDate;
@@ -49,20 +63,6 @@ public class Route {
 
     public void setFromName(String fromName) {
         this.fromName = fromName;
-    }
-
-    private String toName;
-    private String fromName;
-
-
-    public Route(int routeId, String routeName, String startDate, Station to, Station from, String depDate, String arrDate) {
-        this.routeId = routeId;
-        this.startDate = startDate;
-        this.routeName = routeName;
-        this.to = to;
-        this.from = from;
-        this.depDate = depDate;
-        this.arrDate = arrDate;
     }
 
     public void setRouteId(int routeId) {
@@ -111,6 +111,7 @@ public class Route {
                 ", from=" + from +
                 ", depDate='" + depDate + '\'' +
                 ", arrDate='" + arrDate + '\'' +
+                ", trainId='" + trainId + '\'' +
                 '}';
     }
 

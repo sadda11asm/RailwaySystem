@@ -67,7 +67,9 @@ public class RoutesController {
         return routeDAO.getRoutesFromTo(from, to, dateTo);
     }
 
-
+    public List<Route> getRoutes(){
+        return routeDAO.getRoutes();
+    }
     private boolean coolTicket(String depDate, String arrDate, String start, String end) {
         System.out.println("cool ticket  " + depDate + " " + arrDate + " " + start + " " + end);
         if (depDate.compareTo(start)>=0 && depDate.compareTo(end)<0) return false;

@@ -36,6 +36,12 @@ public class Employees {
         return Response.ok(new Gson().toJson(id)).build();
     }
 
+    @OPTIONS
+    @Path("/newRoute")
+    public Response createNewRoute(){
+        return Response.ok().build();
+    }
+
     @POST
     @Path("/login")
     public Response login(@FormParam("email") String email, @FormParam("password") String password) {
@@ -44,18 +50,32 @@ public class Employees {
             return Response.status(401).build();
         }
         Gson gson = new Gson();
+        if(employeeController.isAgent(employee)) employee.setAgent(true);
+        if(employeeController.isManager(employee)) employee.setManager(true);
         return Response.ok(gson.toJson(employee)).build();
+    }
+
+    @OPTIONS
+    @Path("/login")
+    public Response login(){
+        return Response.ok().build();
     }
 
     @DELETE
     @Path("/deleteTicket")
-    public Response login(@FormParam("ticketId") int ticketId, @FormParam("trainId") int trainId,
+    public Response deleteTicket(@FormParam("ticketId") int ticketId, @FormParam("trainId") int trainId,
                           @FormParam("routeId") int routeId){
         boolean isDeleted = employeeController.deleteTicket(ticketId, trainId, routeId);
         if(isDeleted){
             return Response.ok().build();
         }
         return Response.status(401).build();
+    }
+
+    @OPTIONS
+    @Path("/deleteTicket")
+    public Response deleteTicket(){
+        return Response.ok().build();
     }
 
 
@@ -69,6 +89,11 @@ public class Employees {
         return Response.ok(res).build();
     }
 
+    @OPTIONS
+    @Path("/createTicket")
+    public Response createTicket(){
+        return Response.ok().build();
+    }
 
     @GET
     @Path("/schedule")
@@ -97,6 +122,12 @@ public class Employees {
         return Response.status(401).build();
     }
 
+    @OPTIONS
+    @Path("/salary/{e_id: [0-9]+}")
+    public Response updateSalary(){
+        return Response.ok().build();
+    }
+
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("/adjust/{e_id: [0-9]+}")
@@ -108,11 +139,23 @@ public class Employees {
         return Response.status(401).build();
     }
 
+    @OPTIONS
+    @Path("/adjust/{e_id: [0-9]+}")
+    public Response makeAdjustment(){
+        return Response.ok().build();
+    }
+
     @DELETE
     @Path("/cancelRoute")
     public Response cancelRoute(@FormParam("routeId") int routeId, @FormParam("startDate") String startDate){
         if(employeeController.cancelRoute(routeId, startDate)) return Response.ok().build();
         return Response.status(304).build();
+    }
+
+    @OPTIONS
+    @Path("/cancelRoute")
+    public Response cancelRoute(){
+        return Response.ok().build();
     }
 
     @GET

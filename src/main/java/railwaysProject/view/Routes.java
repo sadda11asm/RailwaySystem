@@ -46,4 +46,16 @@ public class Routes {
         if (!res.isSuccess()) return Response.status(403).build();
         return Response.ok(res).build();
     }
+
+    @OPTIONS
+    @Path("/book")
+    public Response login(){
+        return Response.ok().build();
+    }
+
+    @GET
+    @Path("/getRoutes")
+    public Response getRoutes(){
+        return Response.ok(new Gson().toJson(controller.getRoutes())).build();
+    }
 }

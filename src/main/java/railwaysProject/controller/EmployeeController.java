@@ -143,4 +143,31 @@ public class EmployeeController {
         }
         return employees;
     }
+
+
+    public boolean isManager(Employee employee){
+        Connection conn = ConnectionPool.getDatabaseConnection();
+        try{
+            Statement statement = conn.createStatement();
+            String query = "Select * from Manager where Employee_employee_id = " + employee.getEmployeeId() + ";";
+            ResultSet rs = statement.executeQuery(query);
+            if(rs.next()) return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean isAgent(Employee employee){
+        Connection conn = ConnectionPool.getDatabaseConnection();
+        try{
+            Statement statement = conn.createStatement();
+            String query = "Select * from Agent where Employee_employee_id = " + employee.getEmployeeId() + ";";
+            ResultSet rs = statement.executeQuery(query);
+            if(rs.next()) return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }
