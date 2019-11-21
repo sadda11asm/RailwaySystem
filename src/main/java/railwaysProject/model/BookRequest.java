@@ -12,12 +12,11 @@ public class BookRequest {
     @JsonbProperty("from") private int from;
     @JsonbProperty("email") private String email;
     @JsonbProperty("phone") private String phone;
+    @JsonbProperty("pass_id") private int pass_id;
+    @JsonbProperty("train_id") private int train_id;
     @JsonbProperty("first_name") private String first_name;
     @JsonbProperty("last_name") private String last_name;
-    @JsonbProperty("carriage_num") private int carriage_num;
-    @JsonbProperty("train_id") private int train_id;
-    @JsonbProperty("seat_num") private int seat_num;
-    @JsonbProperty("pass_id") private int pass_id;
+    @JsonbProperty("passengers") private People[] passengers;
 
     @Override
     public String toString() {
@@ -30,9 +29,7 @@ public class BookRequest {
                 ", phone='" + phone + '\'' +
                 ", first_name='" + first_name + '\'' +
                 ", last_name='" + last_name + '\'' +
-                ", carriage_num=" + carriage_num +
                 ", train_id=" + train_id +
-                ", seat_num=" + seat_num +
                 ", pass_id=" + pass_id +
                 '}';
     }
@@ -47,9 +44,8 @@ public class BookRequest {
             @JsonbProperty("phone")  String phone,
             @JsonbProperty("first_name")  String first_name,
             @JsonbProperty("last_name")  String last_name,
-            @JsonbProperty("carriage_num")  int carriage_num,
-            @JsonbProperty("train_id")  int train_id,
-            @JsonbProperty("seat_num")  int seat_num) {
+            @JsonbProperty("passengers")  People[] passengers,
+            @JsonbProperty("train_id")  int train_id) {
         this.date = date;
         this.to = to;
         this.route_id = route_id;
@@ -57,9 +53,8 @@ public class BookRequest {
         this.from = from;
         this.email = email;
         this.last_name = last_name;
-        this.carriage_num = carriage_num;
+        this.passengers = passengers;
         this.train_id = train_id;
-        this.seat_num = seat_num;
         this.phone = phone;
 
     }
@@ -96,17 +91,11 @@ public class BookRequest {
         return last_name;
     }
 
-    public int getCarriage_num() {
-        return carriage_num;
-    }
 
     public int getTrain_id() {
         return train_id;
     }
 
-    public int getSeat_num() {
-        return seat_num;
-    }
 
     public void setRoute_id(int route_id) {
         this.route_id = route_id;
@@ -140,17 +129,11 @@ public class BookRequest {
         this.last_name = last_name;
     }
 
-    public void setCarriage_num(int carriage_num) {
-        this.carriage_num = carriage_num;
-    }
 
     public void setTrain_id(int train_id) {
         this.train_id = train_id;
     }
 
-    public void setSeat_num(int seat_num) {
-        this.seat_num = seat_num;
-    }
 
     public int getPass_id() {
         return pass_id;
@@ -159,4 +142,13 @@ public class BookRequest {
     public void setPass_id(int pass_id) {
         this.pass_id = pass_id;
     }
+
+    public People[] getPassengers() {
+        return passengers;
+    }
+
+    public void setPassengers(People[] passengers) {
+        this.passengers = passengers;
+    }
 }
+
