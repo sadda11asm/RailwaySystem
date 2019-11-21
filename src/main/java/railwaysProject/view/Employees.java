@@ -20,6 +20,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
+import java.sql.ResultSet;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.ArrayList;
@@ -188,5 +189,14 @@ public class Employees {
             ApiRequestInfo log = new ApiRequestInfo(requestType, time, addInfo, whoIs, action);
             loggerInfo.addLogs(log);
         }
+    }
+
+    @POST
+    @Path("/switchMode")
+    public Response switchModeOfLog(@QueryParam("isOn") boolean isOn){
+        System.out.println("Before switching the mode:" + isOn);
+        ServiceLocator.setLoggingOn(isOn);
+        System.out.println("After switching the mode:" + isOn);
+        return Response.ok().build();
     }
 }

@@ -36,6 +36,10 @@ public class ServiceLocator {
         return loggerInfo;
     }
 
+    public static void setLoggingOn(boolean loggingOn) {
+        ServiceLocator.loggingOn = loggingOn;
+    }
+
     public static EmailService getEmailService() {
         if (emailService == null) {
             emailService = new EmailService();
