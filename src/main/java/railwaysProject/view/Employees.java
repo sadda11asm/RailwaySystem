@@ -306,5 +306,11 @@ public class Employees {
         return Response.ok().build();
     }
 
+    @GET
+    @Path("/switchMode")
+    public Response switchModeOfLog(){
+        return Response.ok(ServiceLocator.isLoggingOn()).build();
+    }
+
 
 }
