@@ -102,11 +102,15 @@ public class EmailService {
         try {
             message.setFrom(new InternetAddress(username));
             for(String email: emails){
-                System.out.println("EMAILS: " + email + subject + textBody);
-                message.setRecipient(Message.RecipientType.TO, new InternetAddress(email));
-                message.setSubject(subject);
-                message.setContent(textBody,"text/html;charset=UTF-8" );
-                Transport.send(message);
+                try {
+                    System.out.println("EMAILS: " + email + subject + textBody);
+                    message.setRecipient(Message.RecipientType.TO, new InternetAddress(email));
+                    message.setSubject(subject);
+                    message.setContent(textBody, "text/html;charset=UTF-8");
+                    Transport.send(message);
+                }catch (Exception e){
+                    continue;
+                }
             }
         } catch (Exception ex) {
             System.out.println( ex.getMessage());

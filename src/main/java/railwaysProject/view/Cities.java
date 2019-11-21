@@ -21,7 +21,7 @@ public class Cities {
 
     @GET
     public Response getListOfCities(){
-        emailService.sendAgentCreated("saddam.asmatullayev@nu.edu.kz");
+        //emailService.sendAgentCreated("saddam.asmatullayev@nu.edu.kz");
         List<City> listOfCities = cityController.getCities();
         String cities = new Gson().toJson(listOfCities);
         return Response.ok(cities).build();
