@@ -300,9 +300,9 @@ public class Employees {
     @POST
     @Path("/switchMode")
     public Response switchModeOfLog(@QueryParam("isOn") boolean isOn){
-        System.out.println("Before switching the mode:" + isOn);
+        System.out.println("Before switching the mode:" + ServiceLocator.isLoggingOn());
         ServiceLocator.setLoggingOn(isOn);
-        System.out.println("After switching the mode:" + isOn);
+        System.out.println("After switching the mode:" + ServiceLocator.isLoggingOn());
         return Response.ok().build();
     }
 
