@@ -13,8 +13,39 @@ public class Trip {
     private int seat;
     private int routeId;//
     private String routeName;
+    private String firstName;
+
+
+    private String lastName;
+
+
+    private String documentID;
+
+    public void setDocumentID(String documentID) {
+        this.documentID = documentID;
+    }
+
+    public String getDocumentID() {
+        return documentID;
+    }
 
     public Trip(){
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public int getCarriageNum() {
