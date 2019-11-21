@@ -59,12 +59,12 @@ public class ApiRequestInfo {
 
     @Override
     public String toString() {
-        return "ApiRequestInfo{" +
-                "requestType='" + requestType + '\'' +
+        return "{" +
+                " requestType='" + requestType + '\'' +
                 ", dateTime=" + dateTime +
                 ", addInfo='" + addInfo + '\'' +
                 ", whoIs='" + whoIs + '\'' +
                 ", action='" + action + '\'' +
-                '}';
+                "}\n";
     }
 }

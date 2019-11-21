@@ -32,6 +32,19 @@ public class Cities {
         return Response.ok(cities).build();
     }
 
+
+    private void addLogCitiesList(Request request) {
+        if (ServiceLocator.isLoggingOn()) {
+            String requestType = request.getMethod();
+            String whoIs = "Unknown user";
+            String action = "Get list of cities";
+            String addInfo = "";
+            LocalDateTime time = LocalDateTime.now();
+            ApiRequestInfo log = new ApiRequestInfo(requestType, time, addInfo, whoIs, action);
+            loggerInfo.addLogs(log);
+        }
+    }
+
     @GET
     @Path("{cityId: [0-9]+}")
     public Response getScheduleOfCity(@PathParam("cityId") int cityId, @Context Request request) {
@@ -53,17 +66,6 @@ public class Cities {
         }
     }
 
-    private void addLogCitiesList(Request request) {
-        if (ServiceLocator.isLoggingOn()) {
-            String requestType = request.getMethod();
-            String whoIs = "Unknown user";
-            String action = "Get list of cities";
-            String addInfo = "";
-            LocalDateTime time = LocalDateTime.now();
-            ApiRequestInfo log = new ApiRequestInfo(requestType, time, addInfo, whoIs, action);
-            loggerInfo.addLogs(log);
-        }
-    }
 
 }
 
