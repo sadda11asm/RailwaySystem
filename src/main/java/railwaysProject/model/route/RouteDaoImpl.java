@@ -20,6 +20,10 @@ public class RouteDaoImpl implements RouteDAO {
     @Override
     public List<Route> getRoutesFromTo(int stationFrom, int stationTo, String date) {
 
+        System.out.println("{" + date + "}");
+
+        date = date.substring(0, date.length()-1) + "%" + "'";
+
 
         String sqlQuery =   "SELECT Route.route_id, Route.start_date, R.route_name, Arrival.date as arr_date, " +
                             "Arrival.station_id as to_station, Departure.date as dep_date, Departure.station_id as from_station, " +
@@ -30,25 +34,31 @@ public class RouteDaoImpl implements RouteDAO {
                             "AND Route.start_date = Arrival.route_start_date) INNER JOIN Departure " +
                             "ON Departure.route_id = Route.route_id AND Departure.route_start_date = Route.start_date), Route R, Station stto, " +
                             "Station stfrom\n" +
-                            "WHERE R.route_id = Route.route_id AND start_date = " + date + " AND stto.station_id = Arrival.station_id AND stfrom.station_id = Departure.station_id " +
+                            "WHERE R.route_id = Route.route_id AND dep_date like " + date + " AND stto.station_id = Arrival.station_id AND stfrom.station_id = Departure.station_id " +
                             "AND Arrival.station_id IN (SELECT station_id FROM Station WHERE locality_locality_id = " + stationTo + ") " +
                             "AND Departure.station_id IN (SELECT station_id FROM Station WHERE locality_locality_id = " + stationFrom +") " +
                             "and Train.route_id = Route.route_id;";
 
-        String newSqlQuery =    "SELECT Route.route_id, Route.start_date, Arrival.date as arr_date, " +
-                                "Arrival.station_id as to_station, Departure.date as dep_date, Departure.station_id as from_station " +
-                                "FROM ((Route_Instance as Route INNER JOIN Arrival ON Arrival.route_id = Route.route_id " +
-                                "AND Route.start_date = Arrival.route_start_date) INNER JOIN Departure " +
-                                "ON Departure.route_id = Route.route_id AND Departure.route_start_date = Route.start_date) " +
-                                "WHERE start_date = " + date + " " +
-                                "AND Arrival.station_id IN (SELECT station_id FROM station WHERE locality_locality_id = " + stationTo + ") " +
-                                "AND Departure.station_id IN (SELECT station_id FROM station WHERE locality_locality_id = " + stationFrom +");";
+        String newSqlQuery =    "SELECT RI.route_id, RI.start_date, R.route_name, A.date as arr_date,\n" +
+                "A.station_id as to_station, D.date as dep_date, D.station_id as from_station,\n" +
+                "stto.station_name as to_name, stfrom.station_name as from_name, \n" +
+                "Train.train_id \n" +
+                "FROM Train, Route R, Station stto, Station stfrom,\n" +
+                "Route_Instance as RI \n" +
+                "INNER JOIN Arrival A ON A.route_id = RI.route_id AND RI.start_date = A.route_start_date \n" +
+                "INNER JOIN Departure D ON D.route_id = RI.route_id AND D.route_start_date = RI.start_date\n" +
+                "WHERE R.route_id = RI.route_id AND D.date like " + date + "\n" +
+                "AND stto.station_id = A.station_id AND stfrom.station_id = D.station_id \n" +
+                "AND A.station_id IN \n" +
+                "(SELECT station_id FROM Station WHERE locality_locality_id = " + stationTo + " ) \n" +
+                "AND D.station_id IN (SELECT station_id FROM Station WHERE locality_locality_id = " + stationFrom + ") \n" +
+                "and Train.route_id = RI.route_id;";
 
         Connection conn = null;
         ArrayList<Route> routes = new ArrayList<>();
         try {
             conn = ConnectionPool.getDatabaseConnection();
-            ResultSet result = conn.createStatement().executeQuery(sqlQuery);
+            ResultSet result = conn.createStatement().executeQuery(newSqlQuery);
             while(result.next()) {
                 int routeId = result.getInt("route_id");
                 String startDate = result.getString("start_date");
